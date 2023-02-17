@@ -1,0 +1,32 @@
+.containerbox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: blue;
+    height: 100vh;
+    gap: 75px;
+  }
+  
+  .box {
+    display: inline-block;
+    width: 170px;
+    font-size: smaller;
+    height: 100px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    /* font-size: 10px; */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .box:hover{
+    background-color: #ddd;
+  }
+  .box span{
+    line-height: 100px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  .box span a{
+    font-size: smaller;
+  }
