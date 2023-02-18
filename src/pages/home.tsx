@@ -31,23 +31,28 @@ const home = () =>{
             <Navbar/>
             
         </header>
-        <div style={{minHeight:'100vh', maxHeight:'100vh'}}>
-            <div className={style.containerbox}>
+        <div style={{minHeight:'100vh', maxHeight:'100vh',backgroundColor:'black'}}>
+            <div className={style.homesidebar}>
+                <a href="">data 1</a>
+                <a href="">data 2</a>
+            </div>
+            {/* <div className={style.containerbox}>
                 <div className={style.box}><span ><a href="/home/view/report">View Report</a></span></div>
                 <div className={style.box}><span ><a href="/home/managementmenu">Management menu</a></span></div>
-            </div>
+            </div> */}
         </div>
         <footer style={{position:'sticky'}}>
             <HomeFooter/>
-            <div style={{color:'black', display:'flex',justifyContent:'space-between'}}>
+            <div style={{color:'black', display:'flex',justifyContent:'space-between',height:'40vh'}}>
                 <div style={{display:'flex',flexGrow:'1'}}>
                     <div> © 2000-2023 Newegg Inc.  All rights reserved</div>
                     <div> Terms & Conditions</div>
                     <div>Privacy Policy</div>
                     <div> Cookie Preferences</div>
                 </div>
-                <div style={{display:'flex',order:'1', justifyContent:'space-between', gap:'1000px'}}>
-                    <div style={{justifyContent:'space-between'}}>
+                <div style={{
+                    display:'flex', 
+                    gap:'50px'}} className={style.circlelink}>
                         <a href=""><FontAwesomeIcon icon={faFacebookF}/></a>
                         <a href=""><FontAwesomeIcon icon={faTwitter}/></a>
                         <a href=""><FontAwesomeIcon icon={faInstagramSquare}/></a>
@@ -57,7 +62,6 @@ const home = () =>{
                         <a href=""><FontAwesomeIcon icon={faTwitch}/></a>
                         <a href=""><FontAwesomeIcon icon={faDiscord}/></a>
                         <a href=""><FontAwesomeIcon icon={faTiktok}/></a>
-                    </div>
                 </div>
                 
             </div>

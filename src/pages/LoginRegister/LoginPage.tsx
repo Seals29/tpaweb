@@ -72,7 +72,7 @@ const LoginPage = () => {
     console.log('Password:', password);
     setError('');
   };
-
+  const [errormsg,setErrormsg] = useState("")
   return (
     <div className={style.container}>
       
@@ -82,8 +82,9 @@ const LoginPage = () => {
         
         
         <input className = {style.input} type="email" id="username" value={username} onChange={(e) => setUsername(e.target.value)}
-          placeholder="Email Address"
+          placeholder="Email Address" required
         />
+        <div style={{color:'red'}}>{errormsg}</div>
         <div className={style.button} onClick={()=>{
           users.map((user)=>{
             // console.log(user.email);
@@ -91,15 +92,35 @@ const LoginPage = () => {
               const encoded = encodeURIComponent(username);
               routers.push(`/login/users/[email]`,`/login/users/${encoded}`);
               console.log(username)
+            }else{
+              setErrormsg("No Email Found")
             }
           })
         }}>
           Sign In
         </div>
-        <button type="submit" className={style.button2}>
+        <div  className={style.button2} onClick={()=>{
+          users.map(user=>{
+            if(user.email===(username)){
+              const encodedemail = encodeURIComponent(username);//dapet email
+              console.log(username)
+              const data = {
+                Email: username
+              }
+              axios.post("http://localhost:9998/forgotpassword",data).then(res=>{
+                console.log(res)
+                // routers.push()
+              }).catch(err=>{
+                console.log(err)
+              })
+            }else{
+              setErrormsg("No Email Found")
+            }
+          })
+        }}>
         
           GET ONE-TIME SIGN IN CODE
-        </button>
+        </div>
         <a href="" style={{
           color:'black',
           textDecorationLine:'underline' 
@@ -113,7 +134,7 @@ const LoginPage = () => {
         </div>
         <br/>
         <div style={{color : 'black'}}>OR</div>
-        <button type="submit" className={style.button3} >
+        <button type="submit" className={style.button3}>
           
           <FontAwesomeIcon icon={faGoogle} style={{left:'0',float:'left'}}/>
           <div style={{textAlign:'center', justifyContent:'center',alignItems:'center'}}> Sign In with Google</div>

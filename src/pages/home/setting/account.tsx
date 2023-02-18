@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import { setCookie } from "nookies";
 import React, { useEffect, useState } from "react";
 import style from "@/styles/homes.module.css"
-export default function newshop(){
+export default function account(){
 
     
     const routers = useRouter();
@@ -76,24 +76,6 @@ export default function newshop(){
                           console.log(err.response);
                           
                         })
-                        type ShopUser = {
-                            email :string
-                        }
-                        const NewShopUser : ShopUser={
-                            email : shopEmail
-                        }
-                        axios.post("http://localhost:9998/notifyshop",NewShopUser).then(res=>{
-                            console.log(res)
-                        }).catch(err=>{
-                            console.log(err)
-                        })
-                        // axios.post("http://localhost:9998/announce",newMessage).then(res=>{
-                        //     console.log(res)
-                        //     setMessage("")
-                        //     setSubject("")
-                        // }).catch(err=>{
-                        //     console.log(err)
-                        // })
                         alert("Successfully Registered new Shop account!");
                       }
                 

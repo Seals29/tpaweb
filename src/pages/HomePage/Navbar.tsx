@@ -48,7 +48,13 @@ const Navbar = () => {
         color: theme === 'light' ? 'black' : 'white' ,
          display:'flex',flexDirection:'column'}}>
         
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', position:'sticky' }}>
+        <div style={{ display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'center', 
+        padding: '1rem',
+        top:'0',
+         position:'sticky',
+         zIndex:'1' }}>
           <div onClick={()=>{
             if(sidebar==false){
               window.sessionStorage.setItem('theme','asdas')
@@ -108,7 +114,7 @@ const Navbar = () => {
           </div>
           </div>
 
-            <a href=""><div className={style.splash}></div> <img 
+            <a href="/home"><div className={style.splash}></div> <img 
             src="https://c1.neweggimages.com/WebResource/Themes/2005/Nest/logo_424x210.png" 
             alt="Newegg" className={style.logo} ></img>
             </a>

@@ -45,8 +45,11 @@ export default function managementmenu(){
     }else{
         return(
             <div>
-                you're not authrozied in this page
-            </div>
+            <Navbar/>
+            <div style={{minHeight:'100vh', maxHeight:'100vh'}}>
+            You're not Authorized
+    </div>
+        </div>
         )
     }
     

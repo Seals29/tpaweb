@@ -24,6 +24,7 @@ const Register= ()=>{
     const [email,setEmail] = useState("");
     const [phone,setPhone] = useState("");
     const [password,setPassword] = useState("");
+    const [checkbox, setCheckbox] = useState(false);
 
     
     return (
@@ -66,7 +67,11 @@ const Register= ()=>{
           asdasd
         </div>
         <div style={{display:'flex', color:'black'}}>
-        <input type="checkbox" className={style.input} style={{backgroundColor:'white'}}/>
+        <input type="checkbox" className={style.input} 
+        style={{backgroundColor:'white'}} onChange={(e)=>{
+          setCheckbox(e.target.checked)
+
+        }} />
         <label className={style.link}>asdasd</label>
         </div>
         <div style={{display:'flex', wordWrap:'break-word',color:'black',gap:'5px',opacity:'0.5'}}>
@@ -83,23 +88,33 @@ const Register= ()=>{
             alert("Please complete the validation")
             
           }else{
+            if(checkbox&&validatePassword(password)==true){
+              console.log("checked true")
+              alert("Account has been subscribed")
+              type UserSubscribe = {
+                useremail : string
+              }
+              const newUserSubscribe:UserSubscribe={
+                useremail : email
+              }
+              axios.post("http://localhost:9998/usersubscribe", newUserSubscribe).then(response=>{
+              }).catch(err => {
+              })
+            }
             if(validatePassword(password)==true){
-              const formdata = new FormData()
-              formdata.append('email',email)
-              formdata.append('password',password)
-
               type User = {
                   firstname: string,
+                  // phone: number,
                   lastname:string,
                   isban:boolean,
                   role : string,
                   email : string,
                   password : string
               }
-
               const newUser : User = {
                 firstname:firstName,
                 lastname:lastName,
+                // phone:parseInt(phone),
                 isban:false,
                 role:"customer",
                 email:email,
@@ -117,7 +132,6 @@ const Register= ()=>{
               }).catch(err => {
                 console.log("Response")  
                 console.log(err.response);
-                
               })
               alert("Successfully Registered!");
             }else{  
