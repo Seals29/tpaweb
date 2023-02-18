@@ -30,3 +30,46 @@
   .box span a{
     font-size: smaller;
   }
+
+
+
+
+
+
+
+  .containerform {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* margin-top: 50px; */
+    /* background-color: blue; */
+  }
+  
+  .containerform label {
+    font-weight: bold;
+    margin-bottom: 10px;
+    margin-top: 40px;
+  }
+  
+  .containerform input {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    box-shadow: 0px 0px 5px #ddd;
+    width: 300px;
+  }
+  
+  .containerform button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .containerform button:hover {
+    background-color: #3e8e41;
+  }

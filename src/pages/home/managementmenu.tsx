@@ -33,8 +33,8 @@ export default function managementmenu(){
                 <div className={style.containerbox} style={{fontSize:'8px'}}>
                     <div className={style.box}><span ><a href="/home/view/report">Add New Voucher Code</a></span></div>
                     <div className={style.box}><span ><a href="/home/managementmenu">User List</a></span></div>{/*paginated */}
-                    <div className={style.box}><span ><a href="/home/view/report">Send Newsletter</a></span></div>
-                    <div className={style.box}><span ><a href="/home/view/report">Insert New Shop</a></span></div>
+                    <div className={style.box}><span ><a href="/home/sendnews">Send Newsletter</a></span></div>
+                    <div className={style.box}><span ><a href="/home/newshop">Insert New Shop</a></span></div>
                     <div className={style.box}><span ><a href="/home/view/report">Show All Shops</a></span></div>
                     <div className={style.box}><span ><a href="/home/view/report">View All Reviews</a></span></div>
 

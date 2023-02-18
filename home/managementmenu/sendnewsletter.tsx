@@ -6,8 +6,7 @@ import { useRouter } from "next/router";
 import { setCookie } from "nookies";
 import React, { useEffect, useState } from "react";
 import style from "@/styles/homes.module.css"
-import Link from "next/link";
-export default function report(){
+export default function sendnewsletter(){
 
     
     const routers = useRouter();
@@ -26,33 +25,22 @@ export default function report(){
     },[])
 
     console.log(routers);
-    if(currUser.role=="admin"){
-        return(
-            <div>
+    return(
+        <div>
                 <Navbar/>
+                sadddddddddddddd
                 <div style={{minHeight:'100vh', maxHeight:'100vh'}}>
                 <div className={style.containerbox} style={{fontSize:'10px'}}>
                     <div className={style.box}><span ><a href="/home/view/report">Add New Voucher Code</a></span></div>
                     <div className={style.box}><span ><a href="/home/managementmenu">User List</a></span></div>{/*paginated */}
-                    <div className={style.box}><span >
-                        
-                        <a href="/home/managementmenu/send/newsletter">Send Newsletter</a>
-                        <Link href={"/home/asdas"}>sadas</Link>
-                        </span></div>
+                    <div className={style.box}><span ><a href="/home/view/report">Send Newsletter</a></span></div>
                     <div className={style.box}><span ><a href="/home/view/report">Insert New Shop</a></span></div>
                     <div className={style.box}><span ><a href="/home/view/report">Show All Shops</a></span></div>
                     <div className={style.box}><span ><a href="/home/view/report">View All Reviews from Customer for Customer Service</a></span></div>
 
                 </div>
-        </div>
+                </div>
             </div>
-        )
-    }else{
-        return(
-            <div>
-                you're not authrozied in this page
-            </div>
-        )
-    }
+    )
     
 }
