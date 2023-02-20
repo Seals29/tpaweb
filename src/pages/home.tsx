@@ -11,6 +11,7 @@ import { faBattery3, faBatteryCar, faCarTunnel, faCompactDisc, faComputer, faCom
 import { faVolumeUp } from '@fortawesome/free-solid-svg-icons';
 import { ThemeContext } from "@/theme/theme";
 import { clearInterval, setInterval } from "timers";
+import Image from "next/image";
 const home = () =>{
     const routers = useRouter();
     const [currUser,setCurrUser] = useState([]);
@@ -22,11 +23,11 @@ const home = () =>{
         
         {
             id:1,
-            url :"//promotions.newegg.com/international/22-2012/1920x660@2x.png"
+            url :"https://promotions.newegg.com/international/22-2012/1920x660@2x.png"
         },
         {
             id:2,
-            url:"//promotions.newegg.com/nepro/23-0211/1920x660.jpg"
+            url:"https://promotions.newegg.com/nepro/23-0211/1920x660.jpg"
         }
     ]
     const [currBanner,setCurrBanner] = useState(banner[0].url)  
@@ -47,7 +48,7 @@ const home = () =>{
         })
             console.log(currUser)
         setCurrBanner(banner[currIdx].url)
-        const interval =setInterval(next,5000)
+        const interval =setInterval(next,15000)
         return () =>clearInterval(interval)
     },[currIdx])
     if(currUser.role==="admin"){
@@ -71,7 +72,6 @@ const home = () =>{
                     <div> © 2000-2023 Newegg Inc.  All rights reserved</div>
                     <div> Terms & Conditions</div>
                     <div>Privacy Policy</div>
-                    <input type="image" />
                     <div> Cookie Preferences</div>
                 </div>
                 <div style={{
@@ -124,7 +124,13 @@ const home = () =>{
                     <div className={style.box}><span ><a href="/home/managementmenu">Management menu</a></span></div>
                 </div> */}
                 <div className={style.slidercontainer}>
-                    <img src={currBanner} alt={`/${currBanner}`} style={{width:'100%'}} />
+                    {banner.map((img,idx)=>(
+                        <Image key={idx} src={img.url} alt="description"
+                        className={currIdx===idx?style.actives:style.inactives}
+                        layout="fill"
+                        ></Image>
+                    ))}
+                    {/* <img src={currBanner} alt={`/${currBanner}`} style={{width:'100%'}} /> */}
                     <button onClick={prev} className={style.prev}>
                         &lt;
                     </button>
@@ -141,7 +147,6 @@ const home = () =>{
                         <div> © 2000-2023 Newegg Inc.  All rights reserved</div>
                         <div> Terms & Conditions</div>
                         <div>Privacy Policy</div>
-                        <input type="image" />
                         <div> Cookie Preferences</div>
                     </div>
                     <div style={{

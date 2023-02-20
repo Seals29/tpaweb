@@ -243,14 +243,7 @@
     min-width: 100px;
     height: 55px;
 }
-.darkbar{
-  display: flex;
-  align-items: center;
-  position: relative;
-  width: 35%;
-  min-width: 100px;
-  height: 55px;
-}
+
 .text{
     height: 44px;
     width: 100%;
@@ -259,21 +252,12 @@
     border: none;
     background-color: blue;
 }
-.darktext{
-  height: 44px;
-  width: 100%;
-  border-radius: 90px;
-  padding: 10px 15px;
-  border: none;
-  background-color: #170f5c;
-}
+
 .text:focus{
     outline: 1px solid black;
 }
 
-.darktext:focus{
-  outline: 1px solid lightblue;
-}
+
 .search{
     display: flex;
     justify-content: center;
@@ -287,33 +271,14 @@
     right: 0;
     transition: all 0.1s linear;
 }
-.darksearch{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: lightblue;
-  height: 45px;
-  width: 100px;
-  border: none;
-  border-radius: 90px;
-  position: absolute;
-  right: 0;
-  transition: all 0.1s linear;
-}
-.darksearch:hover{
-  transform: scale(1.05,1.05);
-  cursor: pointer;
-}
+
+
 .icon{
     color: black;
     height: 17px;
     width: auto;
 }
-.darkicon{
-  outline-color: black;
-  height: 17px;
-  width: auto;
-}
+
 .search:hover{
     transform: scale(1.05,1.05);
     cursor: pointer;
@@ -328,16 +293,7 @@
     min-width: 35px;
     height: 35px;
 }
-.darknotif{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 100px;
-  border: 2px solid white;
-  transition: background-color 0.1s linear;
-  min-width: 35px;
-  height: 35px;
-}
+
 .language{
     display: flex;
     justify-content: center;

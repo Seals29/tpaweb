@@ -3,6 +3,7 @@ import styled from "styled-components";
 import style from "@/styles/navbar.module.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
+
 import {faMapMarker, 
   faLocationDot,
   faCartShopping,
@@ -10,12 +11,15 @@ import {faMapMarker,
 import { faCodeFork } from "@fortawesome/free-solid-svg-icons";
 import Cookies from "js-cookie";
 import { THEME, ThemeContext, ThemeProvider } from "@/theme/theme";
+import { destroyCookie } from "nookies";
+import { useRouter } from "next/router";
 
 const Navbar = () => {
     // const [theme, setTheme] = useState('light');
     const [search, setSearch] = useState('');
     const [currUser,setCurrUser] = useState([]);
     const [isDark,setIsDark] = useState(false)
+    const router = useRouter();
     const{theme, toggleTheme} = useContext(ThemeContext)
     console.log(theme)
     useEffect(()=>{
@@ -158,7 +162,11 @@ const Navbar = () => {
 
           <a href=""><div style={{display:'flex'}}>
           <FontAwesomeIcon icon={faUser} style={{marginTop:'12px', marginRight:'10px',color:theme.text}}/>
-          <div style={{color:'grey'}}>
+          <div style={{color:'grey'}} onClick={(e)=>{
+            destroyCookie(null,'token',{path:'/'})
+            router.push("/login")
+            
+          }}>
             Welcome
             <div style={{color:theme.text}}>{currUser.firstname}</div>
           </div>
