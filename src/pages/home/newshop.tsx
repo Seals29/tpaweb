@@ -5,6 +5,9 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { setCookie } from "nookies";
 import React, { useEffect, useState } from "react";
+import {}from 'firebase/app';
+import 'firebase/storage';
+
 import style from "@/styles/homes.module.css"
 export default function newshop(){
 
@@ -23,9 +26,12 @@ export default function newshop(){
         console.log(currUser)
         
     },[])
+
     const [shopName, setShopName]= useState("")
     const [shopEmail, setShopEmail] = useState("")
     const [shopPassword, setShopPassword]= useState("")
+    const [fileURL, setfileURL] = useState("")
+    const [file, setFile] = useState(null)
     console.log(routers);
     return(
         <div>
@@ -48,6 +54,12 @@ export default function newshop(){
                         setShopPassword(e.target.value)
                     }}/><br/>
                     <br/>
+                    <label >Shop Banner (optional):</label>
+                    <input type="file" placeholder="Shop Password" onChange={(e:any)=>{
+                        const file = e.target.files[0];
+                        // const storageRef = firebase.storage().ref();
+                    }}/><br/>
+                    <br/>
                     <button onClick={()=>{
                         console.log(shopPassword);
                         type User = {
@@ -55,38 +67,41 @@ export default function newshop(){
                             email : string,
                             role : string,
                             password : string,
-                            isban: boolean
+                            isban: boolean,
+                            banner : string
                         }
                         
                         const newUser : User = {
-                        firstname:shopName,
+                          firstname:shopName,
                           isban:false,
                           role:"Seller",
                           email:shopEmail,
-                          password:shopPassword
+                          password:shopPassword,
+                          banner : ""
                         }
+
                         // var token = "";
-                        axios.post("http://localhost:9998/createshop", newUser).then(response=>{
-                          console.log("Response")  
-                          console.log(response.data)  
+                        // axios.post("http://localhost:9998/createshop", newUser).then(response=>{
+                        //   console.log("Response")  
+                        //   console.log(response.data)  
                           
-                          // routers.push('/home')
-                        }).catch(err => {
-                          console.log("Response")  
-                          console.log(err.response);
+                        //   // routers.push('/home')
+                        // }).catch(err => {
+                        //   console.log("Response")  
+                        //   console.log(err.response);
                           
-                        })
-                        type ShopUser = {
-                            email :string
-                        }
-                        const NewShopUser : ShopUser={
-                            email : shopEmail
-                        }
-                        axios.post("http://localhost:9998/notifyshop",NewShopUser).then(res=>{
-                            console.log(res)
-                        }).catch(err=>{
-                            console.log(err)
-                        })
+                        // })
+                        // type ShopUser = {
+                        //     email :string
+                        // }
+                        // const NewShopUser : ShopUser={
+                        //     email : shopEmail
+                        // }
+                        // axios.post("http://localhost:9998/notifyshop",NewShopUser).then(res=>{
+                        //     alert("Announcement has been sent!")
+                        // }).catch(err=>{
+                        //     console.log(err)
+                        // })
                         // axios.post("http://localhost:9998/announce",newMessage).then(res=>{
                         //     console.log(res)
                         //     setMessage("")

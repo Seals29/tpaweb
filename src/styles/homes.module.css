@@ -76,11 +76,13 @@
   .homesidebar {
     display: flex;
     background-color: grey;
+    z-index: 1;
+    position: absolute;
     flex-direction: column;
-    width: 100px;
+    width: 200px;
     margin-left: 75px;
-    height: 50vh;
-    background: linear-gradient(to bottom, grey 70%, rgba(255, 255, 255, 0) 90%);
+    height: auto;
+    /* background: linear-gradient(180deg,#ECF1FE 61%,rgba(236,241,254,.7) 88%,rgba(236,241,254,0) 97%); */
   }
   .homesidebar a {
     color: black;
@@ -95,4 +97,96 @@
     justify-content: center;
     align-items: center;
     min-width: 30px;
+  }
+  .homeul{
+    /* background-color: black; */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    text-decoration: none;
+    list-style-type: none;
+  }
+  .darkhomeul{
+    /* background-color: black; */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    text-decoration: none;
+    list-style-type: none;
+  }
+  .homeul li{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: black;
+    gap: 20px;
+    
+  }
+
+  .homeul li:hover{
+    color: rgba(144, 144, 248, 0.653);
+
+  }
+  .homeul li label{
+    margin-left: auto;
+  }
+  .slider{
+    display: none;
+    width: 100%;
+    height: 50vh;
+  }
+  .banner{
+    width:100%;
+    height: 400px;
+    object-fit: cover;
+  }
+  .prev,.next{
+    cursor:pointer;
+    position: absolute;
+    width: auto;
+    top: 50%;
+    margin-top: -22px;
+    padding: 16px;
+    background-color: rgba(0,0,0,0.3);
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transform: 0.6 ease;
+    border:none;
+
+  }
+  .next{
+    right:0;
+  }
+  .prev{
+    left: 0;
+  }
+  .prev:hover,.next:hover{
+     background-color: rgba(0,0,0,0.8);
+  }
+  .fade{
+    animation-name:fadeIn 1s ease-in forwards;
+    animation-duration: 1.5s;
+  }
+  .slidefade{
+    display: none;
+    width: 100%;
+    height: 100%;  
+    animation: fadeIn 1s ease-in forwards;
+    animation-duration: 1.5s;
+  }
+
+  @keyframes fade {
+    from {
+      opacity: 0.3;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  .slidercontainer {
+    position: relative;
+    /* margin: 50px auto 20px auto; */
+    width: 100%;
+    height: 600px;
   }

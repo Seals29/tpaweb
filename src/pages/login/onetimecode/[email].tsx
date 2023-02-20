@@ -1,9 +1,13 @@
-const LoginAst= ()=>{
-    if(typeof window !== 'undefined'){
-       
-        console.log(localStorage.getItem('theme'))
-    }
-    return (
+import LoginHeader from "@/pages/LoginRegister/Loginheader";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { setCookie } from "nookies";
+import React, { useEffect, useState } from "react";
+export default function loginonetimePage(){
+    const router = useRouter();
+    const [pass,setPass]=useState("");
+    console.log(router);
+    return(
         <div>
             <img 
             src="https://c1.neweggimages.com/WebResource/Themes/2005/Nest/logo_424x210.png" 
@@ -31,7 +35,8 @@ const LoginAst= ()=>{
                 </div>
                 <br/>
                 <div style={{backgroundColor:'white', color:'black', alignItems:'center',width:'500px',margin:'auto'}}>
-                    <input type="email" name="" id="" placeholder="Email Address" style={{width:'500px', backgroundColor:'white',color:'black', height:'30px'}}/>
+                    <div >{router.query.email}</div>
+                    {/* <input type="email" name="" id="" placeholder="Email Address" style={{width:'500px', backgroundColor:'white',color:'black', height:'30px'}}/> */}
                 </div>
                 <br/>
                 <br/>
@@ -49,7 +54,20 @@ const LoginAst= ()=>{
                         color: 'black',
                         cursor: 'pointer',
                         borderWidth:'thin'
-                        }} type="submit">
+                        }} type="submit" onClick={(e)=>{
+                            e.preventDefault()
+                            const data = {
+                                Email : router.query.email
+                            }
+                            console.log(data.Email)
+                            axios.post("http://localhost:9998/forgotpassword",data).then(res=>{
+                                console.log(res)
+                                const encoded = encodeURIComponent(data.Email.toString());
+                                router.push(`/login/verif/[email]`,`/login/verif/${encoded}`);
+                            }).catch(err=>{
+                                console.log(err)
+                            })
+                        }}>
                         REQUEST VERIFICATION CODE
                     </button>
                 </div>
@@ -65,4 +83,3 @@ const LoginAst= ()=>{
         </div>
     )
 }
-export default LoginAst

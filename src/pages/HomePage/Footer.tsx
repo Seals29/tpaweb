@@ -1,8 +1,9 @@
 
 import style from "@/styles/homefooter.module.css"
-import { useEffect } from "react";
+import { ThemeContext } from "@/theme/theme";
+import { useContext, useEffect } from "react";
 const HomeFooter=()=>{
-    
+    const {theme} = useContext(ThemeContext)
 
     return(
         
@@ -11,76 +12,76 @@ const HomeFooter=()=>{
         <div className={style.row}>
             <div className={style.col2}>
                     <div style={{display:'flex',flexDirection:'column'}}>
-                    <p>Customer Service</p>
+                    <p style={{color:theme.text}}>Customer Service</p>
                     <br/>
                     <div style={{display:'flex',flexDirection:'column', left:'0',wordWrap:'break-word', maxWidth:'200px',gap:'25px'}}>
-                    <a href="">Help  Center</a>
-                    <a href="">Track an Order</a>
-                    <a href="">Return an item</a>
-                    <a href="">Return Policy</a>
-                    <a href="">Privacy & Security</a>
-                    <a href="">Feedback</a>
+                    <a href="" style={{color:theme.text}}>Help  Center</a>
+                    <a href="" style={{color:theme.text}}>Track an Order</a>
+                    <a href="" style={{color:theme.text}}>Return an item</a>
+                    <a href="" style={{color:theme.text}}>Return Policy</a>
+                    <a href="" style={{color:theme.text}}>Privacy & Security</a>
+                    <a href="" style={{color:theme.text}}>Feedback</a>
                     </div>
                     
                     </div>
                     <div style={{display:'flex',flexDirection:'column'}}>
-                    <p><a href="#"> My Account</a></p>
+                    <p><a href="#" style={{color:theme.text}}> My Account</a></p>
                     <br/>
-                    <div style={{display:'flex',flexDirection:'column', left:'0',wordWrap:'break-word', maxWidth:'200px',gap:'25px'}}>
-                    <a href="">Login/Register</a>
-                    <a href="">Order History</a>
-                    <a href="">Returns History</a>
-                    <a href="">Address Book</a>
-                    <a href="">Wish Lists</a>
-                    <a href="">My Build Lists</a>
-                    <a href="">My Build Showcase</a>
-                    <a href="">Email Notifications</a>
-                    <a href="">Subscriptions Orders</a>
-                    <a href="">Auto Notifications</a>
+                    <div style={{display:'flex',flexDirection:'column', left:'0',wordWrap:'break-word', maxWidth:'200px',gap:'25px', color:theme.text}}>
+                    <a href=""style={{color:theme.text}}>Login/Register</a>
+                    <a href=""style={{color:theme.text}}>Order History</a>
+                    <a href=""style={{color:theme.text}}>Returns History</a>
+                    <a href=""style={{color:theme.text}}>Address Book</a>
+                    <a href=""style={{color:theme.text}}>Wish Lists</a>
+                    <a href=""style={{color:theme.text}}>My Build Lists</a>
+                    <a href=""style={{color:theme.text}}>My Build Showcase</a>
+                    <a href=""style={{color:theme.text}}>Email Notifications</a>
+                    <a href=""style={{color:theme.text}}>Subscriptions Orders</a>
+                    <a href=""style={{color:theme.text}}>Auto Notifications</a>
                     </div>
                     
                     </div>
                     <div style={{display:'flex',flexDirection:'column'}}>
-                    <p><a href="#">COMPANY INFORMATION</a></p>
+                    <p><a href="#" style={{color:theme.text}}>COMPANY INFORMATION</a></p>
                     <br/>
                     <div style={{display:'flex',flexDirection:'column', left:'0',wordWrap:'break-word', maxWidth:'200px',gap:'25px'}}>
-                    <a href="">About Newegg</a>
-                    <a href="">Investor Relations</a>
-                    <a href="">Awards/Rankings</a>
-                    <a href="">Hours and Locations</a>
-                    <a href="">Press Inquiries</a>
-                    <a href="">Newegg Careers</a>
-                    <a href="">Newsroom</a>
-                    <a href="">Newegg Insider</a>
-                    <a href="" >Calif. Transparency in Supply Chains Act </a>
-                    <a href="">Cigna MRF</a>
+                    <a href="" style={{color:theme.text}}>About Newegg</a>
+                    <a href="" style={{color:theme.text}}>Investor Relations</a>
+                    <a href="" style={{color:theme.text}}>Awards/Rankings</a>
+                    <a href="" style={{color:theme.text}}>Hours and Locations</a>
+                    <a href="" style={{color:theme.text}}>Press Inquiries</a>
+                    <a href="" style={{color:theme.text}}>Newegg Careers</a>
+                    <a href="" style={{color:theme.text}}>Newsroom</a>
+                    <a href="" style={{color:theme.text}}>Newegg Insider</a>
+                    <a href="" style={{color:theme.text}} >Calif. Transparency in Supply Chains Act </a>
+                    <a href="" style={{color:theme.text}}>Cigna MRF</a>
                     </div>
                     
                     </div>
                     <div style={{display:'flex',flexDirection:'column'}}>
-                    <p><a href="#">TOOLS & RESOURCES</a></p>
+                    <p><a href="#" style={{color:theme.text}}>TOOLS & RESOURCES</a></p>
                     <br/>
                     <div style={{display:'flex',flexDirection:'column', left:'0',wordWrap:'break-word', maxWidth:'200px',gap:'25px'}}>
-                    <a href="">Sell on Newegg</a>
-                    <a href="">For Your Business</a>
-                    <a href="">Newegg Partner Services</a>
-                    <a href="">Become an Affiliate</a>
-                    <a href="">Newegg Creators</a>
-                    <a href="">Site Map</a>
-                    <a href="">Shop by brand</a>
-                    <a href="">Rebates</a>
-                    <a href="">Mobile Apps</a>
+                    <a href="" style={{color:theme.text}}>Sell on Newegg</a>
+                    <a href="" style={{color:theme.text}}>For Your Business</a>
+                    <a href="" style={{color:theme.text}}>Newegg Partner Services</a>
+                    <a href="" style={{color:theme.text}}>Become an Affiliate</a>
+                    <a href="" style={{color:theme.text}}>Newegg Creators</a>
+                    <a href="" style={{color:theme.text}}>Site Map</a>
+                    <a href="" style={{color:theme.text}}>Shop by brand</a>
+                    <a href="" style={{color:theme.text}}>Rebates</a>
+                    <a href="" style={{color:theme.text}}>Mobile Apps</a>
                     </div>
                     
                     </div>
                     <div style={{display:'flex',flexDirection:'column'}}>
-                    <p><a href="#">SHOP OUR BRANDS</a></p>
+                    <p><a href="#" style={{color:theme.text}}>SHOP OUR BRANDS</a></p>
                     <br/>
                     <div style={{display:'flex',flexDirection:'column', left:'0',wordWrap:'break-word', maxWidth:'200px',gap:'25px'}}>
-                    <a href="">Newegg Business</a>
-                    <a href="">Newegg Global</a>
-                    <a href=""> ABS</a>
-                    <a href="">Rosewill</a>
+                    <a href="" style={{color:theme.text}}>Newegg Business</a>
+                    <a href="" style={{color:theme.text}}>Newegg Global</a>
+                    <a href="" style={{color:theme.text}}> ABS</a>
+                    <a href="" style={{color:theme.text}}>Rosewill</a>
                     </div>
                     
                     </div>

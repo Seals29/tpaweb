@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import style from "@/styles/navbar.module.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,17 +9,24 @@ import {faMapMarker,
   faTools,faHourglass,faArrowRight,faMailReply,faMailBulk, faMailReplyAll, faGamepad, faGift, faTrophy, faBoxOpen, faLightbulb, faPerson, faUserCircle, faUser, faDotCircle, faCircle, faComments, faCircleQuestion, faMagnifyingGlass, faBell, faFlagUsa} from "@fortawesome/free-solid-svg-icons"
 import { faCodeFork } from "@fortawesome/free-solid-svg-icons";
 import Cookies from "js-cookie";
+import { THEME, ThemeContext, ThemeProvider } from "@/theme/theme";
 
-const button = styled.button`
-  background-color : blue;&:hover {
-    background-color : lighblue;
-  }
-`;
 const Navbar = () => {
-    const [theme, setTheme] = useState('light');
+    // const [theme, setTheme] = useState('light');
     const [search, setSearch] = useState('');
     const [currUser,setCurrUser] = useState([]);
+    const [isDark,setIsDark] = useState(false)
+    const{theme, toggleTheme} = useContext(ThemeContext)
+    console.log(theme)
     useEffect(()=>{
+        let darks = localStorage.getItem('isDark')
+        
+        if (!darks){
+          setIsDark(false)
+        }else{
+          setIsDark(Boolean(darks)) 
+        }
+
         const cookies = Cookies.get('token')
         axios.post('http://localhost:9998/validate',{cookies}).then(res=>{
             console.log(res.data.user)
@@ -34,18 +41,13 @@ const Navbar = () => {
       setSearch(event.target.value);
     };
   
-    const handleThemeToggle = () => {
-      setTheme(theme === 'light' ? 'dark' : 'light');
-      // theme = localStorage.getItem('theme');
-        setTheme(localStorage.getItem('theme')==='light'?'dark':'light');
-        console.log(localStorage.getItem('theme'))
-    };
     const [sidebar, setSidebar] = useState(false);
     return (
-        
+      
       <nav style={{ 
-        backgroundColor: theme === 'light' ? 'white' : 'black', 
-        color: theme === 'light' ? 'black' : 'white' ,
+        
+        backgroundColor:theme.navbar, 
+        color: isDark  ? 'white' : 'black' ,
          display:'flex',flexDirection:'column'}}>
         
         <div style={{ display: 'flex', 
@@ -66,50 +68,51 @@ const Navbar = () => {
             }
           }}>
                 <div style={{width:'20px',height:'10px',display:'inline-block',position:'relative',cursor:'pointer'}}>
-                <div className={style.garis1}></div>
-                <div className={style.garis2}></div>
-                <div className={style.garis3}></div>
+                <div className={style.garis1} style={{backgroundColor:theme.text}}></div>
+                <div className={style.garis2} style={{backgroundColor:theme.text}}></div>
+                <div className={style.garis3} style={{backgroundColor:theme.text}}></div>
           </div>
-          <div className={style.sidebar} style={{visibility: sidebar==true? "visible":"hidden",display:'flex', overflow:'auto', backgroundColor:theme=="dark"?'#007aff':'white'}}>
-              <ul style={{border:'10px'}}>
-                  <li className={style.lisidebar}><a href="#"><FontAwesomeIcon icon={faHourglass}/> Today's Big Deals</a></li>
-                  <li className={style.lisidebar}><a href="#"><FontAwesomeIcon icon={faMailBulk}/>Email Deals!</a></li>
-                  <li className={style.lisidebar}><a href="#"><FontAwesomeIcon icon={faTools}/>Contact</a></li>
-                  <li className={style.lisidebar}><a href="#"><FontAwesomeIcon icon={faGamepad}/>Gaming PC Finder</a></li>
-                  <li className={style.lisidebar}><a href="#"><FontAwesomeIcon icon={faGift}/> Gift Ideas</a></li>
-                  <li className={style.lisidebar}><a href="#"><FontAwesomeIcon icon={faTrophy}/> Best Seller </a></li>
-                  <li className={style.lisidebar}><a href="#"><FontAwesomeIcon icon={faBoxOpen}/>Unbox This!</a></li>
-                  <li className={style.lisidebar}><a href="#"><FontAwesomeIcon icon={faLightbulb}/>NewEgg's Creator</a></li>
-                  <li className={style.lisidebar}><hr style={{opacity:'0.2'}}/></li>
-                  <li className={style.lisidebar}><h3 style={{color:'black',fontStyle:'italic'}}>Trending Events</h3></li>
-                  <li className={style.lisidebar}><a href="">Overclock Your Heart</a></li>
-                  <li className={style.lisidebar}><hr style={{opacity:'0.2'}}/></li>
-                  <li className={style.lisidebar}><h3 style={{color:'black',fontStyle:'italic',fontSize:'15px'}}>MORE AT NEWEGG</h3></li>
-                  <li className={style.lisidebar}><a href="">Newegg Store Credit Card</a></li>
-                  <li className={style.lisidebar}><a href="">Newegg Gift Card</a></li>
-                  <li className={style.lisidebar}><a href="">Newegg Select</a></li>
-                  <li className={style.lisidebar}><a href="">Newegg insider</a></li>
+          <div className={style.sidebar} style={
+            {visibility: sidebar==true? "visible":"hidden",display:'flex', overflow:'auto'}}>
+              <ul style={{border:'10px',backgroundColor:theme.bgsidebar,color:theme.text}}>
+                  <li className={style.lisidebar} style={{color:theme.text}}><a href="#" style={{color:theme.text}}><FontAwesomeIcon icon={faHourglass}/> Today's Big Deals</a></li>
+                  <li className={style.lisidebar} style={{color:theme.text}}><a href="#" style={{color:theme.text}}><FontAwesomeIcon icon={faMailBulk}/>Email Deals!</a></li>
+                  <li className={style.lisidebar} style={{color:theme.text}}><a href="#" style={{color:theme.text}}><FontAwesomeIcon icon={faTools}/>Contact</a></li>
+                  <li className={style.lisidebar} style={{color:theme.text}}><a href="#" style={{color:theme.text}}><FontAwesomeIcon icon={faGamepad}/>Gaming PC Finder</a></li>
+                  <li className={style.lisidebar} style={{color:theme.text}}><a href="#" style={{color:theme.text}}><FontAwesomeIcon icon={faGift}/> Gift Ideas</a></li>
+                  <li className={style.lisidebar} style={{color:theme.text}}><a href="#" style={{color:theme.text}}><FontAwesomeIcon icon={faTrophy}/> Best Seller </a></li>
+                  <li className={style.lisidebar} style={{color:theme.text}}><a href="#" style={{color:theme.text}}><FontAwesomeIcon icon={faBoxOpen}/>Unbox This!</a></li>
+                  <li className={style.lisidebar} style={{color:theme.text}}><a href="#" style={{color:theme.text}}><FontAwesomeIcon icon={faLightbulb}/>NewEgg's Creator</a></li>
+                  <li className={style.lisidebar} style={{color:theme.text}}><hr style={{opacity:'0.2'}}/></li>
+                  <li className={style.lisidebar} style={{color:theme.text}}><h3 style={{color: theme.text,fontStyle:'italic'}}>Trending Events</h3></li>
+                  <li className={style.lisidebar} style={{color:theme.text}}><a href="" style={{color:theme.text}}>Overclock Your Heart</a></li>
+                  <li className={style.lisidebar} style={{color:theme.text}}><hr style={{opacity:'0.2'}}/></li>
+                  <li className={style.lisidebar} style={{color:theme.text}}><h3 style={{color:theme.text,fontStyle:'italic',fontSize:'15px'}}>MORE AT NEWEGG</h3></li>
+                  <li className={style.lisidebar} style={{color:theme.text}}><a href="" style={{color:theme.text}}>Newegg Store Credit Card</a></li>
+                  <li className={style.lisidebar} style={{color:theme.text}}><a href="" style={{color:theme.text}}>Newegg Gift Card</a></li>
+                  <li className={style.lisidebar} style={{color:theme.text}}><a href="" style={{color:theme.text}}>Newegg Select</a></li>
+                  <li className={style.lisidebar} style={{color:theme.text}}><a href="" style={{color:theme.text}}>Newegg insider</a></li>
               
               </ul>
-              <ul style={{border:'10px'}}>
-                  <li className={style.lisidebar}><h3 style={{color:'black',fontStyle:'italic'}}>ALL PRODUCTS</h3></li>
-                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between'}}>Computer & Storage <div style={{right:'0'}}>{'>'}</div></a></li>
-                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between'}}>Computer Systems <div style={{right:'0'}}>{'>'}</div></a></li>
-                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between'}}>Computer Peripherals <div style={{right:'0'}}>{'>'}</div></a></li>
-                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between'}}>Appliances <div style={{right:'0'}}>{'>'}</div></a></li>
-                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between'}}>TV & Home Theater <div style={{right:'0'}}>{'>'}</div></a></li>
-                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between'}}>Electronics <div style={{right:'0'}}>{'>'}</div></a></li>
-                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between'}}>Electronics <div style={{right:'0'}}>{'>'}</div></a></li>
-                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between'}}>Computer Systems <div style={{right:'0'}}>{'>'}</div></a></li>
-                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between'}}>Gaming & VR <div style={{right:'0'}}>{'>'}</div></a></li>
-                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between'}}>Networking <div style={{right:'0'}}>{'>'}</div></a></li>
-                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between'}}>Smart Home & Security <div style={{right:'0'}}>{'>'}</div></a></li>
-                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between'}}>Office Solutions <div style={{right:'0'}}>{'>'}</div></a></li>
-                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between'}}>Software & Services <div style={{right:'0'}}>{'>'}</div></a></li>
-                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between'}}>Automotive & Tools<div style={{right:'0'}}>{'>'}</div></a></li>
-                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between'}}>Home & Outdoors <div style={{right:'0'}}>{'>'}</div></a></li>
-                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between'}}>Toys, Drones & Maker <div style={{right:'0'}}>{'>'}</div></a></li>
-
+              <ul style={{border:'10px', backgroundColor:theme.sidebar}}>
+                 
+                  <li className={style.lisidebar}><h3 style={{color:theme.text,fontStyle:'italic'}}>ALL PRODUCTS</h3></li>
+                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between',color:theme.text}}>Computer & Storage <div style={{right:'0'}}>{'>'}</div></a></li>
+                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between',color:theme.text}}>Computer Peripherals <div style={{right:'0'}}>{'>'}</div></a></li>
+                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between',color:theme.text}}>Computer Systems <div style={{right:'0'}}>{'>'}</div></a></li>
+                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between',color:theme.text}}>Appliances <div style={{right:'0'}}>{'>'}</div></a></li>
+                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between',color:theme.text}}>TV & Home Theater <div style={{right:'0'}}>{'>'}</div></a></li>
+                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between',color:theme.text}}>Electronics <div style={{right:'0'}}>{'>'}</div></a></li>
+                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between',color:theme.text}}>Electronics <div style={{right:'0'}}>{'>'}</div></a></li>
+                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between',color:theme.text}}>Computer Systems <div style={{right:'0'}}>{'>'}</div></a></li>
+                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between',color:theme.text}}>Gaming & VR <div style={{right:'0'}}>{'>'}</div></a></li>
+                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between',color:theme.text}}>Networking <div style={{right:'0'}}>{'>'}</div></a></li>
+                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between',color:theme.text}}>Smart Home & Security <div style={{right:'0'}}>{'>'}</div></a></li>
+                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between',color:theme.text}}>Office Solutions <div style={{right:'0'}}>{'>'}</div></a></li>
+                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between',color:theme.text}}>Software & Services <div style={{right:'0'}}>{'>'}</div></a></li>
+                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between',color:theme.text}}>Automotive & Tools<div style={{right:'0'}}>{'>'}</div></a></li>
+                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between',color:theme.text}}>Home & Outdoors <div style={{right:'0'}}>{'>'}</div></a></li>
+                  <li className={style.lisidebar}><a href="#" style={{display:'flex', flexDirection:'row',justifyContent:'space-between',color:theme.text}} className={style.links}>Toys, Drones & Maker <div style={{right:'0'}}>{'>'}</div></a></li>
               </ul>
           </div>
           </div>
@@ -119,10 +122,11 @@ const Navbar = () => {
             alt="Newegg" className={style.logo} ></img>
             </a>
            <a href=""><div style={{display:'flex'}}>
-          <FontAwesomeIcon icon={faLocationDot} style={{marginTop:'12px', marginRight:'10px'}}/>
+          <FontAwesomeIcon icon={faLocationDot} style={{marginTop:'12px', marginRight:'10px'
+        , color:theme.text}}/>
           <div style={{color:'grey'}}>
             Hello
-            <div style={{color: theme=="light"?'black':'white'}}>Select Address</div>
+            <div style={{color:theme.text}}>Select Address</div>
           </div>
           </div></a>
           
@@ -130,34 +134,33 @@ const Navbar = () => {
 
           <div className={style.bar}>
             <input type="text" className={style.text} />
-            <button className={style.search}>
-              <FontAwesomeIcon icon={faMagnifyingGlass} className={style.icon}/>
-
+            <button className={style.search} >
+              <FontAwesomeIcon icon={faMagnifyingGlass} className={style.icon} style={{color:theme.text}}/>
             </button>
           </div>
-          <div className={style.notif}>
-            <a href=""><FontAwesomeIcon icon={faBell} className={style.icon}/></a>
+          <div className={style.notif} style={{borderColor:theme.text}}> 
+            <a href=""><FontAwesomeIcon icon={faBell} className={style.icon} style={{color:theme.text}}/></a>
             
           </div>
-          <div className={style.language}>
+          <div className={style.language} style={{borderColor:theme.text}} >
             
-            <a href=""><FontAwesomeIcon icon={faFlagUsa} className={style.icon}/></a>
+            <a href=""><FontAwesomeIcon icon={faFlagUsa} className={style.icon}  style={{color:theme.text}} /></a>
 
           </div>
           
           {/* <button onClick={handleThemeToggle}>Toggle Theme</button> */}
-          <div className={style.switch}>
-            <input type="checkbox" />
-            <span className={style.slider}></span>
-          </div>
+          <label className={style.switch} onClick={toggleTheme} >
+            <input type="checkbox" onChange={toggleTheme} />
+            <span className={style.slider}  ></span>
+          </label>
 
 
 
           <a href=""><div style={{display:'flex'}}>
-          <FontAwesomeIcon icon={faUser} style={{marginTop:'12px', marginRight:'10px'}}/>
+          <FontAwesomeIcon icon={faUser} style={{marginTop:'12px', marginRight:'10px',color:theme.text}}/>
           <div style={{color:'grey'}}>
             Welcome
-            <div style={{color: theme=="light"?'black':'white'}}>{currUser.firstname}</div>
+            <div style={{color:theme.text}}>{currUser.firstname}</div>
           </div>
           </div></a>
           
@@ -165,15 +168,15 @@ const Navbar = () => {
         
           <div style={{color:'grey'}}>
             Returns
-            <div style={{color: theme=="light"?'black':'white'}}>& Orders</div>
+            <div style={{color:theme.text}}>& Orders</div>
           </div>
           <div>
-              <FontAwesomeIcon icon={faCartShopping}/>
+              <FontAwesomeIcon icon={faCartShopping}style={{color:theme.text}}/>
             </div>
         </div>
         <div className={style.navbar2} style={{position:'relative'}}>
           {/* kiri  watchegg dll*/}
-          <div className={style.navbar2scroll}>
+          <div className={style.navbar2scroll} style={{color:theme.text}}>
             <div>
               <FontAwesomeIcon icon={faCircle}/> Watch : Newegg now
             </div>
@@ -204,10 +207,10 @@ const Navbar = () => {
             </div>
           </div>
           
-          <div>
+          <div  style={{color:theme.text}}>
             NewEgg Business
           </div>
-          <div className={style.verticalline}></div>
+          <div className={style.verticalline}  style={{color:theme.text}}></div>
           <div className={style.navbar2button}>
             <FontAwesomeIcon icon={faComments}/>
             Feedback

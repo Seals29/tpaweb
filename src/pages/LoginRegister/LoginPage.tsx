@@ -100,23 +100,16 @@ const LoginPage = () => {
           Sign In
         </div>
         <div  className={style.button2} onClick={()=>{
-          users.map(user=>{
+          users.map((user)=>{
+            // console.log(user.email);
             if(user.email===(username)){
-              const encodedemail = encodeURIComponent(username);//dapet email
-              console.log(username)
-              const data = {
-                Email: username
-              }
-              axios.post("http://localhost:9998/forgotpassword",data).then(res=>{
-                console.log(res)
-                // routers.push()
-              }).catch(err=>{
-                console.log(err)
-              })
+              const encoded = encodeURIComponent(username);
+              routers.push(`/login/onetimecode/[email]`,`/login/onetimecode/${encoded}`);
             }else{
               setErrormsg("No Email Found")
             }
           })
+
         }}>
         
           GET ONE-TIME SIGN IN CODE
