@@ -7,168 +7,160 @@ import { useContext, useEffect, useState } from "react";
 import HomeFooter from "./HomePage/Footer";
 import Navbar from "./HomePage/Navbar";
 import style from "@/styles/homes.module.css"
-import { faBattery3, faBatteryCar, faCarTunnel, faCompactDisc, faComputer, faComputerMouse, faFootball, faGamepad, faHeadphones, faKeyboard, faNetworkWired, faPrint, faRoute, faSnowplow, faTshirt } from "@fortawesome/free-solid-svg-icons";
+import { faArrowCircleLeft, faBackward, faBackwardFast, faBackwardStep, faBattery3, faBatteryCar, faCarTunnel, faCompactDisc, faComputer, faComputerMouse, faFootball, faGamepad, faHeadphones, faKeyboard, faNetworkWired, faPrint, faRoute, faSnowplow, faTshirt } from "@fortawesome/free-solid-svg-icons";
 import { faVolumeUp } from '@fortawesome/free-solid-svg-icons';
 import { ThemeContext } from "@/theme/theme";
 import { clearInterval, setInterval } from "timers";
 import Image from "next/image";
-const home = () =>{
+const home = () => {
+    const [currCountry, setCurrCountry] = useState('')
     const routers = useRouter();
-    const [currUser,setCurrUser] = useState([]);
-    const [isDark,setIsDark] = useState(false)
-    const {theme} = useContext(ThemeContext)
-    const [currIdx, setCurrIdx]=useState(0)
-   
-    const banner=[
-        
+    const [currUser, setCurrUser] = useState([]);
+    const [isDark, setIsDark] = useState(false)
+    const { theme } = useContext(ThemeContext)
+    const [currIdx, setCurrIdx] = useState(0)
+
+    const banner = [
+
         {
-            id:1,
-            url :"https://promotions.newegg.com/international/22-2012/1920x660@2x.png"
+            id: 1,
+            url: "https://promotions.newegg.com/international/22-2012/1920x660@2x.png"
         },
         {
-            id:2,
-            url:"https://promotions.newegg.com/nepro/23-0211/1920x660.jpg"
+            id: 2,
+            url: "https://promotions.newegg.com/nepro/23-0211/1920x660.jpg"
         }
     ]
-    const [currBanner,setCurrBanner] = useState(banner[0].url)  
-    const next=()=>{
-        setCurrIdx((currIdx+1)%banner.length)
+    const [currBanner, setCurrBanner] = useState(banner[0].url)
+    const next = () => {
+        setCurrIdx((currIdx + 1) % banner.length)
     }
-    const prev = () =>{
-        setCurrIdx((currIdx+1)%banner.length)
+    const prev = () => {
+        setCurrIdx((currIdx + 1) % banner.length)
     }
-    useEffect(()=>{
+    useEffect(() => {
         const cookies = Cookies.get('token')
-        axios.post('http://localhost:9998/validate',{cookies}).then(res=>{
+        axios.post('http://localhost:9998/validate', { cookies }).then(res => {
             console.log(res.data.user)
             setCurrUser(res.data.user)
-        }).catch(err=>{
+        }).catch(err => {
             console.log(err)
             routers.push('/login')
         })
-            console.log(currUser)
+        console.log(currUser)
         setCurrBanner(banner[currIdx].url)
-        const interval =setInterval(next,15000)
-        return () =>clearInterval(interval)
-    },[currIdx])
-    if(currUser.role==="admin"){
-        return(
-        <>
-        <header style={{color:''}}>
-            <Navbar/>
-            
-        </header>
-        <div style={{backgroundColor:'transparent'}}>
-            <div className={style.containerbox}>
-                <div className={style.box}><span ><a href="/home/view/report">View Report</a></span></div>
-                <div className={style.box}><span ><a href="/home/managementmenu">Management menu</a></span></div>
-            </div>
-            
-        </div>
-        <footer style={{position:'sticky'}}>
-            <HomeFooter/>
-            <div style={{color:'black', display:'flex',justifyContent:'space-between',height:'7vh'}}>
-                <div style={{display:'flex',flexGrow:'1'}}>
-                    <div> © 2000-2023 Newegg Inc.  All rights reserved</div>
-                    <div> Terms & Conditions</div>
-                    <div>Privacy Policy</div>
-                    <div> Cookie Preferences</div>
-                </div>
-                <div style={{
-                    display:'flex', 
-                    gap:'50px'}} className={style.circlelink}>
-                        <a href=""><FontAwesomeIcon icon={faFacebookF}/></a>
-                        <a href=""><FontAwesomeIcon icon={faTwitter}/></a>
-                        <a href=""><FontAwesomeIcon icon={faInstagramSquare}/></a>
-                        <a href=""><FontAwesomeIcon icon={faLinkedinIn}/></a>
-                        <a href=""><FontAwesomeIcon icon={faPinterestSquare}/></a>
-                        <a href=""><FontAwesomeIcon icon={faYoutubeSquare}/></a>
-                        <a href=""><FontAwesomeIcon icon={faTwitch}/></a>
-                        <a href=""><FontAwesomeIcon icon={faDiscord}/></a>
-                        <a href=""><FontAwesomeIcon icon={faTiktok}/></a>
-                </div>
-                
-            </div>
-        </footer>
-       
-        </>
-        )
-    }else{
+        const interval = setInterval(next, 15000)
+
+
+        // 4789dc9ad1d743caae109fc5818ebe2f
+        return () => clearInterval(interval)
+    }, [currIdx])
+    console.log(currCountry)
+
+    if (currUser.role === "admin") {
         return (
             <>
-            <header style={{color:''}}>
-                <Navbar/>
-                
-            </header>
-            <div style={{backgroundColor:'transparent'}}>
-                <div className={style.homesidebar} style={{backgroundImage:theme.sidebargradient}}  >
-    
-                    <ul className={style.homeul}>
-                        <li style={{color:theme.text}}><FontAwesomeIcon icon={faComputer} style={{color:theme.text}}/>Components & Storage <label > {'>'} </label></li>
-                        <li style={{color:theme.text}}><FontAwesomeIcon icon={faNetworkWired}/>Computer Systems<label > {'>'} </label></li>
-                        <li style={{color:theme.text}}><FontAwesomeIcon icon={faKeyboard}/>Computer Peripherals<label > {'>'} </label></li>
-                        <li style={{color:theme.text}}><FontAwesomeIcon icon={faHeadphones}/>Electronic<label > {'>'} </label></li>
-                        <li style={{color:theme.text}}><FontAwesomeIcon icon={faGamepad}/>Gaming<label > {'>'} </label></li>
-                        <li style={{color:theme.text}}><FontAwesomeIcon icon={faCompactDisc}/>Software & Services<label > {'>'} </label></li>
-                        <li style={{color:theme.text}}><FontAwesomeIcon icon={faComputerMouse}/>Networking<label > {'>'} </label></li>
-                        <li style={{color:theme.text}}><FontAwesomeIcon icon={faPrint}/>Office Solution<label > {'>'} </label></li>
-                        <li style={{color:theme.text}}><FontAwesomeIcon icon={faCarTunnel}/>Automotive & Industrial<label > {'>'} </label></li>
-                        <li style={{color:theme.text}}><FontAwesomeIcon icon={faSnowplow}/>Home & Tools<label > {'>'} </label></li>
-                        <li style={{color:theme.text}}><FontAwesomeIcon icon={faFootball}/>Health & Sports<label > {'>'} </label></li>
-                        <li style={{color:theme.text}}><FontAwesomeIcon icon={faTshirt}/>Apparel & Accessories<label > {'>'} </label></li>
-                        <li style={{color:theme.text}}><FontAwesomeIcon icon={faBatteryCar}/>Drone<label > {'>'} </label></li>
-                    </ul>
-                </div>
-                {/* <div className={style.containerbox}>
-                    <div className={style.box}><span ><a href="/home/view/report">View Report</a></span></div>
-                    <div className={style.box}><span ><a href="/home/managementmenu">Management menu</a></span></div>
-                </div> */}
-                <div className={style.slidercontainer}>
-                    {banner.map((img,idx)=>(
-                        <Image key={idx} src={img.url} alt="description"
-                        className={currIdx===idx?style.actives:style.inactives}
-                        layout="fill"
-                        ></Image>
-                    ))}
-                    {/* <img src={currBanner} alt={`/${currBanner}`} style={{width:'100%'}} /> */}
-                    <button onClick={prev} className={style.prev}>
-                        &lt;
-                    </button>
-                    <button onClick={next} className={style.next}>
-                        &gt;
-                    </button>
-                {/* <img src="//promotions.newegg.com/international/22-2012/1920x660@2x.png" alt="Most Popular VGA" id="$bannerId1"></img> */}
-                </div>
-            </div>
-            <footer style={{position:'sticky'}}>
-                <HomeFooter/>
-                <div style={{color:'black', display:'flex',justifyContent:'space-between',height:'7vh'}}>
-                    <div style={{display:'flex',flexGrow:'1'}}>
-                        <div> © 2000-2023 Newegg Inc.  All rights reserved</div>
-                        <div> Terms & Conditions</div>
-                        <div>Privacy Policy</div>
-                        <div> Cookie Preferences</div>
+                <header style={{ color: '' }}>
+                    <Navbar />
+                </header>
+                <div style={{ minHeight: '50vh', maxHeight: '50vh', backgroundColor: theme.background }} className={style.containerbox1}>
+                    <div className={style.containerbox} style={{ justifyContent: 'center' }}>
+                        <div className={style.box} style={{ backgroundColor: theme.backgroundmenu, justifyContent: 'center', display: 'flex' }}>
+                            <a href="/home/view/report"
+                                style={{
+                                    color: theme.text,
+                                    display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', fontSize: '20px'
+                                }} >Add New Voucher Code</a></div>
+                        <div className={style.box} style={{ backgroundColor: theme.backgroundmenu, justifyContent: 'center', display: 'flex', fontSize: '20px' }}><a href="/home/managementmenu" style={{
+                            color: theme.text,
+                            display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'
+                        }}>Management Menu</a></div>
                     </div>
-                    <div style={{
-                        display:'flex', 
-                        gap:'50px'}} className={style.circlelink}>
-                            <a href=""><FontAwesomeIcon icon={faFacebookF}/></a>
-                            <a href=""><FontAwesomeIcon icon={faTwitter}/></a>
-                            <a href=""><FontAwesomeIcon icon={faInstagramSquare}/></a>
-                            <a href=""><FontAwesomeIcon icon={faLinkedinIn}/></a>
-                            <a href=""><FontAwesomeIcon icon={faPinterestSquare}/></a>
-                            <a href=""><FontAwesomeIcon icon={faYoutubeSquare}/></a>
-                            <a href=""><FontAwesomeIcon icon={faTwitch}/></a>
-                            <a href=""><FontAwesomeIcon icon={faDiscord}/></a>
-                            <a href=""><FontAwesomeIcon icon={faTiktok}/></a>
-                    </div>
-                    
                 </div>
-            </footer>
-           
+                <footer style={{ position: 'sticky' }}>
+                    <HomeFooter />
+                    <div style={{ color: 'black', display: 'flex', justifyContent: 'space-between', height: '7vh' }}>
+                        <div style={{ display: 'flex', flexGrow: '1' }}>
+                            <div> © 2000-2023 Newegg Inc.  All rights reserved</div>
+                            <div> Terms & Conditions</div>
+                            <div>Privacy Policy</div>
+                            <div> Cookie Preferences</div>
+                        </div>
+                        <div style={{
+                            display: 'flex',
+                            gap: '50px'
+                        }} className={style.circlelink}>
+                            <a href=""><FontAwesomeIcon icon={faFacebookF} /></a>
+                            <a href=""><FontAwesomeIcon icon={faTwitter} /></a>
+                            <a href=""><FontAwesomeIcon icon={faInstagramSquare} /></a>
+                            <a href=""><FontAwesomeIcon icon={faLinkedinIn} /></a>
+                            <a href=""><FontAwesomeIcon icon={faPinterestSquare} /></a>
+                            <a href=""><FontAwesomeIcon icon={faYoutubeSquare} /></a>
+                            <a href=""><FontAwesomeIcon icon={faTwitch} /></a>
+                            <a href=""><FontAwesomeIcon icon={faDiscord} /></a>
+                            <a href=""><FontAwesomeIcon icon={faTiktok} /></a>
+                        </div>
+
+                    </div>
+                </footer>
+
+            </>
+        )
+    } else {
+        return (
+            <>
+                <header style={{ color: '' }}>
+                    <Navbar />
+
+                </header>
+                <div style={{ backgroundColor: 'transparent' }}>
+
+                    <div className={style.slidercontainer}>
+                        {banner.map((img, idx) => (
+                            <Image key={idx} src={img.url} alt="description"
+                                className={currIdx === idx ? style.actives : style.inactives}
+                                layout="fill"
+                            ></Image>
+                        ))}
+                        <button onClick={prev} className={style.prev}>
+                            &lt;
+                        </button>
+                        <button onClick={next} className={style.next}>
+                            &gt;
+                        </button>
+
+                    </div>
+                </div>
+                <footer style={{ position: 'sticky' }}>
+                    <HomeFooter />
+                    <div style={{ color: 'black', display: 'flex', justifyContent: 'space-between', height: '7vh' }}>
+                        <div style={{ display: 'flex', flexGrow: '1' }}>
+                            <div> © 2000-2023 Newegg Inc.  All rights reserved</div>
+                            <div> Terms & Conditions</div>
+                            <div>Privacy Policy</div>
+                            <div> Cookie Preferences</div>
+                        </div>
+                        <div style={{
+                            display: 'flex',
+                            gap: '50px'
+                        }} className={style.circlelink}>
+                            <a href=""><FontAwesomeIcon icon={faFacebookF} /></a>
+                            <a href=""><FontAwesomeIcon icon={faTwitter} /></a>
+                            <a href=""><FontAwesomeIcon icon={faInstagramSquare} /></a>
+                            <a href=""><FontAwesomeIcon icon={faLinkedinIn} /></a>
+                            <a href=""><FontAwesomeIcon icon={faPinterestSquare} /></a>
+                            <a href=""><FontAwesomeIcon icon={faYoutubeSquare} /></a>
+                            <a href=""><FontAwesomeIcon icon={faTwitch} /></a>
+                            <a href=""><FontAwesomeIcon icon={faDiscord} /></a>
+                            <a href=""><FontAwesomeIcon icon={faTiktok} /></a>
+                        </div>
+
+                    </div>
+                </footer>
+
             </>
         )
     }
-    
+
 }
 export default home;
