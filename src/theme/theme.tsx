@@ -10,13 +10,14 @@ export type ThemeType = {
   textColor: string,
   cardBG: string,
   border: string,
-  sidebar : string,
-  text : string,
+  sidebar: string,
+  text: string,
   bgsidebar: string,
-  sidebargradient : string
+  sidebargradient: string,
+  backgroundmenu: string
 }
 
-export const THEME:{LIGHT: ThemeType, DARK: ThemeType} = {
+export const THEME: { LIGHT: ThemeType, DARK: ThemeType } = {
   LIGHT: {
     className: "light",
     navbar: "white",
@@ -26,10 +27,11 @@ export const THEME:{LIGHT: ThemeType, DARK: ThemeType} = {
     cardBG: "#ECF1FE",
     border: "transparent",
     button: "#FFF",
-    sidebar : "white",
+    sidebar: "white",
     text: "black",
-    bgsidebar : "white",
-    sidebargradient: "linear-gradient(180deg,#ECF1FE 61%,rgba(236,241,254,.7) 88%,rgba(236,241,254,0) 97%)"
+    bgsidebar: "white",
+    sidebargradient: "linear-gradient(180deg,#ECF1FE 61%,rgba(236,241,254,.7) 88%,rgba(236,241,254,0) 97%)",
+    backgroundmenu: 'lightblue'
   },
   DARK: {
     className: "dark",
@@ -41,35 +43,36 @@ export const THEME:{LIGHT: ThemeType, DARK: ThemeType} = {
     border: "whitesmoke",
     button: "#363636",
     sidebar: "#212121",
-    text:"white",
-    bgsidebar:"#363636",
-    sidebargradient: "linear-gradient(180deg,#000 80%,rgba(12,29,106,0) 97%)"
+    text: "white",
+    bgsidebar: "#363636",
+    sidebargradient: "linear-gradient(180deg,#000 80%,rgba(12,29,106,0) 97%)",
+    backgroundmenu: '#363636'
   },
 }
 
 export const ThemeContext = createContext({
-    theme: THEME.LIGHT,
-    toggleTheme: () => {},
-  });
+  theme: THEME.LIGHT,
+  toggleTheme: () => { },
+});
 
-export const ThemeProvider = ({ children } : any) => {
-    const [theme, setTheme] = useState(THEME.LIGHT);
-  
-    useEffect(() => {
-      const storedTheme = localStorage.getItem("theme");
-      if (storedTheme && storedTheme === "dark") {
-        setTheme(THEME.DARK);
-      }
-    }, []);
+export const ThemeProvider = ({ children }: any) => {
+  const [theme, setTheme] = useState(THEME.LIGHT);
 
-    const toggleTheme = () => {
-      setTheme((e) => (e === THEME.LIGHT ? THEME.DARK : THEME.LIGHT));
-      localStorage.setItem("theme", theme === THEME.LIGHT? "dark" : "light");
-    };
-    return(
-      <ThemeContext.Provider value={{theme, toggleTheme}}>
-        {children}
-      </ThemeContext.Provider>
-    )
+  useEffect(() => {
+    const storedTheme = localStorage.getItem("theme");
+    if (storedTheme && storedTheme === "dark") {
+      setTheme(THEME.DARK);
+    }
+  }, []);
 
+  const toggleTheme = () => {
+    setTheme((e) => (e === THEME.LIGHT ? THEME.DARK : THEME.LIGHT));
+    localStorage.setItem("theme", theme === THEME.LIGHT ? "dark" : "light");
   };
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  )
+
+};

@@ -63,6 +63,9 @@ const home = () => {
                 <header style={{ color: '' }}>
                     <Navbar />
                 </header>
+                <div style={{
+                    backgroundColor: 'red', color: 'white', padding: '10px', textAlign: 'center', display: `${currUser.isban ? "" : "none"}`
+                }}>Your account is banned!</div>
                 <div style={{ minHeight: '50vh', maxHeight: '50vh', backgroundColor: theme.background }} className={style.containerbox1}>
                     <div className={style.containerbox} style={{ justifyContent: 'center' }}>
                         <div className={style.box} style={{ backgroundColor: theme.backgroundmenu, justifyContent: 'center', display: 'flex' }}>
@@ -106,13 +109,87 @@ const home = () => {
 
             </>
         )
-    } else {
+    } else if (currUser.role === "Seller") {
+        return (
+            <>
+                <header style={{ color: '' }}>
+                    <Navbar />
+                </header>
+                <div style={{
+                    backgroundColor: 'red', color: 'white', padding: '10px', textAlign: 'center', display: `${currUser.isban ? "" : "none"}`
+                }}>Your account is banned!</div>
+                <div style={{ minHeight: '50vh', maxHeight: '50vh', backgroundColor: theme.background }} className={style.containerbox1}>
+                    <div className={style.containerbox} style={{ justifyContent: 'center' }}>
+                        <div className={style.box} style={{ backgroundColor: theme.backgroundmenu, justifyContent: 'center', display: 'flex' }}>
+                            <a href="/home/shop/newproduct"
+                                style={{
+                                    color: theme.text,
+                                    display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', fontSize: '20px'
+                                }} >Insert New Product!</a></div>
+
+                        <div className={style.box} style={{ backgroundColor: theme.backgroundmenu, justifyContent: 'center', display: 'flex', fontSize: '20px' }}>
+                            <a href="/home/shop/view" style={{
+                                color: theme.text,
+                                display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'
+                            }}>View Your Product!</a></div>
+                        <div className={style.box} style={{ backgroundColor: theme.backgroundmenu, justifyContent: 'center', display: 'flex', fontSize: '20px' }}>
+                            <a href="/home/shop/profile" style={{
+                                color: theme.text,
+                                display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'
+                            }}>View Your ShopProfile!</a></div>
+                        <div className={style.box} style={{ backgroundColor: theme.backgroundmenu, justifyContent: 'center', display: 'flex', fontSize: '20px' }}>
+                            <a href="/home/shop/updatename" style={{
+                                color: theme.text,
+                                display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'
+                            }}>Update Shop Name</a></div>
+                        <div className={style.box} style={{ backgroundColor: theme.backgroundmenu, justifyContent: 'center', display: 'flex', fontSize: '20px' }}>
+                            <a href="/home/shop/updatepass" style={{
+                                color: theme.text,
+                                display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'
+                            }}>Change your Password</a></div>
+                    </div>
+                </div>
+                <footer style={{ position: 'sticky' }}>
+                    <HomeFooter />
+                    <div style={{ color: 'black', display: 'flex', justifyContent: 'space-between', height: '7vh' }}>
+                        <div style={{ display: 'flex', flexGrow: '1' }}>
+                            <div> © 2000-2023 Newegg Inc.  All rights reserved</div>
+                            <div> Terms & Conditions</div>
+                            <div>Privacy Policy</div>
+                            <div> Cookie Preferences</div>
+                        </div>
+                        <div style={{
+                            display: 'flex',
+                            gap: '50px'
+                        }} className={style.circlelink}>
+                            <a href=""><FontAwesomeIcon icon={faFacebookF} /></a>
+                            <a href=""><FontAwesomeIcon icon={faTwitter} /></a>
+                            <a href=""><FontAwesomeIcon icon={faInstagramSquare} /></a>
+                            <a href=""><FontAwesomeIcon icon={faLinkedinIn} /></a>
+                            <a href=""><FontAwesomeIcon icon={faPinterestSquare} /></a>
+                            <a href=""><FontAwesomeIcon icon={faYoutubeSquare} /></a>
+                            <a href=""><FontAwesomeIcon icon={faTwitch} /></a>
+                            <a href=""><FontAwesomeIcon icon={faDiscord} /></a>
+                            <a href=""><FontAwesomeIcon icon={faTiktok} /></a>
+                        </div>
+
+                    </div>
+                </footer>
+
+            </>
+        )
+    }
+
+    else {
         return (
             <>
                 <header style={{ color: '' }}>
                     <Navbar />
 
                 </header>
+                <div style={{
+                    backgroundColor: 'red', color: 'white', padding: '10px', textAlign: 'center', display: `${currUser.isban ? "" : "none"}`
+                }}>Your account is banned!</div>
                 <div style={{ backgroundColor: 'transparent' }}>
 
                     <div className={style.slidercontainer}>
