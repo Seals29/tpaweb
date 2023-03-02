@@ -3,6 +3,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { setCookie } from "nookies";
 import React, { useEffect, useState } from "react";
+import style from "@/styles/login.module.css"
 export default function login2Page() {
   const router = useRouter();
   const [pass, setPass] = useState("");
@@ -17,10 +18,13 @@ export default function login2Page() {
         <div style={{ color: 'black' }}>
           {router.query.email};
         </div>
-        <input type="password" placeholder="Password" value={pass} onChange={(e) => {
-          setPass(e.target.value);
-        }} />
-        <div style={styles.button} onClick={() => {
+        <input
+          className={style.input}
+          type="password" placeholder="Password" value={pass} onChange={(e) => {
+            setPass(e.target.value);
+          }} />
+        <button style={styles.button} onClick={(e) => {
+          e.preventDefault()
           const data = {
             Email: router.query.email,
             Password: pass
@@ -45,7 +49,7 @@ export default function login2Page() {
 
         }}>
           Sign In
-        </div>
+        </button>
         <button style={{
           width: '100%',
           padding: '12px',

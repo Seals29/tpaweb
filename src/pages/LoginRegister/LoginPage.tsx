@@ -70,7 +70,8 @@ const LoginPage = () => {
           placeholder="Email Address" required
         />
         <div style={{ color: 'red' }}>{errormsg}</div>
-        <div className={style.button} onClick={() => {
+        <button className={style.button} onClick={(e) => {
+          e.preventDefault()
           users.map((user) => {
 
             if (user.email === (username)) {
@@ -83,8 +84,9 @@ const LoginPage = () => {
           })
         }}>
           Sign In
-        </div>
-        <div className={style.button2} onClick={() => {
+        </button>
+        <button className={style.button2} onClick={(e) => {
+          e.preventDefault()
           users.map((user) => {
             // console.log(user.email);
             if (user.email === (username)) {
@@ -98,7 +100,7 @@ const LoginPage = () => {
         }}>
 
           GET ONE-TIME SIGN IN CODE
-        </div>
+        </button>
         <a href="" style={{
           color: 'black',
           textDecorationLine: 'underline'

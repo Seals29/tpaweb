@@ -66,20 +66,22 @@ const Register = () => {
         <div style={{ color: 'black' }}>
           asdasd
         </div>
-        <div style={{ display: 'flex', color: 'black' }}>
-          <input type="checkbox" className={style.input}
-            style={{ backgroundColor: 'white' }} onChange={(e) => {
-              setCheckbox(e.target.checked)
+        <div style={{ display: 'flex', color: 'black', gap: '5px' }}>
 
-            }} />
-          <label className={style.link}>asdasd</label>
+          <label className={style.link} style={{ gap: '5px' }}>
+            <input type="checkbox"
+              style={{ backgroundColor: 'white' }} onChange={(e) => {
+                setCheckbox(e.target.checked)
+
+              }} />
+            Subscribe for exclusive e-mail offers and discounts</label>
         </div>
         <div style={{ display: 'flex', wordWrap: 'break-word', color: 'black', gap: '5px', opacity: '0.5' }}>
           By creating an account, you agree to Newegg's
-          <a href="" className={style.link}>Privacy Notice</a>
+          <a href="" className={style.link} style={{ wordWrap: 'break-word' }}>Privacy Notice</a>
           <br />
           <div>and</div>
-          <a href="" className={style.link}>Terms of Use</a>
+          <a href="" className={style.link} style={{ wordWrap: 'break-word' }}>Terms of Use</a>
           <br />
         </div>
         <div className={style.button} style={{ textAlign: 'center', fontWeight: 'bold' }} onClick={() => {

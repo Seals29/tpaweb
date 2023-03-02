@@ -48,6 +48,8 @@
 
 
 .containerform {
+  padding-top: 200px;
+  padding-bottom: 260px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -69,7 +71,7 @@
   border: none;
   border-radius: 5px;
   margin-bottom: 20px;
-  box-shadow: 0px 0px 5px #ddd;
+  box-shadow: 0px 0px 5px black;
   width: 300px;
 }
 
@@ -257,35 +259,118 @@
   border-radius: 5px;
 }
 
-.usercontainer {
-  display: grid;
+/* .usercontainer {
+  display: flex;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 25px;
+  flex-flow: row wrap;
+  position: relative;
+} */
 
+.cardcontainers {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, 20%);
+  padding: 0px 5% 40 px;
+  gap: 10px;
+  /* margin-top: 10px; */
+  padding-top: 10px;
+
+  justify-content: center;
+  /* flex-direction: 'row'; */
+  /* min-width: 320px; */
+
+  /* 
+  display: flex;
+  flex-flow: row wrap;
+  position: relative; */
+  /* Set a minimum width */
+
+}
+
+.circleimg {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid #363636;
+}
+
+.circleimg img {
+  width: 100%;
+  overflow: hidden;
+  height: auto;
 }
 
 .usercontainer {
   list-style: none;
   background-color: #212121;
-
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
 }
 
 .usercontainer img {
   height: auto;
   width: auto;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 
 }
 
 .productimage {
   size: 30px;
   justify-content: center;
+  height: 150px;
+  width: 200px;
 }
 
+.buttonflwchat {
+  left: 0;
+  margin-right: 200px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.buttonflwchat button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  height: 25px;
+  width: 52px;
+  align-items: center;
+  justify-content: center;
+  /* padding: 12px 24px; */
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 8px;
+  margin: 10px;
+  cursor: pointer;
+  border-radius: 15px;
+}
+
+.buttonflwchat button:hover {
+  background-color: #3e8e41;
+}
+
+.followbtn {
+  background-color: #313131;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.followbtn:hover {
+  background-color: #525050;
+}
 
 .userdata {
   margin: 30px;
@@ -344,6 +429,24 @@
   box-sizing: border-box;
 }
 
+.activetab {
+  position: relative;
+
+}
+
+.activetab::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-bottom: 15px;
+  background-color: red;
+}
+
 .shopprofile button {
   background-color: #007bff;
   color: #fff;
@@ -400,4 +503,52 @@
   margin: 20px;
   color: black;
   background-color: #363636;
+}
+
+.allproductcontainer {
+  max-width: 1500px;
+  min-width: 1500px;
+  margin: 0 auto;
+  height: 1000px;
+  padding: 50px;
+  background-color: #f5f5f5;
+  border-radius: 30px;
+  min-height: 1000px;
+  max-height: 1000px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  min-height: auto;
+
+}
+
+.categorycard {
+  align-items: center;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  width: 300px;
+  min-height: 150px;
+  border: 1px solid #ccc;
+  border-radius: 35px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-bottom: 20px;
+  cursor: pointer;
+  margin-left: 25px;
+  transition: background-color 0.3s ease;
+  /* Add a transition to the background color */
+}
+
+.categorycard:hover {
+  background-color: #313131 !important;
+}
+
+/* transition: background-color 0.3s ease;
+}
+
+.box:hover {
+  background-color: #ddd;
+} */
+.categorycardinfo {
+  padding: 20px;
 }

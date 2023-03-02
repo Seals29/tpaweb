@@ -14,7 +14,8 @@ export type ThemeType = {
   text: string,
   bgsidebar: string,
   sidebargradient: string,
-  backgroundmenu: string
+  backgroundmenu: string,
+  footerbg: string,
 }
 
 export const THEME: { LIGHT: ThemeType, DARK: ThemeType } = {
@@ -31,7 +32,8 @@ export const THEME: { LIGHT: ThemeType, DARK: ThemeType } = {
     text: "black",
     bgsidebar: "white",
     sidebargradient: "linear-gradient(180deg,#ECF1FE 61%,rgba(236,241,254,.7) 88%,rgba(236,241,254,0) 97%)",
-    backgroundmenu: 'lightblue'
+    backgroundmenu: 'lightblue',
+    footerbg: '#0A185C'
   },
   DARK: {
     className: "dark",
@@ -46,7 +48,8 @@ export const THEME: { LIGHT: ThemeType, DARK: ThemeType } = {
     text: "white",
     bgsidebar: "#363636",
     sidebargradient: "linear-gradient(180deg,#000 80%,rgba(12,29,106,0) 97%)",
-    backgroundmenu: '#363636'
+    backgroundmenu: '#363636',
+    footerbg: '#313131'
   },
 }
 
@@ -66,8 +69,14 @@ export const ThemeProvider = ({ children }: any) => {
   }, []);
 
   const toggleTheme = () => {
-    setTheme((e) => (e === THEME.LIGHT ? THEME.DARK : THEME.LIGHT));
+
     localStorage.setItem("theme", theme === THEME.LIGHT ? "dark" : "light");
+    localStorage.setItem("theme", theme === THEME.LIGHT ? "dark" : "light");
+    setTheme((e) => (e === THEME.LIGHT ? THEME.DARK : THEME.LIGHT));
+    // const newLang = e ? Language.Eng : Language.Id;
+    // setLang(newLang);
+    // localStorage.setItem("lang", newLang === Language.Id ? "id" : "eng");
+
   };
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>

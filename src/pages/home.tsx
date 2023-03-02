@@ -12,14 +12,16 @@ import { faVolumeUp } from '@fortawesome/free-solid-svg-icons';
 import { ThemeContext } from "@/theme/theme";
 import { clearInterval, setInterval } from "timers";
 import Image from "next/image";
-const home = () => {
+import Card from "./components/card";
+const home = (props: any) => {
     const [currCountry, setCurrCountry] = useState('')
     const routers = useRouter();
+    const { allProducts } = props;
     const [currUser, setCurrUser] = useState([]);
     const [isDark, setIsDark] = useState(false)
     const { theme } = useContext(ThemeContext)
     const [currIdx, setCurrIdx] = useState(0)
-
+    console.log(allProducts)
     const banner = [
 
         {
@@ -38,6 +40,10 @@ const home = () => {
     const prev = () => {
         setCurrIdx((currIdx + 1) % banner.length)
     }
+    const [products, setProducts] = useState([])
+    const [chunk, setChunk] = useState(products.slice(0, 10))
+
+
     useEffect(() => {
         const cookies = Cookies.get('token')
         axios.post('http://localhost:9998/validate', { cookies }).then(res => {
@@ -47,9 +53,10 @@ const home = () => {
             console.log(err)
             routers.push('/login')
         })
+
         console.log(currUser)
         setCurrBanner(banner[currIdx].url)
-        const interval = setInterval(next, 15000)
+        const interval = setInterval(next, 20000)
 
 
         // 4789dc9ad1d743caae109fc5818ebe2f
@@ -82,29 +89,6 @@ const home = () => {
                 </div>
                 <footer style={{ position: 'sticky' }}>
                     <HomeFooter />
-                    <div style={{ color: 'black', display: 'flex', justifyContent: 'space-between', height: '7vh' }}>
-                        <div style={{ display: 'flex', flexGrow: '1' }}>
-                            <div> © 2000-2023 Newegg Inc.  All rights reserved</div>
-                            <div> Terms & Conditions</div>
-                            <div>Privacy Policy</div>
-                            <div> Cookie Preferences</div>
-                        </div>
-                        <div style={{
-                            display: 'flex',
-                            gap: '50px'
-                        }} className={style.circlelink}>
-                            <a href=""><FontAwesomeIcon icon={faFacebookF} /></a>
-                            <a href=""><FontAwesomeIcon icon={faTwitter} /></a>
-                            <a href=""><FontAwesomeIcon icon={faInstagramSquare} /></a>
-                            <a href=""><FontAwesomeIcon icon={faLinkedinIn} /></a>
-                            <a href=""><FontAwesomeIcon icon={faPinterestSquare} /></a>
-                            <a href=""><FontAwesomeIcon icon={faYoutubeSquare} /></a>
-                            <a href=""><FontAwesomeIcon icon={faTwitch} /></a>
-                            <a href=""><FontAwesomeIcon icon={faDiscord} /></a>
-                            <a href=""><FontAwesomeIcon icon={faTiktok} /></a>
-                        </div>
-
-                    </div>
                 </footer>
 
             </>
@@ -151,29 +135,6 @@ const home = () => {
                 </div>
                 <footer style={{ position: 'sticky' }}>
                     <HomeFooter />
-                    <div style={{ color: 'black', display: 'flex', justifyContent: 'space-between', height: '7vh' }}>
-                        <div style={{ display: 'flex', flexGrow: '1' }}>
-                            <div> © 2000-2023 Newegg Inc.  All rights reserved</div>
-                            <div> Terms & Conditions</div>
-                            <div>Privacy Policy</div>
-                            <div> Cookie Preferences</div>
-                        </div>
-                        <div style={{
-                            display: 'flex',
-                            gap: '50px'
-                        }} className={style.circlelink}>
-                            <a href=""><FontAwesomeIcon icon={faFacebookF} /></a>
-                            <a href=""><FontAwesomeIcon icon={faTwitter} /></a>
-                            <a href=""><FontAwesomeIcon icon={faInstagramSquare} /></a>
-                            <a href=""><FontAwesomeIcon icon={faLinkedinIn} /></a>
-                            <a href=""><FontAwesomeIcon icon={faPinterestSquare} /></a>
-                            <a href=""><FontAwesomeIcon icon={faYoutubeSquare} /></a>
-                            <a href=""><FontAwesomeIcon icon={faTwitch} /></a>
-                            <a href=""><FontAwesomeIcon icon={faDiscord} /></a>
-                            <a href=""><FontAwesomeIcon icon={faTiktok} /></a>
-                        </div>
-
-                    </div>
                 </footer>
 
             </>
@@ -208,36 +169,44 @@ const home = () => {
 
                     </div>
                 </div>
+                {/* <div style={{
+                    display: "flex", gap: '15px', background: theme.background,
+                    flexDirection: 'row', overflow: 'auto', flexWrap: 'wrap', justifyContent: 'center'
+                }}> */}
+                <div style={{ backgroundColor: theme.background, margin: '0' }} >
+                    <div className={style.cardcontainers} style={{backgroundColor:theme.background}}>
+                        {allProducts.map((idx: any) => (
+                            <div className={style.usercontainer} onClick={(e) => {
+                                e.preventDefault()
+                                console.log(idx.ID)
+                                routers.push(`home/user/product/${idx.ID}`)
+                            }} style={{backgroundColor:theme.background, cursor:'pointer'}}>
+                                <Card name={idx.name} image={idx.image} description={idx.description} rating={idx.rating} category={idx.category} detail={idx.detail} stock={idx.stock} price={idx.price} />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* tinggal kasi infinite scrolling */}
+
+                {/* </div> */}
                 <footer style={{ position: 'sticky' }}>
                     <HomeFooter />
-                    <div style={{ color: 'black', display: 'flex', justifyContent: 'space-between', height: '7vh' }}>
-                        <div style={{ display: 'flex', flexGrow: '1' }}>
-                            <div> © 2000-2023 Newegg Inc.  All rights reserved</div>
-                            <div> Terms & Conditions</div>
-                            <div>Privacy Policy</div>
-                            <div> Cookie Preferences</div>
-                        </div>
-                        <div style={{
-                            display: 'flex',
-                            gap: '50px'
-                        }} className={style.circlelink}>
-                            <a href=""><FontAwesomeIcon icon={faFacebookF} /></a>
-                            <a href=""><FontAwesomeIcon icon={faTwitter} /></a>
-                            <a href=""><FontAwesomeIcon icon={faInstagramSquare} /></a>
-                            <a href=""><FontAwesomeIcon icon={faLinkedinIn} /></a>
-                            <a href=""><FontAwesomeIcon icon={faPinterestSquare} /></a>
-                            <a href=""><FontAwesomeIcon icon={faYoutubeSquare} /></a>
-                            <a href=""><FontAwesomeIcon icon={faTwitch} /></a>
-                            <a href=""><FontAwesomeIcon icon={faDiscord} /></a>
-                            <a href=""><FontAwesomeIcon icon={faTiktok} /></a>
-                        </div>
 
-                    </div>
                 </footer>
 
             </>
         )
     }
 
+}
+export async function getStaticProps() {
+    const response = await axios.get("http://localhost:9998/getallproduct")
+    const allProducts = await response.data;
+    return {
+        props: {
+            allProducts,
+        },
+    };
 }
 export default home;

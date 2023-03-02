@@ -62,7 +62,7 @@ export default function loginonetimePage() {
                 <div className={style.containerform}>
 
 
-                    <img src={data.image} alt="" style={{ marginTop: '75px' }} />
+                    <img src={data.image} alt="" style={{ marginTop: '75px', width: '300px', height: '200px' }} />
                     <label >Image</label>
                     <input type="file" placeholder="" accept="image/png, image/jpeg" onChange={(e: any) => {
                         setImageUpload(e.target.files[0])

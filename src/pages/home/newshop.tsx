@@ -9,6 +9,8 @@ import { } from 'firebase/app';
 import 'firebase/storage';
 
 import style from "@/styles/homes.module.css"
+import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
+import { storage } from "../firebase/firebase";
 export default function newshop() {
 
 
@@ -32,6 +34,7 @@ export default function newshop() {
     const [shopPassword, setShopPassword] = useState("")
     const [fileURL, setfileURL] = useState("")
     const [file, setFile] = useState(null)
+    const [imageUpload, setImageUpload] = useState(null)
     console.log(routers);
     return (
         <div>
@@ -55,13 +58,14 @@ export default function newshop() {
                     }} /><br />
                     <br />
                     <label >Shop Banner (optional):</label>
-                    <input type="file" placeholder="Shop Password" onChange={(e: any) => {
-                        const file = e.target.files[0];
+                    <input type="file" placeholder="ImageUploade" onChange={(e: any) => {
+                        setImageUpload(e.target.files[0]);
                         // const storageRef = firebase.storage().ref();
                     }} /><br />
                     <br />
+                    {/* e.preventDefault() */}
+                    {/* const imageRef = ref(storage, `shopBanner/${currUser.firstname}/${imageUpload.name + "OldEgg"}`); */}
                     <button onClick={() => {
-                        console.log(shopPassword);
                         type User = {
                             firstname: string,
                             email: string,
@@ -71,50 +75,66 @@ export default function newshop() {
                             banner: string
                         }
 
-                        const newUser: User = {
-                            firstname: shopName,
-                            isban: false,
-                            role: "Seller",
-                            email: shopEmail,
-                            password: shopPassword,
-                            banner: ""
-                        }
-
-                        var token = "";
-                        axios.post("http://localhost:9998/createshop", newUser).then(response => {
-                            console.log("Response")
-                            if (response.data.error) {
-                                setResp(response.data.error)
-                                alert(response.data.error)
-
-                                return
-                            } else {
-                                alert("Account shop successfully registered")
-                                type ShopUser = {
-                                    email: string
-                                }
-                                const NewShopUser: ShopUser = {
-                                    email: shopEmail
-                                }
-                                axios.post("http://localhost:9998/notifyshop", NewShopUser).then(res => {
-                                    alert("Announcement has been sent!")
-                                }).catch(err => {
-                                    console.log(err)
-                                })
-
-                            }
+                        const imageRef = ref(storage, `shopBanner/${shopName}/${imageUpload.name + "OldEgg"}`);
+                        uploadBytes(imageRef, imageUpload).then(res => {
+                            console.log(res)
                         }).catch(err => {
-                            console.log("Response")
-                            console.log(err);
-
+                            console.log(err)
+                            return
                         })
+                        const imageListReff = ref(storage, `shopBanner/${shopName}/`)
+                        listAll(imageListReff).then(res => {
+                            console.log(res)
+                            res.items.forEach((item) => {
+                                console.log(item.name)
+                                console.log(`${imageUpload.name + "OldEgg"}`)
 
+                                console.log(`${imageUpload.name + "OldEgg"}` === item.name)
+                                if (item.name === `${imageUpload.name + "OldEgg"}`) {
+                                    getDownloadURL(item).then(url => {
+                                        console.log(url)
+                                        const newUser: User = {
+                                            firstname: shopName,
+                                            isban: false,
+                                            role: "Seller",
+                                            email: shopEmail,
+                                            password: shopPassword,
+                                            banner: url
+                                        }
+                                        axios.post("http://localhost:9998/createshop", newUser).then(response => {
+                                            console.log("Response")
+                                            if (response.data.error) {
+                                                setResp(response.data.error)
+                                                alert(response.data.error)
 
+                                                return
+                                            } else {
+                                                alert("Account shop successfully registered")
+                                                type ShopUser = {
+                                                    email: string
+                                                }
+                                                const NewShopUser: ShopUser = {
+                                                    email: shopEmail
+                                                }
+                                                axios.post("http://localhost:9998/notifyshop", NewShopUser).then(res => {
+                                                    alert("Announcement has been sent!")
+                                                }).catch(err => {
+                                                    console.log(err)
+                                                })
+
+                                            }
+                                        }).catch(err => {
+                                            console.log("Response")
+                                            console.log(err);
+
+                                        })
+
+                                    })
+
+                                }
+                            })
+                        })
                     }
-
-
-
-
                     }>Submit</button>
                 </div>
             </div>

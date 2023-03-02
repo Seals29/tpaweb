@@ -1,0 +1,87 @@
+.productdetail {
+    display: flex;
+    /* flex-direction: row; */
+    flex-wrap: wrap;
+    margin: 0 auto;
+    /* gap: 50px; */
+    border-radius: 30px;
+    max-width: 1000px;
+    padding: 20px;
+    padding-top: 15px;
+}
+
+.detailbutton button {
+
+    background-color: #212121;
+    /* Green */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.detailbutton button:hover {
+    background-color: #515151;
+    cursor: pointer
+}
+
+.detaillogocontainer {
+    display: flex;
+    gap: 1px;
+    align-items: center;
+    justify-content: center;
+    /* background-color: #313131; */
+    max-height: 75px;
+    max-width: 100px;
+    /* margin-left: auto; */
+    /* padding: 10px; */
+    border: 2px solid #000;
+    border-radius: 5px;
+    box-shadow: 1px 1px 1px #888888;
+    transition: all 0.3s ease-in-out;
+}
+
+.detailprice {
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+
+}
+
+.detailstock {
+    color: green;
+
+}
+
+.detaildescription {
+    margin: 10px 0;
+    font-size: 14px;
+
+}
+
+.detailcategory {
+    font-style: italic;
+    color: #888;
+}
+
+.detaillogocontainer:hover {
+    transform: scale(1.1);
+    box-shadow: 1px 1px 10px #888888;
+
+}
+
+.detaillogocontainer img {
+    max-width: 20px;
+    margin-right: 10px;
+}
+
+.detaillogocontainer p {
+    font-size: 24px;
+    font-weight: bold;
+}

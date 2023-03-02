@@ -1,0 +1,109 @@
+.wishlistnavbar{
+    display: flex;
+    justify-content: space-evenly;
+    font-size: 28px;
+    list-style: none;
+    padding-top: 25px;
+    padding: 55px;
+    /* transition: 10s blue ease; */
+}
+.wishlistnavbar li{
+    padding-left: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-right: 10px;
+    transition: 1s ease;
+    cursor: pointer;
+}
+.activenavbar{
+    background-color: white;
+    border-radius: 50%;
+}
+.wishlistnavbar li:hover{
+    background-color: grey;
+    border-radius: 15px;
+    /* margin: 15px; */
+    /* padding: 15px; */
+    padding-left: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-right: 10px;
+    width: auto;
+}
+.wishbtn button{
+    margin-left: 100px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 15px;
+    font-size: 15px;
+    padding-top: 5px;
+    cursor: pointer;
+    padding-bottom: 5px;
+    transition: 1s ease;
+}
+.wishbtn button:hover{
+    background-color: grey;
+}
+.activetab {
+    position: relative;
+  
+  }
+  .wishlistmain{
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(5, 20%);
+        padding: 0px 5% 40 px;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+        /* margin-bottom: 15px; */
+        gap: 5px;
+        /* margin-top: 10px; */
+        padding-top: 10px;
+  }
+  .wishlistcontainer h2{
+    padding: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+        text-align: center;
+        margin: 0;
+  }
+.wishlistcontainer{
+    width: 200px;
+    cursor: pointer;
+    margin-top: 35px;
+    border: 1px solid black;
+    margin-bottom: 35px;
+    margin-left: 38px;
+    height: 300px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+  .activetab::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-bottom: -27px;
+    background-color: grey;
+  }
+.inactiveyour{
+    display: none;
+}
+.activeyour{
+    border-radius: 67px;
+    font-size: 50px;
+    display: block;
+    min-height: 800px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    border: 1px solid black;
+    max-height: auto;
+}

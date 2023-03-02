@@ -26,8 +26,11 @@ export default function newproduct() {
     const [stock, setStock] = useState(0)
     const [rating, setRating] = useState(0)
     const [detail, setDetail] = useState("")
+    const [subCategory, setSubCategory] = useState([])
     const [shopid, setShopid] = useState("")
     const [shopData, setShopData] = useState([])
+    const [allCategory, setAllCategory] = useState([])
+    const [allSubCategory, setAllSubCategory] = useState([])
     useEffect(() => {
         axios.post('http://localhost:9998/validate', { cookies }).then(res => {
             console.log(res.data.user)
@@ -39,6 +42,16 @@ export default function newproduct() {
             console.log(res.data)
             setShopData(res.data)
         })
+        axios.get("http://localhost:9998/getallsubcategory").then(res => {
+            console.log(res)
+            setAllSubCategory(res.data)
+        }).catch(err => {
+            console.log(err)
+        })
+        axios.get("http://localhost:9998/getallcategory").then(res => {
+            console.log(res)
+            setAllCategory(res.data)
+        })
 
     }, [])
 
@@ -48,61 +61,64 @@ export default function newproduct() {
                 <Navbar />
             </div>
 
-            <div style={{ minHeight: '100vh', maxHeight: '100vh', backgroundColor: 'blue' }}>
-                <div className={style.containerform}>
-                    <label>Product:</label>
+            <div style={{ minHeight: '100vh', maxHeight: '100vh', backgroundColor: '' }}>
+                <div className={style.containerform} style={{ backgroundColor: theme.background }}>
+                    <label style={{ color: theme.text }}>Product:</label>
                     <input type="text" placeholder="Product Name" onChange={(e) => {
                         setName(e.target.value)
-                    }} /><br /><br />
-                    <label >Product Category</label>
+                    }} style={{ boxShadow: '0px 0px 5px black', backgroundColor: theme.bgsidebar, color: theme.text }} /><br /><br />
+                    {/* box-shadow: 0px 0px 5px #ddd; */}
+                    <label style={{ color: theme.text }}>Product Category</label>
                     <select id="selectOption" value={category} onChange={(e) => {
                         console.log(e.target.value)
                         setCategory(e.target.value)
-                    }}>
-                        <option value="">--Please choose an option--</option>
-                        <option value="Components & Storage">Components & Storage</option>
-                        <option value="Computer Systems">Computer Systems</option>
-                        <option value="Computer Peripherals">Computer Peripherals</option>
-                        <option value="Computer Systems">Computer Systems</option>
-                        <option value="Electronics">Electronics</option>
-                        <option value="Gaming">Gaming</option>
-                        <option value="Software & Services">Software & Services</option>
-                        <option value="Networking">Networking</option>
-                        <option value="Office Solutions">Office Solutions</option>
-                        <option value="Automotive & Industrial">Automotive & Industrial</option>
-                        <option value="Home & Tools">Home & Tools</option>
-                        <option value="Health & Sports">Health & Sports</option>
-                        <option value="Apparel & Accessories">Apparel & Accessories</option>
-                        <option value="Toys, Drones & Maker">Toys, Drones & Maker</option>
+                    }} style={{ boxShadow: '0px 0px 5px black', backgroundColor: theme.bgsidebar, color: theme.text }}>
+                        <option value="" style={{ color: theme.text }}>--Please choose an option--</option>
+                        {allCategory.map((e: any) => (
+                            <option key={e.ID} value={e.ID}>{e.name}</option>
+                        ))}
                     </select>
-                    <label >Product Image</label>
+                    <select name="" id="" onChange={(e) => {
+                        setSubCategory(e.target.value)
+                    }}>
+                        <option value="" style={{ color: theme.text }}>--Please choose an option--</option>
+                        {allSubCategory.map((i: any) => {
+                            if (String(i.productcategoryid) === String(category)) {
+                                return (
+                                    <option key={i.ID} value={i.namr}>{i.name}</option>
+                                )
+                            }
+                            // } console.log(i)
+                        })}
+                    </select>
+                    <label style={{ color: theme.text }}>Product Image</label>
                     <input type="file" placeholder="Product Image" onChange={(e: any) => {
                         setImageUpload(e.target.files[0])
-                    }} accept="image/png, image/jpeg" /><br />
+                    }} accept="image/png, image/jpeg" style={{ boxShadow: '0px 0px 5px black', backgroundColor: theme.bgsidebar, color: theme.text }} /><br />
                     <br />
-                    <label >Product Description:</label>
+                    <label style={{ color: theme.text }}>Product Description:</label>
                     <input type="text" placeholder="Description" onChange={(e: any) => {
                         setDesc(e.target.value)
 
-                    }} /><br />
+                    }} style={{ boxShadow: '0px 0px 5px black', backgroundColor: theme.bgsidebar, color: theme.text }} /><br />
                     <br />
-                    <label >Product Price:</label>
+                    <label style={{ color: theme.text }}>Product Price:</label>
                     <input type="number" placeholder="Price" onChange={(e: any) => {
                         setPrice(e.target.value)
 
-                    }} /><br />
+                    }} style={{ boxShadow: '0px 0px 5px black', backgroundColor: theme.bgsidebar, color: theme.text }} /><br />
                     <br />
-                    <label >Product Stock:</label>
+                    <label style={{ color: theme.text }}>Product Stock:</label>
                     <input type="number" placeholder="Stock" onChange={(e: any) => {
                         setStock(e.target.value)
-                    }} /><br />
+                    }} style={{ boxShadow: '0px 0px 5px black', backgroundColor: theme.bgsidebar, color: theme.text }} /><br />
                     <br />
-                    <label >Product Detail:</label>
-                    <input type="text" placeholder="Detail" onChange={(e: any) => {
+                    <label style={{ color: theme.text }}>Product Detail:</label>
+                    <input style={{ boxShadow: '0px 0px 5px black', backgroundColor: theme.bgsidebar, color: theme.text }} type="text" placeholder="Detail" onChange={(e: any) => {
                         setDetail(e.target.value)
                     }} /><br />
                     <br />
-                    <button onClick={() => {
+                    <button style={{ color: theme.text }} onClick={() => {
                         if (imageUpload == null) {
                             alert("Product must have image to be shown")
                             return
@@ -124,6 +140,7 @@ export default function newproduct() {
                                         type Product = {
                                             name: string,
                                             category: string,
+                                            subcategory: string,
                                             price: string,
                                             email: string,
                                             description: string,
@@ -139,6 +156,7 @@ export default function newproduct() {
                                                 const newProduct: Product = {
                                                     name: name,
                                                     category: category,
+                                                    subcategory: subCategory.toString(),
                                                     price: price.toString(),
                                                     email: currUser.email,
                                                     description: desc,

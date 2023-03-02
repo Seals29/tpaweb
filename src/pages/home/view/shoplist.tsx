@@ -4,10 +4,12 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { setCookie } from "nookies";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import style from "@/styles/homes.module.css"
 import Link from "next/link";
 import Pagination from "@/pages/components/pagination";
+import { ThemeContext } from "@/theme/theme";
+import Card from "@/pages/components/card";
 export default function shoplist() {
 
 
@@ -36,9 +38,11 @@ export default function shoplist() {
     const [currPage, setCurrPage] = useState(1);
     const totalShops = shops.length;
     const Pages = Math.ceil(totalShops / 5)
+    const { theme } = useContext(ThemeContext)
     const startIdx = (currPage - 1) * 5
     const endIdx = startIdx + 5
     const userOnPage = shops.slice(startIdx, endIdx)
+    console.log(userOnPage)
     const changePageHandler = (pageNumber: any) => {
         setCurrPage(pageNumber)
     }
@@ -50,12 +54,18 @@ export default function shoplist() {
                 <div style={{ minHeight: '100vh', maxHeight: '100vh' }}>
                     <h1>Shop List</h1>
                     <ul className={style.usercontainer}>
-                        {userOnPage.map((idx: any) => (
-                            <li key={idx.id} style={{ color: 'black' }} className={style.userdata}>
-                                <h2>{idx.firstname ? idx.firstname : "Unnamed"} {idx.lastname === idx.firstname ? "" : idx.lastname}</h2>
-                                <h2>{idx.email ? idx.email : "No Email"}</h2>
-                                {idx.isban ? (
 
+                        {userOnPage.map((idx: any) => (
+
+                            <li key={idx.ID} style={{ color: theme.text }} className={style.userdata} onClick={() => {
+                                console.log(idx)
+                                // routers.push("/home/user/shop/[name]", `/home/user/shop/${idx.ID}`)
+                            }}>
+                                <h2>{idx.name ? idx.name : "Unnamed"} {idx.lastname === idx.firstname ? "" : idx.lastname}</h2>
+                                <h2></h2>
+                                <h2>{idx.email ? idx.email : "No Email"}</h2>
+                                <img src={idx.banner} alt="" />
+                                {idx.isban ? (
                                     <button onClick={() => {
                                         const data = {
                                             IsBan: idx.isban,
@@ -98,3 +108,12 @@ export default function shoplist() {
     }
 
 }
+// export async function getStaticProps() {
+//     const response = await axios.get("http://localhost:9998/getallproduct")
+//     const allProducts = await response.data;
+//     return {
+//         props: {
+//             allProducts,
+//         },
+//     };
+// }
