@@ -7,7 +7,18 @@ import style from "@/styles/login.module.css"
 export default function loginverifcode() {
     const router = useRouter();
     const [code, setCode] = useState("")
+    const [cooldown, setCooldown] = useState(0)
     console.log(router);
+    useEffect(() => {
+        if (cooldown > 0) {
+            const timeoutID = setTimeout(() => {
+                setCooldown(cooldown - 1)
+            }, 1000)
+            return () =>
+                clearInterval(timeoutID)
+
+        }
+    }, [cooldown])
     return (
         <div>
             <img
@@ -30,7 +41,7 @@ export default function loginverifcode() {
                         <button className={style.button} onClick={(e) => {
                             //get data
                             e.preventDefault()
-                            alert("masuk button")
+                            // alert("masuk button")
                             console.log(code)
                             type body = {
                                 ResetCode: string
@@ -51,7 +62,7 @@ export default function loginverifcode() {
                                     router.push('/home');
                                 }
                                 //valid
-                                console.log("suskesaxios")
+                                // console.log("suskesaxios")
                                 //setcookie
 
                             }).catch(err => {
@@ -70,13 +81,18 @@ export default function loginverifcode() {
                                 const encoded = encodeURIComponent(data.Email.toString());
                                 // router.push(`/login/verif/[email]`,`/login/verif/${encoded}`);
                                 alert("new verification code has been sent")
+                                setCooldown(120)
                             }).catch(err => {
                                 console.log(err)
                             })
-                        }}>
+                        }} disabled={cooldown <= 0 ? false : true}>
                             Resend Verification Code!
                         </button>
+                        {cooldown > 0 && (
+                            <p style={{ color: "black" }}>Resend Verification code available in {cooldown} seconds</p>
+                        )}
                     </form>
+                    
                 </div>
             </div>
 

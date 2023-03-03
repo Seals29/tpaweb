@@ -51,8 +51,9 @@
   .wishlistmain{
         width: 100%;
         display: grid;
-        grid-template-columns: repeat(5, 20%);
+        grid-template-columns: repeat(4, 25%);
         padding: 0px 5% 40 px;
+        /* gap: 150px; */
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
         /* margin-bottom: 15px; */
         gap: 5px;
@@ -68,17 +69,34 @@
         margin: 0;
   }
 .wishlistcontainer{
-    width: 200px;
-    cursor: pointer;
+    width: 350px;
+    /* cursor: pointer; */
     margin-top: 35px;
     border: 1px solid black;
     margin-bottom: 35px;
     margin-left: 38px;
-    height: 300px;
+    height: 470px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.wishlistcontainer img{
+    /* margin-left: 62px;
+    margin-top: 15px;
+    /* margin-right: 50%; */
+    /* left: 50%; */
+    /* right: 50%;  */
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 190px;
+    max-width: 200px;
+
 }
   .activetab::after {
     content: '';
@@ -106,4 +124,38 @@
     align-items: center;
     border: 1px solid black;
     max-height: auto;
+}
+.btn{
+    display: flex;
+    flex-direction: column;
+    bottom: 0;
+    align-content: end;
+    /* align-items: flex-end; */
+    align-items: center;
+    /* align-items: center; */
+    justify-content: center;
+
+    gap: 15px;
+}
+.btn button{
+    
+    min-width: 120px;
+    /* position: absolute; */
+    border: none;
+    /* bottom: 50px; */
+    /* left: 50%; */
+    max-width: 120px;
+    border-radius: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+.heading{
+    font-size: 45px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
 }

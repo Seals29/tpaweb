@@ -16,6 +16,8 @@ export type ThemeType = {
   sidebargradient: string,
   backgroundmenu: string,
   footerbg: string,
+  searchicon :string,
+  inputsearch:string,
 }
 
 export const THEME: { LIGHT: ThemeType, DARK: ThemeType } = {
@@ -33,7 +35,9 @@ export const THEME: { LIGHT: ThemeType, DARK: ThemeType } = {
     bgsidebar: "white",
     sidebargradient: "linear-gradient(180deg,#ECF1FE 61%,rgba(236,241,254,.7) 88%,rgba(236,241,254,0) 97%)",
     backgroundmenu: 'lightblue',
-    footerbg: '#0A185C'
+    footerbg: '#0A185C',
+    searchicon:`#1946B8`,
+    inputsearch:`#007aff`
   },
   DARK: {
     className: "dark",
@@ -49,7 +53,9 @@ export const THEME: { LIGHT: ThemeType, DARK: ThemeType } = {
     bgsidebar: "#363636",
     sidebargradient: "linear-gradient(180deg,#000 80%,rgba(12,29,106,0) 97%)",
     backgroundmenu: '#363636',
-    footerbg: '#313131'
+    footerbg: '#313131',
+    searchicon:'#6694EA',
+    inputsearch:'#007aff',
   },
 }
 

@@ -8,17 +8,21 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import style from "@/styles/wishlist.module.css"
+import WishList from "@/pages/components/wishlist";
 export default function wishlist(props: any) {
     const [currUser, setCurrUser] = useState([])
     const routers = useRouter()
     const { theme } = useContext(ThemeContext)
-    const { wishlists } = props
+    const { wishlists,publicWishlists } = props
     const [yourWishlist, setYourWishList] = useState([])
+    const [followedList, setFollowedList] = useState([])
+    const [followedWishList, setFollowedWishList] = useState([])
+    // console.log(publicWishlists)
     useEffect(() => {
 
         const cookies = Cookies.get('token')
         axios.post('http://localhost:9998/validate', { cookies }).then(res => {
-            console.log(res.data.user)
+            // console.log(res.data.user)
             setCurrUser(res.data.user)
             axios.get(`http://localhost:9998/getwishlistbyid/${res.data.user.ID}`).then(resp => {
 
@@ -27,18 +31,46 @@ export default function wishlist(props: any) {
             }).catch(err => {
                 console.log(err)
             })
+            axios.get(`http://localhost:9998/GetFollowWishListByUserId/${res.data.user.ID}`).then(resps=>{
+                console.log(resps);
+                setFollowedList(resps.data)
+                resps.data.map((e:any)=>{
+                    // console.log()
+                    axios.get(`http://localhost:9998/GetFollowedWishListByWishListID/${e.wishlistid}`).then(res=>{
+                        console.log(res) 
+                        setFollowedWishList((prevState)=>[...prevState,res.data])
+                        // const jsonOb = JSON.parse(event.data)
+                        // console.log(jsonOb)
+                        // const dateTime = new Date(jsonOb.CreatedAt);
+                        // console.log(dateTime.toLocaleString('en-US', { timeZone: 'Asia/Jakarta' }));
+                        // setMessages((prevstate) => [...prevstate, jsonOb])
+                    }).catch(err=>{
+                        console.log(err)
+                    })
 
+                    
+                })
+            }).catch(err=>{
+                console.log(err)
+            })
+            // axios.post("h")
         }).catch(err => {
-            console.log(err)
+            // console.log(err)
             routers.push('/home')
         })
 
     }, [])
-    const [activeTab, setActiveTab] = useState("your");
+    console.log(followedWishList)
+    const uniqueFollolwedWishList = followedWishList.filter((item,index,self)=> index === self.findIndex((i)=>i.ID===item.ID))
+    console.log(uniqueFollolwedWishList)
+    // const uniqueItems = items.filter(
+        // (item, index, self) => index === self.findIndex((i) => i.id === item.id)
+    //   );
+    const [activeTab, setActiveTab] = useState("Your WishList");
     const handleTabClick = (tab: string) => {
         setActiveTab(tab);
     };
-    console.log(wishlists)
+    // console.log(wishlists)
     return (
         <div>
             <header>
@@ -48,28 +80,29 @@ export default function wishlist(props: any) {
                 <nav>
                     <ul className={style.wishlistnavbar}>
                         {/* onClick={() => handleTabClick("allproduct") */}
-                        <li onClick={(e) => { handleTabClick("your") }} className={activeTab === "your" ? style.activetab : ""} style={{ color: theme.text }}><FontAwesomeIcon icon={faBookBookmark} />Your WishList</li>
-                        <li onClick={(e) => { handleTabClick("public") }} className={activeTab === "public" ? style.activetab : ""} style={{ color: theme.text }}><FontAwesomeIcon icon={faBookBookmark} />Public WishList</li>
-                        <li onClick={(e) => { handleTabClick("following") }} className={activeTab === "following" ? style.activetab : ""} style={{ color: theme.text }}><FontAwesomeIcon icon={faBookBookmark} />Following WishList</li>
+                        <li onClick={(e) => { handleTabClick("Your WishList") }} className={activeTab === "Your WishList" ? style.activetab : ""} style={{ color: theme.text }}><FontAwesomeIcon icon={faBookBookmark} />Your WishList</li>
+                        <li onClick={(e) => { handleTabClick("Public WishList") }} className={activeTab === "Public WishList" ? style.activetab : ""} style={{ color: theme.text }}><FontAwesomeIcon icon={faBookBookmark} />Public WishList</li>
+                        <li onClick={(e) => { handleTabClick("Following WishList") }} className={activeTab === "Following WishList" ? style.activetab : ""} style={{ color: theme.text }}><FontAwesomeIcon icon={faBookBookmark} />Following WishList</li>
                     </ul>
                 </nav>
-                <div style={{ textAlign: 'center', paddingBottom: '25px' }}>
-                    <h1>Your Wishlist</h1>
+                <div style={{ textAlign: 'center', paddingBottom: '25px',color:theme.text }}>
+                    <h1>{activeTab}</h1>
                 </div>
                 <div className={style.wishbtn}><button onClick={(e) => { routers.push("/home/user/newwishlist") }} style={{ backgroundColor: theme.background, color: theme.text }}><FontAwesomeIcon icon={faPlus} />{' '}New Wishlist</button></div>
-                <div className={activeTab === "your" ? "" : ""} style={{ display: activeTab === "your" ? "block" : "none", paddingBottom: '80px' }}>
+                <div className={activeTab === "Your WishList" ? "" : ""} style={{ display: activeTab === "Your WishList" ? "block" : "none", paddingBottom: '80px' }}>
                     <div className={yourWishlist.length == 0 ? style.activeyour : style.inactiveyour}
                         style={{ backgroundColor: theme.background, margin: '50px', marginBottom: '0px',color:theme.text }}
                     >{"Currently you don't have any Wishlist"}</div>
                     <div className={style.wishlistmain} style={{display:yourWishlist.length==0?'none':""}}>
-                        {wishlists.map((item:any)=>(
-                            <div className={style.wishlistcontainer}
-                            style={{backgroundColor:theme.background, color:theme.text}}
-                            >
-                                {item.image}
-                                <h2 style={{color:theme.text}}>{item.name}</h2>
-                            </div>
-                        ))}
+                        {wishlists.map((item:any)=>{
+                            if (item.userid ===currUser.ID){
+                                return(
+                                    <div>
+                                        <WishList id={item.ID}name={item.name} image={""} statuslist={item.status} follow={""} /></div>
+                                   
+                                )
+                            }
+                        })}
                     </div>
                 </div>
                 {/* <div style={{ backgroundColor: theme.background, margin: '0' }} >
@@ -91,16 +124,38 @@ export default function wishlist(props: any) {
 
 
 
-                <div className={activeTab === "public" ? "" : ""} style={{ display: activeTab === "public" ? "block" : "none" }}>
-                    asdasdasdsa
+                <div className={activeTab === "Public WishList" ? "" : ""} style={{ display: activeTab === "Public WishList" ? "block" : "none" }}>
+                <div className={publicWishlists.length == 0 ? style.activeyour : style.inactiveyour}
+                        style={{ backgroundColor: theme.background, margin: '50px', marginBottom: '0px',color:theme.text }}
+                    >{"Currently you don't have any Wishlist"}</div>
+                    <div className={style.wishlistmain} style={{display:publicWishlists.length==0?'none':""}}>
+                        <>
+                            {publicWishlists.map((item:any)=>{
+                                const followed = uniqueFollolwedWishList.find((f: any) => f.ID === item.ID);
+                                const follow = followed?"Followed":"Follow"
+                                  return <WishList id={item.ID} name={item.name}
+                                   image={""} statuslist={item.status}
+                                   follow={follow} />;
+                            })}
+                        </>
+                                    
+   
+                    </div>
                 </div>
-                <div className={activeTab === "following" ? "" : ""} style={{ display: activeTab === "following" ? "block" : "none" }}>
-                    asdasdasdsa
+                <div className={activeTab === "Following WishList" ? "" : ""} style={{ display: activeTab === "Following WishList" ? "block" : "none" }}>
+                <div className={publicWishlists.length == 0 ? style.activeyour : style.inactiveyour}
+                        style={{ backgroundColor: theme.background, margin: '50px', marginBottom: '0px',color:theme.text }}
+                    >{"Currently you don't have any Wishlist"}</div>
+                    <div className={style.wishlistmain} style={{display:publicWishlists.length==0?'none':""}}>
+                        {uniqueFollolwedWishList.map((item:any)=>(
+                            <WishList 
+                               
+                            id={item.ID}name={item.name} image={""} statuslist={item.status}follow={"Followed"} />
+                        ))}
+                    </div>
                 </div>
             </div>
-            {/* <footer> */}
             <HomeFooter />
-            {/* </footer> */}
         </div>
 
     )
@@ -108,41 +163,13 @@ export default function wishlist(props: any) {
 export async function getStaticProps(context: any) {
 
     const res = await axios.get(`http://localhost:9998/getallwishlist`)
-
+    const res2 = await axios.get(`http://localhost:9998/getpublicwishlist`)
     const wishlists = res.data
+    const publicWishlists = res2.data
     return {
         props: {
-            wishlists
+            wishlists,
+            publicWishlists
         }
     }
 }
-{/* <nav >
-                <ul style={{ height: '55px', display: 'flex', backgroundColor: theme.background, justifyContent: 'space-evenly' }}>
-                    <li
-                        className={activeTab === "home" ? style.activetab : ""}
-                        onClick={() => handleTabClick("home")}
-                        style={{ listStyle: 'none', color: theme.text, background: theme.background }}
-                    > Store home</li>
-                    <li style={{ listStyle: 'none', color: theme.text, background: theme.background }}>|</li>
-                    <li style={{ listStyle: 'none', color: theme.text, background: theme.background }}
-                        className={activeTab === "allproduct" ? style.activetab : ""}
-                        onClick={() => handleTabClick("allproduct")}
-                    >AllProducts</li>
-                    <li style={{ listStyle: 'none', color: theme.text, background: theme.background }}>|</li>
-                    <li style={{ listStyle: 'none', color: theme.text, background: theme.background }}
-                        className={activeTab === "reviews" ? style.activetab : ""}
-                        onClick={() => handleTabClick("reviews")}
-                    >Reviews</li>
-                    <li style={{ listStyle: 'none', color: theme.text, background: theme.background }}>|</li>
-                    <li style={{ listStyle: 'none', color: theme.text, background: theme.background }}
-                        className={activeTab === "return" ? style.activetab : ""}
-                        onClick={() => handleTabClick("return")}
-                    >Return Policy</li>
-                    <li style={{ listStyle: 'none', color: theme.text, background: theme.background }}>|</li>
-                    <li style={{ listStyle: 'none', color: theme.text, background: theme.background }}
-                        className={activeTab === "aboutus" ? style.activetab : ""}
-                        onClick={() => handleTabClick("aboutus")}
-                    >About Us</li>
-                </ul>
-
-            </nav> */}

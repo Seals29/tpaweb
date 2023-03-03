@@ -42,7 +42,7 @@ export default function newwishlist(){
         }
         console.log(newWishList)
         axios.post("http://localhost:9998/createnewwishlist",newWishList).then(res=>{
-            console.log(res)
+            // console.log(res)
             if(res.data.error){
                 alert(res.data.error)
             }else{

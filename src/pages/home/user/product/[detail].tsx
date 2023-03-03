@@ -8,12 +8,15 @@ import Navbar from "@/pages/HomePage/Navbar";
 import HomeFooter from "@/pages/HomePage/Footer";
 import { LangContext } from "@/theme/language";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import { faClose, faLock, faLockOpen, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 // import  style  from "@/styles/productdetail.module.css"
 
 export default function ProductDetail(props: any) {
     console.log(props)
-    const { product, shop, categories } = props;
+    const { product, shop, categories,allwishlist } = props;
+    const [chosenWishList, setChosenWishList] = useState('')
+
+    console.log(allwishlist)
     console.log(shop)
     const { Lang } = useContext(LangContext)
     // const { productmain } = props
@@ -30,10 +33,17 @@ export default function ProductDetail(props: any) {
     const handleToggleWishlist = () => {
         setIsWishlist(!isWishlist);
     };
-
+    const [blur, setBlur] = useState(false);
     const [currUser, setCurrUser] = useState('')
-
+    // useEffect(() => {
+    //     const userWishList = allwishlist.find((e) => e.userid === currUser.ID);
+    //     if (userWishList) {
+    //       setChosenWishList(userWishList.name);
+    //     }
+    //   }, [allwishlist]);
+    
     useEffect(() => {
+        // setChosenWishList(allwishlist[0].name)
         categories.forEach((e: any) => {
             if (product.category === e.ID.toString()) {
                 setProductCategory(e.name)
@@ -56,6 +66,7 @@ export default function ProductDetail(props: any) {
     console.log(currUser)
     const addToWishlist = (e :any)=>{
         e.preventDefault()
+        setBlur(true)
     }
     const addToCart = (e: any) => {
         e.preventDefault()
@@ -70,15 +81,34 @@ export default function ProductDetail(props: any) {
             console.log(err)
         })
     }
-
+    const saveToWishList = (e:any)=>{
+        e.preventDefault()
+        console.log(chosenWishList)
+        const data = {
+            wishlistid : chosenWishList,
+            productid : product.ID.toString(),
+            quantity : currCount.toString()
+        }
+        console.log(data)
+        axios.post("http://localhost:9998/AddNewProductIntoWishList",data).then(res=>{
+            console.log(res)
+            if (res.data.error){
+                alert(res.data.error)
+            }
+            if(res.data.message){
+                alert(res.data.message)
+            }
+        }).catch(err=>{
+            console.log(err)
+        })
+    }
     return (
         <>
+        <div className={blur===true?style.maindiv:""}>
             <header style={{ color: '' }}>
                 <Navbar />
             </header>
-            <div style={{
-                backgroundColor: 'red', color: 'white', padding: '10px', textAlign: 'center', display: `${currUser.isban ? "" : "none"}`
-            }}>{Lang.isEng ? "Your Account is banned!" : "Akun " + currUser.firstname + " diban"}</div>
+            <div style={{backgroundColor: 'red', color: 'white', padding: '10px', textAlign: 'center', display: `${currUser.isban ? "" : "none"}`}}>{Lang.isEng ? "Your Account is banned!" : "Akun " + currUser.firstname + " diban"}</div>
             <div style={{ backgroundColor: theme.backgroundmenu }}>
                 <div style={{
                     top: '0', backgroundColor: theme.background2
@@ -128,9 +158,7 @@ export default function ProductDetail(props: any) {
                             <div className={style.detailcategory}>Detail : {product.detail}</div>
 
                             <div style={{ gap: '15px', display: 'flex' }} className={style.detailbutton}>
-                                <button onClick={(e)=>{
-
-                                }}>
+                                <button onClick={addToWishlist}>
 
                                     {Lang.isEng ? "Add to Wishlist" : "Tambahkan ke dalam Wishlist"}</button>
                                 <button onClick={(e) => {
@@ -172,11 +200,42 @@ export default function ProductDetail(props: any) {
                     </div>
                 </div>
             </div>
+            
             <footer style={{ position: 'sticky' }}>
                 <HomeFooter />
 
             </footer>
-
+            </div>
+            <div className={style.centerContainer} 
+            style={{backgroundColor:theme.background2,
+            display:blur?"":"none"
+            }}>
+                <FontAwesomeIcon icon={faClose} style={{
+                        top:'0%',float:'right',right:'0',
+                        
+                        paddingLeft:'80%'
+                        ,color:theme.text
+                    ,cursor:'pointer'
+                }} onClick={(e)=>{
+                    setBlur(false)
+                }}/>
+               <label style={{color:theme.text}} >Insert to..</label>
+                <select  onClick={(e)=>{
+                    setChosenWishList(e.target.value)
+                }} value={chosenWishList} style={{minHeight:'20px'}} onChange={(e)=>{
+                    setChosenWishList(e.target.value)
+                
+                }} defaultValue={chosenWishList}>
+                    <option value="Empty">-- Choose an Option! --</option>
+                    {allwishlist.map((e:any)=>{
+                        if (e.userid === currUser.ID)return(<option value={e.ID} key={e.ID}>{e.name} - {e.status}</option>) 
+                    })}
+                </select>
+                <button style={{backgroundColor:theme.button, color:theme.text}}
+                onClick={saveToWishList}
+                >Save Wishlist!</button>
+                </div>
+                
         </>
 
 
@@ -211,14 +270,16 @@ export async function getStaticProps(context: any) {
     const product = await res.data;
     const res2 = await axios.get(`http://localhost:9998/getoneshop/${product.shopid}`)
     const res3 = await axios.get(`http://localhost:9998/getallcategory`)
+    const res4 = await axios.get(`http://localhost:9998/getallwishlist`)
     const categories = await res3.data
     const shop = await res2.data;
+    const allwishlist = await res4.data
     return {
         props: {
             product,
             shop,
-            categories
+            categories,
+            allwishlist
         }
     }
 }
-

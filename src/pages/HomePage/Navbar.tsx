@@ -29,7 +29,7 @@ const Navbar = () => {
   const [langNav, setLangNav] = useState(false)
   const { theme, toggleTheme } = useContext(ThemeContext)
   const [currCountry, setCurrCountry] = useState('')
-  console.log(theme)
+  // console.log(theme)
   useEffect(() => {
     if (typeof window !== "undefined" && window.localStorage) {
       // localStorage is available
@@ -43,7 +43,7 @@ const Navbar = () => {
     }
     const cookies = Cookies.get('token')
     axios.post('http://localhost:9998/validate', { cookies }).then(res => {
-      console.log(res.data.user)
+      // console.log(res.data.user)
       setCurrUser(res.data.user)
     }).catch(err => {
       console.log(err)
@@ -114,9 +114,17 @@ const Navbar = () => {
 
 
           <div className={style.bar}>
-            <input type="text" className={style.text} />
-            <button className={style.search} >
-              <FontAwesomeIcon icon={faMagnifyingGlass} className={style.icon} style={{ color: theme.text }} />
+            <input type="text" 
+            
+            className={style.text} style={{
+              // backgroundColor:theme.inputsearch,
+              backgroundImage:'linear-gradient(135deg,#280F5C 0,#100F5C 58%,#0F345C 100%);'
+              // ,backgroundColor:theme.background
+            }} />
+            <button className={style.search} style={{backgroundColor:theme.searchicon}} >
+              <FontAwesomeIcon icon={faMagnifyingGlass} 
+              className={style.icon} 
+              style={{ color: theme.text }} />
             </button>
           </div>
           <div className={style.notif} style={{ borderColor: theme.text }}>
@@ -134,7 +142,11 @@ const Navbar = () => {
 
           </div>
           <div>
-            <a href="home/user/wishlist"><FontAwesomeIcon icon={faGifts} /></a>
+           <FontAwesomeIcon icon={faGifts} onClick={(e)=>{
+            e.preventDefault()
+            router.push("/home/user/wishlist")
+           }} style={{cursor:'pointer'}} />
+            {/* <a href="home/user/wishlist"></a> */}
           </div>
           {/* <button onClick={handleThemeToggle}>Toggle Theme</button> */}
           <label className={style.switch}  >
@@ -214,7 +226,7 @@ const Navbar = () => {
       <div className={style.flagdropdown} style={{ backgroundColor: theme.background, display: langNav ? 'block' : 'none' }} >
         <div className={style.flagtitle}
           style={{ color: theme.text }} onClick={(e) => {
-            console.log("=====================")
+            // console.log("=====================")
             // console.log(e.target.value)
           }}>
           {Lang.isEng ? "Language" : "Bahasa"}
