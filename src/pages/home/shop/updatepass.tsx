@@ -11,6 +11,7 @@ import { storage } from "../../firebase/firebase"
 import Pagination from "@/pages/components/pagination";
 import { ThemeContext } from "@/theme/theme";
 import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
+import HomeFooter from "@/pages/HomePage/Footer";
 export default function updatepass() {
     const [currUser, setCurrUser] = useState([])
     const routers = useRouter()
@@ -101,7 +102,7 @@ export default function updatepass() {
                 </div>
             </div>
 
-
+                <HomeFooter/>
         </>
     )
 }

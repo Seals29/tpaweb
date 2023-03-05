@@ -62,8 +62,27 @@ const home = (props: any) => {
         // 4789dc9ad1d743caae109fc5818ebe2f
         return () => clearInterval(interval)
     }, [currIdx])
+    const [currProducts, setCurrProducts] = useState([])
+    const [currPage, setCurrPage] = useState(1)
+    const [isLoading, setIsLoading] = useState(false)
     console.log(currCountry)
-
+    const loadMore = async () =>{
+        setIsLoading(true)
+        const res = await axios.get(`http://localhost:9998/loadProducts?page=${currPage}&pagesize=10`)
+        const data = await res.data
+        setCurrProducts([...currProducts,...data])
+        setCurrPage(currPage+1)
+        setIsLoading(false)
+    }
+    useEffect(()=>{
+        loadMore()
+    },[])
+    const handleScroll = async () => {
+        const { scrollTop, scrollHeight, clientHeight } = document.documentElement
+        if (scrollTop + clientHeight === scrollHeight) {
+            loadMore()
+        }
+    }
     if (currUser.role === "admin") {
         return (
             <>
@@ -175,7 +194,7 @@ const home = (props: any) => {
                 }}> */}
                 <div style={{ backgroundColor: theme.background, margin: '0' }} >
                     <div className={style.cardcontainers} style={{backgroundColor:theme.background}}>
-                        {allProducts.map((idx: any) => (
+                        {currProducts.map((idx: any) => (
                             <div className={style.usercontainer} onClick={(e) => {
                                 e.preventDefault()
                                 console.log(idx.ID)
@@ -184,6 +203,8 @@ const home = (props: any) => {
                                 <Card name={idx.name} image={idx.image} description={idx.description} rating={idx.rating} category={idx.category} detail={idx.detail} stock={idx.stock} price={idx.price} />
                             </div>
                         ))}
+                        {isLoading && <div>Loading...</div>}
+                        <div ref={ref => ref && window.addEventListener('scroll', handleScroll)}> </div>
                     </div>
                 </div>
 

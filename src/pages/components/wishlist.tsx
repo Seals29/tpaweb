@@ -42,7 +42,13 @@ const WishList = ({ id,name, image, statuslist,follow }: any) => {
             UserID : currUser.ID.toString(),
             WishListID: id.toString(),
         }
-        // axios.post("http://localhost:9998/duplicatepublicwishlisttomywishlist").then(res=>{}).catch(err=>{})
+        axios.post("http://localhost:9998/duplicatepublicwishlisttomywishlist",data).then(res=>{
+            if(res.data.error){
+                alert(res.data.error);
+            }if(res.data.message){
+                alert(res.data.message);
+            }
+        }).catch(err=>{})
         
     }   //copy wishlist iuni ke my wishlist
 
@@ -58,6 +64,8 @@ const WishList = ({ id,name, image, statuslist,follow }: any) => {
 
                 }} style={{color:theme.text,cursor:'pointer'}}/>
             </div>
+            <br/>
+            <br/>
             <img src={"https://firebasestorage.googleapis.com/v0/b/oldegg-3c56e.appspot.com/o/shopProduct%2FTokopedia%2F117495.jpgOldEgg?alt=media&token=5a682786-1407-4433-80b3-7df7860a6b6e"} 
             
             alt={name} className={style.wishimage} />

@@ -41,30 +41,39 @@
   font-size: smaller;
 }
 
-.phonecontainer{
+.phonecontainer {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 35px;
 }
-.phonecontainer h1{
+
+.passcontainer {
+  min-height: 100vh;
+}
+
+.phonecontainer h1 {
   text-align: center;
-  
+
 }
-.phonecontainer label{
-color: grey;
+
+.phonecontainer label {
+  color: grey;
 }
-.phonecontainer input{
+
+.phonecontainer input {
   padding: 10px;
-  margin-top: 120px;
+  margin-top: 0px;
   border: none;
   border-radius: 5px;
   margin-bottom: 20px;
   box-shadow: 0px 0px 5px black;
   width: 300px;
 }
-.phonecontainer button{
+
+.phonecontainer button {
   background-color: #4CAF50;
   color: white;
   padding: 10px 20px;
@@ -77,22 +86,27 @@ color: grey;
 
 
 .containerform {
-  padding-top: 200px;
-  padding-bottom: 260px;
+  /* padding-top: 200px; */
+  /* padding-bottom: 260px; */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: auto;
   background-color: #212121;
+  /* min-height: 2500px; */
+  height: 25%;
+  /* max-height: 1500px; */
+  /* overflow-y: scroll; */
   /* margin-top: 50px; */
   /* background-color: blue; */
+padding-bottom: 35%;
 }
 
 .containerform label {
   font-weight: bold;
   margin-bottom: 10px;
-  margin-top: 40px;
+  margin-top: 30px;
 }
 
 .containerform input {
@@ -339,6 +353,16 @@ color: grey;
   justify-content: center;
   align-items: center;
   gap: 50px;
+}
+
+.usercontainershop {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(4, 20%);
+  padding: 0px 5% 40 px;
+  gap: 25px;
+  flex-flow: row wrap;
+  position: relative;
 }
 
 .usercontainer img {

@@ -139,7 +139,14 @@ export default function accountsetting() {
                                 <div style={{ display: 'flex', marginLeft: '65px' }}>
 
                                     <label >{currUser.password ? "********" : "To enhance your account security, add your mobile number"}</label>
-                                    <button style={{ color: "grey", marginLeft: '122px', backgroundColor: theme.backgroundmenu }}>
+                                    <button 
+                                    style={{ color: "grey", 
+                                    marginLeft: '122px', 
+                                    backgroundColor: theme.backgroundmenu }}
+                                    onClick={(e:any)=>{
+                                        routers.push("/home/changepassword")
+                                    }}
+                                    >
                                         edit
                                     </button>
 

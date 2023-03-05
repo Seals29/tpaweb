@@ -23,9 +23,9 @@ export default function view() {
     console.log(product)
     const [currPage, setCurrPage] = useState(1);
     const totalProduct = product.length;
-    const Pages = Math.ceil(totalProduct / 50)
-    const startIdx = (currPage - 1) * 50
-    const endIdx = startIdx + 50
+    const Pages = Math.ceil(totalProduct / 4)
+    const startIdx = (currPage - 1) * 4
+    const endIdx = startIdx + 4
     const router = useRouter()
     const productOnPage = product.slice(startIdx, endIdx)
     const changePageHandler = (pageNumber: any) => {
@@ -35,8 +35,8 @@ export default function view() {
         <div>
             <Navbar />
             <div style={{ minHeight: '100vh', maxHeight: '100vh' }}>
-                <h1 style={{ backgroundColor: '#212121', textAlign: 'center' }}>Your Current Product</h1>
-                <ul className={style.usercontainer}>
+                <h1 style={{ backgroundColor: '#212121', textAlign: 'center' }}>Your Current Product({product.length})</h1>
+                <ul className={style.usercontainershop} style={{backgroundColor:theme.background}}>
                     {productOnPage.map((idx: any) => (
                         <Card name={idx.name} image={idx.image} description={idx.description} rating={idx.rating}
                             category={idx.category} detail={idx.detail}

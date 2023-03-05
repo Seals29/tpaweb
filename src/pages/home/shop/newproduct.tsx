@@ -12,6 +12,7 @@ import Pagination from "@/pages/components/pagination";
 import { ThemeContext } from "@/theme/theme";
 import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
 import { randomUUID } from "crypto";
+import HomeFooter from "@/pages/HomePage/Footer";
 
 export default function newproduct() {
     const { theme } = useContext(ThemeContext)
@@ -66,7 +67,7 @@ export default function newproduct() {
                     <label style={{ color: theme.text }}>Product:</label>
                     <input type="text" placeholder="Product Name" onChange={(e) => {
                         setName(e.target.value)
-                    }} style={{ boxShadow: '0px 0px 5px black', backgroundColor: theme.bgsidebar, color: theme.text }} /><br /><br />
+                    }} style={{ boxShadow: '0px 0px 5px black', backgroundColor: theme.bgsidebar, color: theme.text }} />
                     {/* box-shadow: 0px 0px 5px #ddd; */}
                     <label style={{ color: theme.text }}>Product Category</label>
                     <select id="selectOption" value={category} onChange={(e) => {
@@ -101,23 +102,23 @@ export default function newproduct() {
                         setDesc(e.target.value)
 
                     }} style={{ boxShadow: '0px 0px 5px black', backgroundColor: theme.bgsidebar, color: theme.text }} /><br />
-                    <br />
+                    {/* <br /> */}
                     <label style={{ color: theme.text }}>Product Price:</label>
                     <input type="number" placeholder="Price" onChange={(e: any) => {
                         setPrice(e.target.value)
 
                     }} style={{ boxShadow: '0px 0px 5px black', backgroundColor: theme.bgsidebar, color: theme.text }} /><br />
-                    <br />
+                    {/* <br /> */}
                     <label style={{ color: theme.text }}>Product Stock:</label>
                     <input type="number" placeholder="Stock" onChange={(e: any) => {
                         setStock(e.target.value)
                     }} style={{ boxShadow: '0px 0px 5px black', backgroundColor: theme.bgsidebar, color: theme.text }} /><br />
-                    <br />
+                    {/* <br /> */}
                     <label style={{ color: theme.text }}>Product Detail:</label>
                     <input style={{ boxShadow: '0px 0px 5px black', backgroundColor: theme.bgsidebar, color: theme.text }} type="text" placeholder="Detail" onChange={(e: any) => {
                         setDetail(e.target.value)
-                    }} /><br />
-                    <br />
+                    }} />
+                    {/* <br /> */}
                     <button style={{ color: theme.text }} onClick={() => {
                         if (imageUpload == null) {
                             alert("Product must have image to be shown")
@@ -197,6 +198,7 @@ export default function newproduct() {
                     }>Submit</button>
                 </div>
             </div>
+            <HomeFooter/>
         </div>
     )
 }

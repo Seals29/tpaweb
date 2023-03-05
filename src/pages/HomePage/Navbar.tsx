@@ -29,6 +29,7 @@ const Navbar = () => {
   const [langNav, setLangNav] = useState(false)
   const { theme, toggleTheme } = useContext(ThemeContext)
   const [currCountry, setCurrCountry] = useState('')
+  const [statusSubscribe, setStatusSubscribe] = useState('')
   // console.log(theme)
   useEffect(() => {
     if (typeof window !== "undefined" && window.localStorage) {
@@ -45,6 +46,21 @@ const Navbar = () => {
     axios.post('http://localhost:9998/validate', { cookies }).then(res => {
       // console.log(res.data.user)
       setCurrUser(res.data.user)
+      const data = {
+        userid: res.data.user.ID.toString()
+      }
+      axios.post("http://localhost:9998/getsubscribestatus", data).then(res => {
+        console.log(res)
+
+        if (res.data.message) {
+          // alert(res.data.message)
+          setStatusSubscribe(res.data.message)
+        }
+        if (res.data.error) {
+          // alert(res.data.error)
+          setStatusSubscribe(res.data.error)
+        }
+      })
     }).catch(err => {
       console.log(err)
     })
@@ -114,17 +130,17 @@ const Navbar = () => {
 
 
           <div className={style.bar}>
-            <input type="text" 
-            
-            className={style.text} style={{
-              // backgroundColor:theme.inputsearch,
-              backgroundImage:'linear-gradient(135deg,#280F5C 0,#100F5C 58%,#0F345C 100%);'
-              // ,backgroundColor:theme.background
-            }} />
-            <button className={style.search} style={{backgroundColor:theme.searchicon}} >
-              <FontAwesomeIcon icon={faMagnifyingGlass} 
-              className={style.icon} 
-              style={{ color: theme.text }} />
+            <input type="text"
+
+              className={style.text} style={{
+                // backgroundColor:theme.inputsearch,
+                backgroundImage: 'linear-gradient(135deg,#280F5C 0,#100F5C 58%,#0F345C 100%);'
+                // ,backgroundColor:theme.background
+              }} />
+            <button className={style.search} style={{ backgroundColor: theme.searchicon }} >
+              <FontAwesomeIcon icon={faMagnifyingGlass}
+                className={style.icon}
+                style={{ color: theme.text }} />
             </button>
           </div>
           <div className={style.notif} style={{ borderColor: theme.text }}>
@@ -142,25 +158,42 @@ const Navbar = () => {
 
           </div>
           <div>
-           <FontAwesomeIcon icon={faGifts} onClick={(e)=>{
-            e.preventDefault()
-            router.push("/home/user/wishlist")
-           }} style={{cursor:'pointer'}} />
+            <FontAwesomeIcon icon={faGifts} onClick={(e) => {
+              e.preventDefault()
+              router.push("/home/user/wishlist")
+            }} style={{ cursor: 'pointer' }} />
             {/* <a href="home/user/wishlist"></a> */}
           </div>
           {/* <button onClick={handleThemeToggle}>Toggle Theme</button> */}
           <label className={style.switch}  >
-            <input type="checkbox" onChange={toggleTheme} defaultChecked={dark} />
+            <input type="checkbox" onChange={toggleTheme} defaultChecked={dark}  />
             <span className={style.slider}  ></span>
           </label>
           <a href="/home/accountsetting"><div style={{ display: 'flex' }}>
             <FontAwesomeIcon icon={faUser} style={{ marginTop: '12px', marginRight: '10px', color: theme.text }} />
             <div >
               {Lang.isEng ? "Welcome" : "Selamat Datang"}
-              <div style={{ color: theme.text }}>{currUser ? currUser.firstname : Lang.isEng ? "SignIn/Register" : "Masuk/Daftar"}</div>
-            </div>
-          </div></a>
+              <div style={{ color: theme.text }}>
+                {currUser ? currUser.firstname : Lang.isEng ? "SignIn/Register" : "Masuk/Daftar"}
+              </div>
 
+            </div>
+            {' '}
+
+          </div></a>
+          <div onClick={(e:any)=>{
+              router.push("/home/balance")
+          }}>
+            {' '}
+            Balance<br />
+            ${currUser.balance}
+          </div>
+          <div>Status : {statusSubscribe}
+            <br />
+            <button style={{
+              display: statusSubscribe === "Subscribed" ? "none" : ""
+            }}>Subcribe to NewsLetter</button>
+          </div>
 
 
           <div style={{ color: 'grey' }}>
@@ -213,7 +246,15 @@ const Navbar = () => {
             <FontAwesomeIcon icon={faComments} />
             {Lang.isEng ? "Feedback" : "Masukan"}
           </div>
-          <div className={style.navbar2button}>
+          <div className={style.navbar2button} onClick={(e:any)=>{
+            if(currUser.role==="cs"||currUser.role==="admin"){
+              router.push("/home/user/chatcs");
+            }else if(currUser.role==="customer"){
+              router.push("/home/user/chattocs")
+            }
+            
+
+          }} style={{cursor:'pointer'}}>
             <FontAwesomeIcon icon={faCircleQuestion} />
             {Lang.isEng ? "Help Center" : "Pusat Bantuan"}
           </div>

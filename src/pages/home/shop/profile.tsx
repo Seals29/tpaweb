@@ -11,6 +11,7 @@ import { storage } from "../../firebase/firebase"
 import Pagination from "@/pages/components/pagination";
 import { ThemeContext } from "@/theme/theme";
 import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
+import HomeFooter from "@/pages/HomePage/Footer";
 export default function profile() {
     const [currUser, setCurrUser] = useState([])
     const routers = useRouter()
@@ -99,7 +100,7 @@ export default function profile() {
                 </div>
             </div>
 
-
+<HomeFooter/>
         </>
     )
 }

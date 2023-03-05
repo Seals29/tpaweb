@@ -1,7 +1,7 @@
 import HomeFooter from "@/pages/HomePage/Footer";
 import Navbar from "@/pages/HomePage/Navbar";
 import { ThemeContext } from "@/theme/theme";
-import { faBookBookmark, faBookmark, faHeart, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faBookBookmark, faBookmark, faClose, faHeart, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import style from "@/styles/wishlist.module.css"
 import WishList from "@/pages/components/wishlist";
+import { Redacted_Script } from "@next/font/google";
 export default function wishlist(props: any) {
     const [currUser, setCurrUser] = useState([])
     const routers = useRouter()
@@ -18,6 +19,90 @@ export default function wishlist(props: any) {
     const [followedList, setFollowedList] = useState([])
     const [followedWishList, setFollowedWishList] = useState([])
     // console.log(publicWishlists)
+    const [wishlistInputs, setWishlistInputs] = useState([]);
+    const [wishlistSelects, setWishlistSelects] = useState([]);
+    const [mainCheck,setMainCheck ]=useState(false)
+    const [isActiveUpdateTab, setIsActiveUpdateTab] = useState(false);
+    const handleInputChange = (ID:any, event:any) => {
+        const values = [...wishlistInputs];
+        console.log(wishlistInputs)
+        wishlistInputs.map((item:any)=>{
+            console.log(item )
+            console.log(ID);
+            
+            if(item.id ===ID){
+                console.log(item)
+                item.name = event.target.value;
+                console.log(item)
+            }
+        })
+      }
+      const handleMainCheck=(event:any)=>{
+        if(mainCheck===true){
+            wishlistInputs.map((e)=>{
+                e.ischeck = true
+            })
+        }
+      }
+      
+      const handleCheck=(ID:any,event:any)=>{
+        wishlistInputs.map((item:any)=>{
+            console.log(ID)
+            if(item.id ===ID){
+                console.log(item)
+                item.ischeck = event.target.checked
+                console.log(item)
+            }
+        })
+      }
+      const handleManageSave=(e:any)=>{
+        e.preventDefault()
+        
+        const data = [...wishlistInputs]
+        // console.log(data);
+        console.log("====")
+        wishlistInputs.map(e=>{
+            if(e.ischeck===true){
+                console.log(e)
+                const data = {
+                    wishlistid : e.id.toString(),
+                    wishlistname : e.name,
+                    wishliststatus : e.status,
+                }
+                console.log(data)
+                axios.post("http://localhost:9998/updatewishlistuser",data).then(res=>{
+                    console.log(res)
+                    if(res.data.message){
+                        console.log(res.data.message);
+                        
+                    }
+                    if(res.data.error){
+                        console.log(res.data.error);
+                        
+                    }
+                }).catch(err=>{
+                    console.log(err)
+                })
+            }
+           
+        })
+        // console.log("--")
+        alert("Update success!")
+        routers.reload()
+      }
+      const handleSelectChange=(ID:any,event:any)=>{
+        const values = [...wishlistSelects]
+        // console.log(wishlistSelects);
+        wishlistInputs.map((item:any)=>{
+            console.log(ID)
+            if(item.id ===ID){
+                console.log(item)
+                item.status =event.target.value;
+                console.log(item)
+            }
+        })
+        // values[index][event.target.value]=event.target.value;
+      }
     useEffect(() => {
 
         const cookies = Cookies.get('token')
@@ -54,6 +139,8 @@ export default function wishlist(props: any) {
                 console.log(err)
             })
             // axios.post("h")
+            console.log(wishlists)
+            setWishlistInputs(wishlists.map((e:any)=>({id:e.ID,name : e.name,status:e.status,ischeck :false})))
         }).catch(err => {
             // console.log(err)
             routers.push('/home')
@@ -70,6 +157,11 @@ export default function wishlist(props: any) {
     const handleTabClick = (tab: string) => {
         setActiveTab(tab);
     };
+    const handleManage = (e:any)=>{
+        e.preventDefault()
+        setIsActiveUpdateTab(true)
+    }
+    
     // console.log(wishlists)
     return (
         <div>
@@ -88,7 +180,10 @@ export default function wishlist(props: any) {
                 <div style={{ textAlign: 'center', paddingBottom: '25px',color:theme.text }}>
                     <h1>{activeTab}</h1>
                 </div>
-                <div className={style.wishbtn}><button onClick={(e) => { routers.push("/home/user/newwishlist") }} style={{ backgroundColor: theme.background, color: theme.text }}><FontAwesomeIcon icon={faPlus} />{' '}New Wishlist</button></div>
+                <div className={style.buttonflex}>
+                    <div className={style.wishbtn}><button onClick={(e) => { routers.push("/home/user/newwishlist") }} style={{ backgroundColor: theme.background, color: theme.text }}><FontAwesomeIcon icon={faPlus} />{' '}New Wishlist</button></div>
+                <div className={style.wishbtn}><button onClick={handleManage}>{' '}Manage WishList</button></div></div>
+                
                 <div className={activeTab === "Your WishList" ? "" : ""} style={{ display: activeTab === "Your WishList" ? "block" : "none", paddingBottom: '80px' }}>
                     <div className={yourWishlist.length == 0 ? style.activeyour : style.inactiveyour}
                         style={{ backgroundColor: theme.background, margin: '50px', marginBottom: '0px',color:theme.text }}
@@ -105,25 +200,6 @@ export default function wishlist(props: any) {
                         })}
                     </div>
                 </div>
-                {/* <div style={{ backgroundColor: theme.background, margin: '0' }} >
-                    <div className={style.cardcontainers} style={{backgroundColor:theme.background}}>
-                        {allProducts.map((idx: any) => (
-                            <div className={style.usercontainer} onClick={(e) => {
-                                e.preventDefault()
-                                console.log(idx.ID)
-                                routers.push(`home/user/product/${idx.ID}`)
-                            }} style={{backgroundColor:theme.background, cursor:'pointer'}}>
-                                <Card name={idx.name} image={idx.image} description={idx.description} rating={idx.rating} category={idx.category} detail={idx.detail} stock={idx.stock} price={idx.price} />
-                            </div>
-                        ))}
-                    </div>
-                </div> */}
-
-
-
-
-
-
                 <div className={activeTab === "Public WishList" ? "" : ""} style={{ display: activeTab === "Public WishList" ? "block" : "none" }}>
                 <div className={publicWishlists.length == 0 ? style.activeyour : style.inactiveyour}
                         style={{ backgroundColor: theme.background, margin: '50px', marginBottom: '0px',color:theme.text }}
@@ -156,6 +232,57 @@ export default function wishlist(props: any) {
                 </div>
             </div>
             <HomeFooter />
+            <div className={style.activemodal} style={{backgroundColor:theme.backgroundmenu, color:theme.text,display:isActiveUpdateTab===true?"":"none"}}>
+                <div style={{
+                    display:'flex',
+                    paddingBottom:'15px',
+                    justifyContent:'flex-end'
+                }}><FontAwesomeIcon icon={faClose} onClick={(e)=>{
+                    e.preventDefault()
+                    setIsActiveUpdateTab(false)
+                }}/></div>
+                <h1>Manage Your WishList</h1>
+                <div className={style.modalh2} style={{backgroundColor:theme.background2}}>
+                    <input type="checkbox" onClick={(event:any)=>{
+
+                    }} />
+                    <h2>My Wish List</h2>
+                        <h2>Privacy</h2>
+                </div>
+                <div className={style.wishlistdata} >
+                    {wishlists.map((e:any)=>{
+                        // console.log(e)
+                        if(e.userid ===currUser.ID){
+                            return(
+                                <div className={style.modalinput} style={{backgroundColor:theme.backgroundmenu}}>
+                                <input type="checkbox" onClick={(event)=>{
+                                    handleCheck(e.ID, event);
+                                }}  defaultChecked={false} />
+                                <input  type="text" style={{
+                                    border:'1px solid '+theme.text,
+                                    backgroundColor:theme.backgroundmenu
+                                }}defaultValue={e.name}
+                                onChange={(event)=>{
+                                    handleInputChange(e.ID,event);
+                                }}
+                                />
+                                <select defaultValue={e.status} onChange={(event:any)=>{
+                                    handleSelectChange(e.ID,event)
+                                }}>
+                                        <option value="Private">Private</option>
+                                        <option value="Public">Public</option>
+        
+                                </select>
+
+
+                            </div>
+                            )
+                        
+                        }
+                    })}
+                    </div>
+                    <button onClick={handleManageSave}>Submit!</button>
+            </div>
         </div>
 
     )

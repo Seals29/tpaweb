@@ -9,6 +9,7 @@ import style from "@/styles/homes.module.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowCircleLeft, faShop } from "@fortawesome/free-solid-svg-icons";
 import { ThemeContext } from "@/theme/theme";
+import HomeFooter from "../HomePage/Footer";
 export default function managementmenu() {
 
     const { theme } = useContext(ThemeContext)
@@ -34,7 +35,17 @@ export default function managementmenu() {
                 <Navbar />
                 <div style={{ minHeight: '100vh', maxHeight: '100vh', backgroundColor: theme.background }} className={style.containerbox1}>
                     <div className={style.containerbox} style={{ backgroundColor: theme.background }}>
-                        <div className={style.box} style={{ backgroundColor: theme.backgroundmenu, textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}><a href="/home/view/report" style={{ color: theme.text, fontSize: '20px' }}>Add New Voucher Code</a></div>
+                        <div className={style.box}
+                            style={{
+                                backgroundColor: theme.backgroundmenu,
+                                textAlign: 'center', display: 'flex',
+                                flexDirection: 'column', justifyContent: 'center'
+                            }} onClick={(e)=>{
+                                e.preventDefault()
+                                routers.push("/home/newvoucher");
+                            }}>
+                                Add New Voucher Code 
+                        </div>
                         <div className={style.box} style={{ backgroundColor: theme.backgroundmenu, textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}><a href="/home/view/userlist" style={{ color: theme.text, fontSize: '20px' }}>User List</a></div>{/*paginated */}
                         <div className={style.box} style={{ backgroundColor: theme.backgroundmenu, textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}><a href="/home/sendnews" style={{ color: theme.text, fontSize: '20px' }}>Send Newsletter</a></div>
                         <div className={style.box} style={{ backgroundColor: theme.backgroundmenu, textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}><a href="/home/newshop" style={{ color: theme.text, fontSize: '20px' }}>Insert New Shop</a></div>
@@ -55,7 +66,6 @@ export default function managementmenu() {
 
 
                         </div>
-                        {/* border: 2px solid #ccc; */}
                         <div className={style.box}
                             style={{ backgroundColor: theme.backgroundmenu, border: `2px solid ${theme.background}`, textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                             <a href="/home/newshop" style={{ color: theme.text, fontSize: '20px' }}>View All Reviews</a>
@@ -69,7 +79,7 @@ export default function managementmenu() {
 
                     </div>
                 </div>
-
+                <HomeFooter />
             </div>
         )
     } else {
@@ -79,6 +89,7 @@ export default function managementmenu() {
                 <div style={{ minHeight: '100vh', maxHeight: '100vh' }}>
                     You're not Authorized
                 </div>
+                <HomeFooter />
             </div>
         )
     }

@@ -58,12 +58,10 @@ export const THEME: { LIGHT: ThemeType, DARK: ThemeType } = {
     inputsearch:'#007aff',
   },
 }
-
 export const ThemeContext = createContext({
   theme: THEME.LIGHT,
   toggleTheme: () => { },
 });
-
 export const ThemeProvider = ({ children }: any) => {
   const [theme, setTheme] = useState(THEME.LIGHT);
 
@@ -75,14 +73,9 @@ export const ThemeProvider = ({ children }: any) => {
   }, []);
 
   const toggleTheme = () => {
-
     localStorage.setItem("theme", theme === THEME.LIGHT ? "dark" : "light");
     localStorage.setItem("theme", theme === THEME.LIGHT ? "dark" : "light");
     setTheme((e) => (e === THEME.LIGHT ? THEME.DARK : THEME.LIGHT));
-    // const newLang = e ? Language.Eng : Language.Id;
-    // setLang(newLang);
-    // localStorage.setItem("lang", newLang === Language.Id ? "id" : "eng");
-
   };
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
