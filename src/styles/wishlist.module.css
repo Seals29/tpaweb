@@ -1,4 +1,4 @@
-.wishlistnavbar{
+.wishlistnavbar {
     display: flex;
     justify-content: space-evenly;
     font-size: 28px;
@@ -7,7 +7,8 @@
     padding: 55px;
     /* transition: 10s blue ease; */
 }
-.wishlistnavbar li{
+
+.wishlistnavbar li {
     padding-left: 10px;
     padding-top: 3px;
     padding-bottom: 3px;
@@ -15,17 +16,19 @@
     transition: 1s ease;
     cursor: pointer;
 }
-.buttonflex{
+
+.buttonflex {
     display: flex;
     flex-direction: row;
     gap: 150px;
 }
 
-.wishlistdata{
+.wishlistdata {
     overflow-y: scroll;
     max-height: 200px;
 }
-.activemodal{
+
+.activemodal {
 
     /* overflow-y: scroll; */
     background-color: green;
@@ -42,7 +45,8 @@
     padding-top: 50px;
     padding-bottom: 50px;
 }
-.activemodal button{
+
+.activemodal button {
     border-radius: 15px;
     padding-left: 5px;
     padding-right: 15px;
@@ -65,14 +69,17 @@
     min-width: 300px;
     min-height: 30px;
 }
-.activemodal button:hover{
-    background-image: linear-gradient(135deg,#280F5C 0,#100F5C 58%,#0F345C 100%);
+
+.activemodal button:hover {
+    background-image: linear-gradient(135deg, #280F5C 0, #100F5C 58%, #0F345C 100%);
 }
-.activemodal h1{
+
+.activemodal h1 {
     padding-left: 20px;
     padding-bottom: 15px;
 }
-.modalh2{
+
+.modalh2 {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -80,31 +87,36 @@
     padding-left: 15px;
     padding-right: 15px;
 }
-.modalinput{
+
+.modalinput {
     display: flex;
-    
+
     padding-top: 15px;
     flex-direction: row;
-    justify-content:space-between;
+    justify-content: space-between;
     padding-left: 15px;
     padding-right: 15px;
 
 }
-.modalinput input{
+
+.modalinput input {
     /* min-width: 500px; */
     /* padding-left: 150px; */
     padding: 10px;
     border: 1px solid black;
 }
-.modalinput select{
+
+.modalinput select {
     padding-left: 15px;
     padding-right: 15px;
 }
-.activenavbar{
+
+.activenavbar {
     background-color: white;
     border-radius: 50%;
 }
-.wishlistnavbar li:hover{
+
+.wishlistnavbar li:hover {
     background-color: grey;
     border-radius: 15px;
     /* margin: 15px; */
@@ -115,7 +127,8 @@
     padding-right: 10px;
     width: auto;
 }
-.wishbtn button{
+
+.wishbtn button {
     margin-left: 100px;
     padding-left: 10px;
     padding-right: 10px;
@@ -126,34 +139,39 @@
     padding-bottom: 5px;
     transition: 1s ease;
 }
-.wishbtn button:hover{
+
+.wishbtn button:hover {
     background-color: grey;
 }
+
 .activetab {
     position: relative;
-  
-  }
-  .wishlistmain{
-        width: 100%;
-        display: grid;
-        grid-template-columns: repeat(4, 25%);
-        padding: 0px 5% 40 px;
-        /* gap: 150px; */
-        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-        /* margin-bottom: 15px; */
-        gap: 5px;
-        /* margin-top: 10px; */
-        padding-top: 10px;
-  }
-  .wishlistcontainer h2{
+
+}
+
+.wishlistmain {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 25%);
+    padding: 0px 5% 40 px;
+    /* gap: 150px; */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    /* margin-bottom: 15px; */
+    gap: 5px;
+    /* margin-top: 10px; */
+    padding-top: 10px;
+}
+
+.wishlistcontainer h2 {
     padding: 10px;
-        font-size: 18px;
-        font-weight: bold;
-        color: #333;
-        text-align: center;
-        margin: 0;
-  }
-.wishlistcontainer{
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin: 0;
+}
+
+.wishlistcontainer {
     width: 350px;
     /* cursor: pointer; */
     margin-top: 35px;
@@ -169,13 +187,14 @@
     flex-direction: column;
     align-items: center;
 }
-.wishlistcontainer img{
+
+.wishlistcontainer img {
     /* margin-left: 62px;
     margin-top: 15px;
     /* margin-right: 50%; */
     /* left: 50%; */
     /* right: 50%;  */
-    
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -183,7 +202,8 @@
     max-width: 200px;
 
 }
-  .activetab::after {
+
+.activetab::after {
     content: '';
     position: absolute;
     bottom: 0;
@@ -194,11 +214,13 @@
     border-radius: 50%;
     margin-bottom: -27px;
     background-color: grey;
-  }
-.inactiveyour{
+}
+
+.inactiveyour {
     display: none;
 }
-.activeyour{
+
+.activeyour {
     border-radius: 67px;
     font-size: 50px;
     display: block;
@@ -210,7 +232,8 @@
     border: 1px solid black;
     max-height: auto;
 }
-.btn{
+
+.btn {
     display: flex;
     flex-direction: column;
     bottom: 0;
@@ -222,8 +245,9 @@
 
     gap: 15px;
 }
-.btn button{
-    
+
+.btn button {
+
     min-width: 120px;
     /* position: absolute; */
     border: none;
@@ -236,7 +260,8 @@
     padding-left: 12px;
     padding-right: 12px;
 }
-.heading{
+
+.heading {
     font-size: 45px;
     font-weight: bold;
     display: flex;
@@ -244,24 +269,42 @@
     text-align: center;
     align-items: center;
 }
-.wishdetailcontainer{
+
+.wishdetailcontainer {
     border-radius: 15px;
     display: flex;
     flex-direction: row;
     max-width: 100%;
     min-width: 100%;
 }
+
 .wishdetailleft {
     min-width: 25%;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    padding: 35px;
     height: auto;
     border: 1px solid white;
 }
 
-.wishcontent{
+.wishdetailleftsub1 {
+    display: flex;
+    gap: 10px;
+}
+.wishdetailleftsub1 button{
+    
+}
+.wishdetailleftsub1 input{
+    padding: 10px;
+}
+
+.wishcontent {
     display: flex;
     width: 75%;
 }
-.wishcontent img{
+
+.wishcontent img {
     /* padding-left: 150px; */
     /* display: flex; */
     /* background-color: blue; */
@@ -275,14 +318,16 @@
     padding-right: 25px;
 
 }
-.flexbottom{
+
+.flexbottom {
     display: flex;
     flex-direction: column;
     border: 1px solid white;
     border-radius: 2px;
     width: 75%;
 }
-.wishdetailcontent{
+
+.wishdetailcontent {
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -290,7 +335,8 @@
     min-width: 100%;
     padding: 15px;
 }
-.closeiconP{
+
+.closeiconP {
     display: flex;
-    
+
 }

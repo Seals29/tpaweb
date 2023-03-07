@@ -562,12 +562,12 @@ padding-bottom: 35%;
   max-width: 1500px;
   min-width: 1500px;
   margin: 0 auto;
-  height: 1000px;
+  /* height: 1000px; */
   padding: 50px;
   background-color: #f5f5f5;
   border-radius: 30px;
-  min-height: 1000px;
-  max-height: 1000px;
+  /* min-height: 1000px; */
+  /* max-height: 1000px; */
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   text-align: center;
   min-height: auto;

@@ -15,9 +15,12 @@ import HomeFooter from "@/pages/HomePage/Footer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord, faFacebookF, faInstagramSquare, faLinkedinIn, faPinterestSquare, faTiktok, faTwitch, faTwitter, faYoutubeSquare } from "@fortawesome/free-brands-svg-icons";
 import { ThemeContext } from "@/theme/theme";
+import Card from "@/pages/components/card";
 export default function main(props: any) {
     // const {}
-    const { products, shop, category } = props;
+    const { products, shop, category, reviewShop } = props;
+    const [currProducts, setCurrProducts] = useState([])
+    console.log(reviewShop);
 
     console.log(products)
     console.log(shop)
@@ -53,16 +56,43 @@ export default function main(props: any) {
         }).catch(err => {
             console.log(err)
         })
-
+        setCurrProducts(products)
     }, [])
 
     const uniqueCategories = [...new Set(allShopCategory)];
     console.log(uniqueCategories)
     const [categories, setCategories] = useState([])
     const [activeTab, setActiveTab] = useState("home")
+    // console.log(sortedascproduct);
+    const sortedData = [...products].sort((a, b) => a.price - b.price)
+    const descSortedData = [...products].sort((a, b) => b.price - a.price)
+    const recomData = [...products].sort((a, b) => a.rating - b.rating)
+    console.log(sortedData);
+    const [rating, setRating] = useState([])
+    const [reviews, setReviews] = useState([])
     const handleTabClick = (tab: string) => {
         setActiveTab(tab);
     };
+    const handleReview = (e: any) => {
+        const userid = currUser.ID.toString()
+        const shopid = shop.ID.toString()
+        const review = reviews
+        const data = {
+            UserID: userid,
+            ShopID: shopid,
+            Review: review,
+            Rating: rating.toString(),
+        }
+        axios.post("http://localhost:9998/newreviewshop", data).then(res => {
+            console.log(res);
+
+        }).catch(err => {
+            console.log(err);
+
+        })
+        console.log(data);
+
+    }
     return (
         <>
             <header style={{ color: '' }}>
@@ -71,7 +101,11 @@ export default function main(props: any) {
             <div style={{
                 backgroundColor: 'red', color: 'white', padding: '10px', textAlign: 'center', display: `${currUser.isban ? "" : "none"}`
             }}>Your account is banned!</div>
-            <div style={{ color: theme.text, backgroundColor: theme.background, display: 'flex', alignItems: 'center' }}>
+            <div style={{
+                color: theme.text, backgroundColor: theme.background,
+
+                display: currUser.isban === true ? "none" : "flex", alignItems: 'center'
+            }}>
                 <div className={style.circleimg} style={{ color: theme.text }}>
                     <img src={shop.banner} alt={shop.name} />
                 </div>
@@ -90,6 +124,7 @@ export default function main(props: any) {
                         |
                         <div style={{ display: 'flex', gap: '5px' }}>
                             {/* {shop.rating} {"(" + (shop.sales/shop.) + ")"} */}
+                            {shop.rating}
                             <div><FontAwesomeIcon icon={faStar} /></div>
                         </div>
                     </div>
@@ -162,12 +197,54 @@ export default function main(props: any) {
 
                 </div>
             </div>
+            <h1 style={{
+                color: theme.text,
+                backgroundColor: theme.background,
+                display: activeTab === "home" ? '' : 'none'
+            }}>Recommended Products</h1><br />
+            <div className={style.cardcontainers} style={{
+                color: theme.text,
+                backgroundColor: theme.background,
+                display: activeTab === "home" ? '' : 'none'
+            }}>
+                {recomData.map((idx: any) => (
+                    <div className={style.usercontainer} onClick={(e) => {
+                        e.preventDefault()
+                        console.log(idx.ID)
+                        routers.push(`/home/user/product/${idx.ID}`)
+                    }} style={{ backgroundColor: theme.background, cursor: 'pointer' }}>
+                        <Card name={idx.name} image={idx.image} description={idx.description} rating={idx.rating} category={idx.category} detail={idx.detail} stock={idx.stock} price={idx.price} />
+                    </div>
+                ))}
+                {/* {isLoading && <div>Loading...</div>} */}
+                {/* <div ref={ref => ref && window.addEventListener('scroll', handleScroll)}> </div> */}
+            </div>
             <div style={{ display: activeTab === "allproduct" ? "block" : "none", backgroundColor: theme.background2 }}>
                 <br />
                 <br />
                 <br />
                 <div className={style.allproductcontainer} style={{ backgroundColor: theme.background }}>
-
+                    <div>
+                        <h2 onClick={(e) => {
+                            setCurrProducts(sortedData)
+                        }}>Sort By Asc</h2>
+                        <h2 onClick={(e) => {
+                            setCurrProducts(descSortedData)
+                        }}>Sort By Desc</h2>
+                    </div>
+                    <div className={style.cardcontainers} style={{ backgroundColor: theme.background }}>
+                        {currProducts.map((idx: any) => (
+                            <div className={style.usercontainer} onClick={(e) => {
+                                e.preventDefault()
+                                console.log(idx.ID)
+                                routers.push(`/home/user/product/${idx.ID}`)
+                            }} style={{ backgroundColor: theme.background, cursor: 'pointer' }}>
+                                <Card name={idx.name} image={idx.image} description={idx.description} rating={idx.rating} category={idx.category} detail={idx.detail} stock={idx.stock} price={idx.price} />
+                            </div>
+                        ))}
+                        {/* {isLoading && <div>Loading...</div>} */}
+                        {/* <div ref={ref => ref && window.addEventListener('scroll', handleScroll)}> </div> */}
+                    </div>
                 </div>
             </div>
             {/* <div style={{ display: 'flex', justifyContent: 'space-evenly', color: theme.text, backgroundColor: theme.background }}>
@@ -198,11 +275,47 @@ export default function main(props: any) {
                     Shop By Category
                 </div>
             </div> */}
+            <div style={{ display: activeTab === "reviews" ? "block" : "none", backgroundColor: theme.background2 }}>
 
-            <div>
+                <div> <h1 style={{
+                    padding: '15px'
+                }}>Reviews1</h1></div>
+            </div>
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                backgroundColor: theme.background2,
+                padding: '15px', gap: '35px'
+            }}>
+                <input type="text" style={{
+                    maxWidth: '35%',
+                    padding: '15px',
+                    fontSize: '13px'
+                }} placeholder={"Input Your Review"} onChange={(e) => {
+                    setReviews(e.target.value)
+                }} />
+                <input type="number" min={1} max={5} step={1} style={{
+                    maxWidth: '15%',
+                    padding: '10px',
+                    fontSize: '20px'
+                }} placeholder={"Rate your Rating!"} onChange={(e: any) => {
+                    setRating(e.target.value)
+                }} />
+                <button style={{
+                    padding: '15px',
+                    maxWidth: '20%',
+                    backgroundColor: theme.background,
+                    color: theme.text
+                }} onClick={handleReview}>Save</button>
 
-                {products.map((e: any) => (
-                    <div>{e.category}</div>
+                <div>
+                    <h1>All Reviews!</h1>
+                </div>
+                {reviewShop.map((event:any)=>(
+                    <div>
+                        {event.reviewcomment}
+
+                    </div>
                 ))}
             </div>
             <footer style={{ position: 'sticky' }}>
@@ -248,14 +361,16 @@ export async function getStaticProps(context: any) {
     const res2 = await axios.get(`http://localhost:9998/getsingleshop/${id}`)
     //get all category
     const products = await res.data;
-
-    // const res3 = await axios.get(`http://localhost:9998//getcategorybyshop/${id}`)
+    const res3 = await axios.get(`http://localhost:9998/getreviewbyshopid?shopid=${id}`)
+    const reviewShop = await res3.data;
+    // const res3 = await axios.get(`http://localhost:9998//getcategorybyshop?id=${id}`)
     const shop = await res2.data
     // const category = await res3.data
     return {
         props: {
             products,
             shop,
+            reviewShop
             // category
         }
     }
