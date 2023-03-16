@@ -9,12 +9,14 @@ import HomeFooter from "@/pages/HomePage/Footer";
 import { LangContext } from "@/theme/language";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose, faLock, faLockOpen, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import Card from "@/pages/components/card";
 // import  style  from "@/styles/productdetail.module.css"
 
 export default function ProductDetail(props: any) {
     console.log(props)
-    const { product, shop, categories,allwishlist } = props;
+    const { product, shop, categories, allwishlist, similar } = props;
     const [chosenWishList, setChosenWishList] = useState('')
+    console.log(similar);
 
     console.log(allwishlist)
     console.log(shop)
@@ -41,7 +43,7 @@ export default function ProductDetail(props: any) {
     //       setChosenWishList(userWishList.name);
     //     }
     //   }, [allwishlist]);
-    
+
     useEffect(() => {
         // setChosenWishList(allwishlist[0].name)
         categories.forEach((e: any) => {
@@ -64,7 +66,7 @@ export default function ProductDetail(props: any) {
 
     }, [])
     console.log(currUser)
-    const addToWishlist = (e :any)=>{
+    const addToWishlist = (e: any) => {
         e.preventDefault()
         setBlur(true)
     }
@@ -81,161 +83,215 @@ export default function ProductDetail(props: any) {
             console.log(err)
         })
     }
-    const saveToWishList = (e:any)=>{
+    const saveToWishList = (e: any) => {
         e.preventDefault()
         console.log(chosenWishList)
         const data = {
-            wishlistid : chosenWishList,
-            productid : product.ID.toString(),
-            quantity : currCount.toString()
+            wishlistid: chosenWishList,
+            productid: product.ID.toString(),
+            quantity: currCount.toString()
         }
         console.log(data)
-        axios.post("http://localhost:9998/AddNewProductIntoWishList",data).then(res=>{
+        axios.post("http://localhost:9998/AddNewProductIntoWishList", data).then(res => {
             console.log(res)
-            if (res.data.error){
+            if (res.data.error) {
                 alert(res.data.error)
             }
-            if(res.data.message){
+            if (res.data.message) {
                 alert(res.data.message)
             }
-        }).catch(err=>{
+        }).catch(err => {
             console.log(err)
         })
     }
     return (
         <>
-        <div className={blur===true?style.maindiv:""}>
-            <header style={{ color: '' }}>
-                <Navbar />
-            </header>
-            <div style={{backgroundColor: 'red', color: 'white', padding: '10px', textAlign: 'center', display: `${currUser.isban ? "" : "none"}`}}>{Lang.isEng ? "Your Account is banned!" : "Akun " + currUser.firstname + " diban"}</div>
-            <div style={{ backgroundColor: theme.backgroundmenu }}>
+            <div className={blur === true ? style.maindiv : ""}>
+                <header style={{ color: '' }}>
+                    <Navbar />
+                </header>
                 <div style={{
-                    top: '0', backgroundColor: theme.background2
-                    , paddingTop: '45px'
-                }}>
-                    <div className={style.productdetail}
-                        style={{
+                    backgroundColor: 'red', color: 'white', padding: '10px', textAlign: 'center', display: `${shop.isban ? "" : "none"}`
+                }}>Current Product is banned!</div>
+                <div style={{ backgroundColor: 'red', color: 'white', padding: '10px', textAlign: 'center', display: `${currUser.isban ? "" : "none"}` }}>{Lang.isEng ? "Your Account is banned!" : "Akun " + currUser.firstname + " diban"}</div>
+                <div style={{ backgroundColor: theme.backgroundmenu }}>
+                    <div style={{
+                        top: '0', backgroundColor: theme.background2
+                        , paddingTop: '45px'
+                    }}>
+                        <div className={style.productdetail}
+                            style={{
 
-                            minHeight: '20vh', gap: '50px',
-                            justifyContent: 'center', overflow: 'hidden',
-                            backgroundColor: theme.backgroundmenu
-                        }}>
-                        <div className={style.productdetailimage} style={{}}>
-                            <img src={product.image} alt={product.name} style={{ minHeight: '38vh', maxHeight: '38vh' }} />
-                        </div>
-                        <div style={{ color: theme.text }}>
-                            <div className={style.productdetailinfo} style={{ color: theme.text }}>
-                                {product.name}
+                                minHeight: '20vh', gap: '50px',
+                                justifyContent: 'center', overflow: 'hidden',
+                                backgroundColor: theme.backgroundmenu
+                            }}>
+                            <div className={style.productdetailimage} style={{}}>
+                                <img src={product.image} alt={product.name} style={{ minHeight: '38vh', maxHeight: '38vh' }} />
                             </div>
-                            <div className={style.detailprice}>
-                                <br />
-                                ${product.price}
-                            </div>
-                            <br />
-                            <div>
-                                <div className={style.detailstock}>
-                                    {product.stock ? product.stock : "No"} {Lang.isEng ? "Stock Left" : "Stok tersisa"}
-                                    <br />
-                                    {product.totalsales} {Lang.isEng ? "Sold" : "Terjual"}
+                            <div style={{ color: theme.text }}>
+                                <div className={style.productdetailinfo} style={{ color: theme.text }}>
+                                    {product.name}
                                 </div>
+                                <div className={style.detailprice}>
+                                    <br />
+                                    ${product.price}
+                                </div>
+                                <br />
+                                <div>
+                                    <div className={style.detailstock}>
+                                        {product.stock ? product.stock : "No"} {Lang.isEng ? "Stock Left" : "Stok tersisa"}
+                                        <br />
+                                        {product.totalsales} {Lang.isEng ? "Sold" : "Terjual"}
+                                    </div>
 
+                                </div>
+                                <div
+                                    // style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '15px' }}
+                                    className={style.detaillogocontainer}
+                                    onClick={(e) => {
+                                        e.preventDefault()
+                                        console.log(shop.ID)
+                                        routers.push("/home/user/shop/[id]", `/home/user/shop/${shop.ID}`)
+                                    }}>
+                                    <img src={shop.banner} alt="" style={{ minHeight: '50px', maxHeight: '50px', minWidth: '50px', maxWidth: '50px' }} />
+                                    <p style={{ color: theme.text, zIndex: '5' }}>{shop.name}</p>
+                                </div>
+                                <br />
+                                <div className={style.detailcategory}>{Lang.isEng ? "Category" : "Kategori"} : {product.category}</div>
+                                <br />
+                                <div className={style.detailcategory}>Detail : {product.detail}</div>
+
+                                <div style={{ gap: '15px', display: 'flex' }} className={style.detailbutton}>
+                                    <button onClick={addToWishlist}>
+
+                                        {Lang.isEng ? "Add to Wishlist" : "Tambahkan ke dalam Wishlist"}</button>
+                                    <button onClick={(e) => {
+                                        e.preventDefault()
+                                        if (currCount === 1) {
+                                            setButtonmin(true)
+                                            setCurrCount(currCount - 1)
+                                        } else {
+                                            setCurrCount(currCount - 1)
+                                            setButtonplus(false)
+                                        }
+                                    }} disabled={buttonmin}>-</button>
+                                    <div style={{ alignItems: 'center', display: 'flex' }}>{currCount}</div>
+                                    <button onClick={(e) => {
+                                        e.preventDefault()
+                                        if (currCount === product.stock - 1) {
+                                            setButtonplus(true)
+                                            setCurrCount(currCount + 1);
+                                        } else {
+                                            setButtonplus(false)
+                                            setButtonmin(false)
+                                            setCurrCount(currCount + 1);
+                                        }
+                                    }} disabled={buttonplus}>+</button>
+                                    <button onClick={addToCart}>
+                                        <FontAwesomeIcon icon={faShoppingCart} />
+                                        {Lang.isEng ? " Add to Cart" : " Tambahkan ke keranjang"}</button>
+                                </div>
                             </div>
-                            <div
-                                // style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '15px' }}
-                                className={style.detaillogocontainer}
-                                onClick={(e) => {
-                                    e.preventDefault()
-                                    console.log(shop.ID)
-                                    routers.push("/home/user/shop/[id]", `/home/user/shop/${shop.ID}`)
-                                }}>
-                                <img src={shop.banner} alt="" style={{ minHeight: '50px', maxHeight: '50px', minWidth: '50px', maxWidth: '50px' }} />
-                                <p style={{ color: theme.text, zIndex: '5' }}>{shop.name}</p>
-                            </div>
-                            <br />
-                            <div className={style.detailcategory}>{Lang.isEng ? "Category" : "Kategori"} : {productCategory}</div>
-                            <br />
-                            <div className={style.detailcategory}>Detail : {product.detail}</div>
 
-                            <div style={{ gap: '15px', display: 'flex' }} className={style.detailbutton}>
-                                <button onClick={addToWishlist}>
 
-                                    {Lang.isEng ? "Add to Wishlist" : "Tambahkan ke dalam Wishlist"}</button>
-                                <button onClick={(e) => {
-                                    e.preventDefault()
-                                    if (currCount === 1) {
-                                        setButtonmin(true)
-                                        setCurrCount(currCount - 1)
-                                    } else {
-                                        setCurrCount(currCount - 1)
-                                        setButtonplus(false)
-                                    }
-                                }} disabled={buttonmin}>-</button>
-                                <div style={{ alignItems: 'center', display: 'flex' }}>{currCount}</div>
-                                <button onClick={(e) => {
-                                    e.preventDefault()
-                                    if (currCount === product.stock - 1) {
-                                        setButtonplus(true)
-                                        setCurrCount(currCount + 1);
-                                    } else {
-                                        setButtonplus(false)
-                                        setButtonmin(false)
-                                        setCurrCount(currCount + 1);
-                                    }
-                                }} disabled={buttonplus}>+</button>
-                                <button onClick={addToCart}>
-                                    <FontAwesomeIcon icon={faShoppingCart} />
-                                    {Lang.isEng ? " Add to Cart" : " Tambahkan ke keranjang"}</button>
+                        </div>
+                        <div style={{ marginLeft: '75px' }} className={style.detaildesc}>
+                            {Lang.isEng ? "Product Description" : "Deskripsi Produk"}
+                            <div>
+                                <br />
+                                {product.description}
                             </div>
                         </div>
+                        <br />
+                        <div style={{
+                            padding: '15px', color: theme.text,
+                            display: 'flex', flexDirection: 'column'
+                        }}>
+                            <h1 style={{
+                                padding: '15px', color: theme.text
+                            }}>Similar Product</h1>
+                            <hr />
 
-
+                            {/* <div> */}
+                            <div className={style.cardcontainers} style={{ backgroundColor: theme.background, display: 'flex' }}>
+                                {similar.map((idx: any) => (
+                                    <div className={style.usercontainer} onClick={(e) => {
+                                        e.preventDefault()
+                                        console.log(idx.ID)
+                                        routers.push(`home/user/product/${idx.ID}`)
+                                    }} style={{ backgroundColor: theme.background, cursor: 'pointer' }}>
+                                        <Card name={idx.name} image={idx.image} description={idx.description} rating={idx.rating} category={idx.category} detail={idx.detail} stock={idx.stock} price={idx.price} />
+                                    </div>
+                                ))}
+                            </div>
+                            <div style={{
+                                padding:'25px',
+                                fontSize:'18px',
+                                fontWeight:'bold'
+                            }}>
+                                {similar.length === 0 ? "There is no similar product" : ""}
+                            </div>
+                            {/* </div> */}
+                            {/* <div style={{ backgroundColor: theme.background, margin: '0' }} >
+                    <div className={style.cardcontainers} style={{ backgroundColor: theme.background }}>
+                        {currProducts.map((idx: any) => (
+                            <div className={style.usercontainer} onClick={(e) => {
+                                e.preventDefault()
+                                console.log(idx.ID)
+                                routers.push(`home/user/product/${idx.ID}`)
+                            }} style={{ backgroundColor: theme.background, cursor: 'pointer' }}>
+                                <Card name={idx.name} image={idx.image} description={idx.description} rating={idx.rating} category={idx.category} detail={idx.detail} stock={idx.stock} price={idx.price} />
+                            </div>
+                        ))}
+                        {isLoading && <div>Loading...</div>}
+                        <div ref={ref => ref && window.addEventListener('scroll', handleScroll)}> </div>
                     </div>
-                    <div style={{ marginLeft: '75px' }}>
-                        {Lang.isEng ? "Product Description" : "Deskripsi Produk"}
-                        <div>
-                            <br />
-                            {product.description}
+                </div> */}
+
+
+
                         </div>
+
                     </div>
                 </div>
-            </div>
-            
-            <footer style={{ position: 'sticky' }}>
-                <HomeFooter />
 
-            </footer>
+                <footer style={{ position: 'sticky' }}>
+                    <HomeFooter />
+
+                </footer>
             </div>
-            <div className={style.centerContainer} 
-            style={{backgroundColor:theme.background2,
-            display:blur?"":"none"
-            }}>
+            <div className={style.centerContainer}
+                style={{
+                    backgroundColor: theme.background2,
+                    display: blur ? "" : "none"
+                }}>
                 <FontAwesomeIcon icon={faClose} style={{
-                        top:'0%',float:'right',right:'0',
-                        
-                        paddingLeft:'80%'
-                        ,color:theme.text
-                    ,cursor:'pointer'
-                }} onClick={(e)=>{
+                    top: '0%', float: 'right', right: '0',
+
+                    paddingLeft: '80%'
+                    , color: theme.text
+                    , cursor: 'pointer'
+                }} onClick={(e) => {
                     setBlur(false)
-                }}/>
-               <label style={{color:theme.text}} >Insert to..</label>
-                <select  onClick={(e)=>{
+                }} />
+                <label style={{ color: theme.text }} >Insert to..</label>
+                <select onClick={(e) => {
                     setChosenWishList(e.target.value)
-                }} value={chosenWishList} style={{minHeight:'20px'}} onChange={(e)=>{
+                }} value={chosenWishList} style={{ minHeight: '20px' }} onChange={(e) => {
                     setChosenWishList(e.target.value)
-                
+
                 }} defaultValue={chosenWishList}>
                     <option value="Empty">-- Choose an Option! --</option>
-                    {allwishlist.map((e:any)=>{
-                        if (e.userid === currUser.ID)return(<option value={e.ID} key={e.ID}>{e.name} - {e.status}</option>) 
+                    {allwishlist.map((e: any) => {
+                        if (e.userid === currUser.ID) return (<option value={e.ID} key={e.ID}>{e.name} - {e.status}</option>)
                     })}
                 </select>
-                <button style={{backgroundColor:theme.button, color:theme.text}}
-                onClick={saveToWishList}
+                <button style={{ backgroundColor: theme.button, color: theme.text }}
+                    onClick={saveToWishList}
                 >Save Wishlist!</button>
-                </div>
-                
+            </div>
+
         </>
 
 
@@ -271,15 +327,18 @@ export async function getStaticProps(context: any) {
     const res2 = await axios.get(`http://localhost:9998/getoneshop/${product.shopid}`)
     const res3 = await axios.get(`http://localhost:9998/getallcategory`)
     const res4 = await axios.get(`http://localhost:9998/getallwishlist`)
+    const res5 = await axios.get(`http://localhost:9998/getsimilarproductbycategory?category=${product.category}`)
     const categories = await res3.data
     const shop = await res2.data;
+    const similar = await res5.data;
     const allwishlist = await res4.data
     return {
         props: {
             product,
             shop,
             categories,
-            allwishlist
+            allwishlist,
+            similar
         }
     }
 }

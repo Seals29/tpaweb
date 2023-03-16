@@ -1,3 +1,4 @@
+import Home from "@/pages";
 import HomeFooter from "@/pages/HomePage/Footer";
 import Navbar from "@/pages/HomePage/Navbar";
 import style from "@/styles/cart.module.css"
@@ -9,7 +10,10 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 export default function viewcart(props: any) {
-    const { carts, savelaters } = props
+
+    const [blur, setBlur] = useState(false)
+    const { carts, savelaters, allwishlist } = props
+    const [chosenWishList, setChosenWishList] = useState([])
     const { theme } = useContext(ThemeContext)
     const [currUser, setCurrUser] = useState([])
     const [totalPrice, setTotalPrice] = useState([])
@@ -20,6 +24,29 @@ export default function viewcart(props: any) {
     // const [totalprice, setTotalPrice] = useState(0)
     const [allSaveLaterProduct, setAllSaveLaterProducts] = useState([])
     console.log(carts);
+    const saveToWishList = (event: any) => {
+        event.preventDefault()
+        console.log(chosenWishList)
+        const data = {
+            wishlistid : chosenWishList,
+            productid : wishlistedProduct.toString(),
+            quantity : wishlistedQty.toString()
+        }
+        console.log(data)
+        axios.post("http://localhost:9998/AddNewProductIntoWishList",data).then(res=>{
+            console.log(res)
+            if (res.data.error){
+                alert(res.data.error)
+            }
+            if(res.data.message){
+                alert(res.data.message)
+            }
+        }).catch(err=>{
+            console.log(err)
+        })
+    }
+    // const [totalPrice,setTotalPrice] = useState(0)
+
     useEffect(() => {
         const cookies = Cookies.get('token')
         axios.post('http://localhost:9998/validate', { cookies }).then(res => {
@@ -35,6 +62,17 @@ export default function viewcart(props: any) {
                     }).catch(err => {
                         console.log(err);
 
+                    })
+                    const myData = {
+                        CartID : e.ID.toString()
+                    }
+                    axios.post("http://localhost:9998/calculatetotalprice",myData).then(res=>{
+                        console.log(res);
+                        setTotalPrice(res.data)
+                        
+                    }).catch(err=>{
+                        console.log(err);
+                        
                     })
                 }
                 // route.GET("/getproduct/:id", controller.GetOneProduct)
@@ -60,17 +98,18 @@ export default function viewcart(props: any) {
             routers.push('/login')
         })
         console.log(currUser)
-        setTotalPrice(uniqueProducts.map((product)=>product.price).reduce((sum,price)=>sum+price,0))
+        // setTotalPrice(uniqueProducts.map((product) => product.price).reduce((sum, price) => sum + price, 0))
     }, [])
     console.log(allSaveLaterProduct);
-
+    console.log(allCarts);
+    
     // const uniqueSaveLaters = allSaveLaterProduct.filter()
     const uniqueProducts = allProducts.filter((item, idx, self) => idx === self.findIndex((i) => i.ID === item.ID))
     console.log(uniqueProducts);
-    const Total = uniqueProducts.map((product)=>product.price).reduce((sum,price)=>sum+price,0);
+    const Total = uniqueProducts.map((product) => product.price).reduce((sum, price) => sum + price, 0);
     console.log(Total);
     console.log(totalPrice);
-    
+    const uniqueAllCarts = allCarts.filter((item, idx, self) => idx === self.findIndex((i) => i.ID === item.ID))
     const uniqueSaveLaterProducts = allSaveLaterProduct.filter((item, idx, self) => idx === self.findIndex((i) => i.ID === item.ID))
     console.log(uniqueSaveLaterProducts);
     const handleMoveAllToWishList = (e: any) => {
@@ -78,6 +117,40 @@ export default function viewcart(props: any) {
     }
     const handleRemoveAll = (e: any) => {
 
+    }
+    const [wishlistedQty, setWishlistedQty] = useState([])
+    const [wishlistedProduct, setWishlistedProduct] = useState([])
+    const handleMoveToWishList = (productID: any, event: any) => {
+        setBlur(true)
+        const data = {
+            ProductID: productID,
+            UserID: currUser.ID
+        }
+        uniqueAllCarts.map(item=>{
+            if(item.productid ===productID){
+                setWishlistedQty(item.quantity)
+            }
+        })
+        setWishlistedProduct(productID)
+
+        console.log(data);
+
+    }
+    const handleCheckout = (e: any) => {
+        e.preventDefault()
+        const data = {
+            UserID: currUser.ID.toString(),
+            // Address : 
+        }
+
+        //     	var body struct {
+        // 	UserID        string `json:"userid"`
+        // 	Address       string `json:"address"`
+        // 	Receiver      string `json:"receiver"`
+        // 	PaymentMethod string `json:"paymentmethod"`
+        // 	Delivery      string `json:"delivery"`
+        // 	ProductTotal  string `json:"producttotal"`
+        // }
     }
     const handleMoveAlltoCart = (ID: any, e: any) => {
         e.preventDefault()
@@ -188,15 +261,29 @@ export default function viewcart(props: any) {
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
 
                                         <h1>asd</h1>
-                                        <label htmlFor="">price : {e.price}</label>
-                                        <label htmlFor="">Category</label>
-                                        <label htmlFor="">Qty</label>
+                                        <label htmlFor="">${e.price}</label>
+                                        <label htmlFor="">{e.category}</label>
+                                        {/* <label htmlFor="">Qty */}
+                                        {uniqueAllCarts.map((item:any)=>{
+                                            console.log(item);
+                                            
+                                            if(item.productid===e.ID){
+                                                return (
+                                                    <div>{item.quantity} Quantity</div>
+                                                )
+                                                
+                                            }
+                                        })}
+                                        
+                                        {/* </label> */}
                                     </div>
                                     <div style={{ display: 'flex' }}>
                                         <div style={{ width: 'auto', wordWrap: 'break-word' }}>
                                             <button style={{
                                                 padding: '3px', paddingLeft: '7px', paddingRight: '7px',
                                                 backgroundColor: theme.footerbg
+                                            }} onClick={(event: any) => {
+                                                handleMoveToWishList(e.ID, event)
                                             }}><FontAwesomeIcon icon={faHeart} />Move to WishList</button>
                                         </div>
 
@@ -261,7 +348,7 @@ export default function viewcart(props: any) {
                     </div>
                     <div style={{ display: 'flex' }}>
                         <div style={{ width: 'auto', wordWrap: 'break-word' }}>
-                            <h1>Save Later({uniqueProducts.length} items)</h1>
+                            <h1>Save Later({uniqueSaveLaterProducts.length} items)</h1>
                         </div>
 
                         <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
@@ -289,6 +376,7 @@ export default function viewcart(props: any) {
 
                         </div>
                     </div>
+                    <hr />
                     <div className={style.flexbottom}>
                         {/* https://firebasestorage.googleapis.com/v0/b/oldegg-3c56e.appspot.com/o/shopProduct%2FTokopedia%2F117495.jpgOldEgg?alt=media&token=5a682786-1407-4433-80b3-7df7860a6b6e */}
                         {uniqueSaveLaterProducts.map((e) =>
@@ -312,9 +400,11 @@ export default function viewcart(props: any) {
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
 
                                         <h1>asd</h1>
-                                        <label htmlFor="">price</label>
-                                        <label htmlFor="">Category</label>
-                                        <label htmlFor="">Qty</label>
+                                        <label htmlFor="">${e.price}</label>
+                                        <label htmlFor="">Category : {e.category}</label>
+                                        <label htmlFor="">Qty
+                                        
+                                        </label>
                                     </div>
                                     <div>
                                         <div style={{ display: 'flex' }}>
@@ -363,14 +453,15 @@ export default function viewcart(props: any) {
                         Summary
                     </h1>
                     <div style={{
-                        display:'flex',
-                        gap:'15px',
-                        flexDirection:'column'
+                        display: 'flex',
+                        gap: '15px',
+                        flexDirection: 'column'
                     }}>
-                        <p>Item(s): ${Total}</p>
-                        <p>Admin Fee(s) : ${Total*0.05}</p>
-                        <h3>Est. Total : ${Total+Total*0.05}</h3>
-                        <button onClick={(e:any)=>{
+                        <p>Item(s): ${totalPrice}</p>
+                        <p>Admin Fee(s) : ${totalPrice * 0.05}</p>
+                        <hr />
+                        <h3>Est. Total : ${totalPrice + totalPrice * 0.05}</h3>
+                        <button onClick={(e: any) => {
                             e.preventDefault()
                             routers.push("/home/user/checkout")
                         }}>Check Out!</button>
@@ -379,8 +470,39 @@ export default function viewcart(props: any) {
                 </div>
             </div>
 
+            <footer>
+                <HomeFooter />
+            </footer>
+            <div className={style.centerContainer}
+                style={{
+                    backgroundColor: theme.background2,
+                    display: blur ? "" : "none"
+                }}>
+                <FontAwesomeIcon icon={faClose} style={{
+                    top: '0%', float: 'right', right: '0',
 
-            <HomeFooter />
+                    paddingLeft: '80%'
+                    , color: theme.text
+                    , cursor: 'pointer'
+                }} onClick={(e) => {
+                    setBlur(false)
+                }} />
+                <label style={{ color: theme.text }} >Insert to..</label>
+                <select onClick={(e) => {
+                    // setChosenWishList(e.target.value)
+                }} value={chosenWishList} style={{ minHeight: '20px' }} onChange={(e) => {
+                    setChosenWishList(e.target.value)
+
+                }} defaultValue={chosenWishList}>
+                    <option value="Empty">-- Choose an Option! --</option>
+                    {allwishlist.map((e: any) => {
+                        if (e.userid === currUser.ID) return (<option value={e.ID} key={e.ID}>{e.name} - {e.status}</option>)
+                    })}
+                </select>
+                <button style={{ backgroundColor: theme.button, color: theme.text }}
+                    onClick={saveToWishList}
+                >Save Wishlist!</button>
+            </div>
 
         </div>
     )
@@ -390,11 +512,14 @@ export async function getStaticProps() {
     const res = await axios.get(`http://localhost:9998/getallcarts`)
     const carts = await res.data;
     const res2 = await axios.get(`http://localhost:9998/getallsavelaters`)
+    const res4 = await axios.get(`http://localhost:9998/getallwishlist`)
+    const allwishlist = await res4.data;
     const savelaters = await res2.data;
     return {
         props: {
             carts,
-            savelaters
+            savelaters,
+            allwishlist
         }
     }
 }

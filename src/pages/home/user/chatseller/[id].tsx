@@ -1,17 +1,24 @@
 import HomeFooter from "@/pages/HomePage/Footer";
 import Navbar from "@/pages/HomePage/Navbar";
-import { ThemeContext } from "@/theme/theme";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import style from "@/styles/chat.module.css"
-export default function chatcs(props: any) {
-    const { users } = props;
+import { ThemeContext } from "@/theme/theme";
+export default function chatseller(props: any) {
+    const { id, orderDetail } = props
+    console.log(id);
+    console.log(orderDetail);
+
+    const [timestamp, setTimestamp] = useState([])
     const { theme } = useContext(ThemeContext)
-    const routers = useRouter();
-    const [currUser, setCurrUser] = useState([]);
-    const messageRef = useRef(null);
+    const [currUser, setCurrUser] = useState([])
+    const [messages, setMessages] = useState<string[]>([]);
+    const [content, setContent] = useState([])
+    const [socket, setSocket] = useState<WebSocket | null>(null);
+    const routers = useRouter()
+    const [shopID, setShopID] = useState([])
     useEffect(() => {
         const cookies = Cookies.get('token')
         axios.post('http://localhost:9998/validate', { cookies }).then(res => {
@@ -34,8 +41,15 @@ export default function chatcs(props: any) {
                 console.log(event.data)
                 const jsonOb = JSON.parse(event.data)
                 setTimestamp(new Date(jsonOb.CreatedAt))
+                console.log(jsonOb);
+                console.log(shopID.ID);
+                console.log(currUser.ID);
 
+                if (jsonOb.from === String(res.data.user.ID) || jsonOb.to === String(res.data.user.ID)) {
                 setMessages((prevstate) => [...prevstate, jsonOb])
+                }
+
+
             };
 
             newSocket.onerror = (event) => {
@@ -51,37 +65,20 @@ export default function chatcs(props: any) {
             routers.push('/login')
         })
         console.log(currUser)
-
+        axios.get(`http://localhost:9998/getusershopid/${orderDetail.shopid}`).then(res => {
+            console.log(res);
+            setShopID(res.data);
+        })
     }, [])
-    console.log(currUser);
-
-    const [messages, setMessages] = useState<string[]>([]);
-    const [socket, setSocket] = useState<WebSocket | null>(null);
-    const [newMsg, setNewMsg] = useState('')
-    const [content, setContent] = useState('')
-    const [updatedMsg, setUpdatedMsg] = useState('')
-    const [timestamp, setTimestamp] = useState('')
-    useEffect(() => {
-
-    }, []);
-    const scrollToBottom = () => {
-        if (messageRef.current) {
-            messageRef.current.scrollTop = messageRef.current.scrollHeight;
-        }
-    };
 
     const handleSend = () => {
         if (socket.readyState === WebSocket.OPEN) {
-            const obj = { from: currUser.ID.toString(), to: "4", content: content }
+            const obj = { from: currUser.ID.toString(), to: shopID.ID.toString(), content: content }
             socket.send(JSON.stringify(obj));
             setContent(''); // Clear the input field
-            scrollToBottom();
+            // scrollToBottom();
         }
-    }; useEffect(() => {
-        if (messageRef.current) {
-            messageRef.current.scrollTop = messageRef.current.scrollHeight;
-        }
-    }, [messages])
+    };
     return (
         <div>
             <Navbar />
@@ -89,21 +86,21 @@ export default function chatcs(props: any) {
                 <div className={style.chatcsmsgs}>
 
                     {/* {messages.map((message, index) => (
-                    <div
-                        key={index}
-                        className={
-                            message.from === "1"
-                                ? style.chatmsgreceive
-                                : style.chatmsgsent
-                        }
-                    >
-                        <div>From : {message.from === "2" ? "2" : "1"}</div>
-                        <div>To : {message.to === "1" ? "1" : "2"}</div>
-                        <div className={style.chatMessageContent}>{message.content}</div>
-                        <div className={style.chatMessageTimestamp}>Date : {message.createdAt}
-                        </div>
+                <div
+                    key={index}
+                    className={
+                        message.from === "1"
+                            ? style.chatmsgreceive
+                            : style.chatmsgsent
+                    }
+                >
+                    <div>From : {message.from === "2" ? "2" : "1"}</div>
+                    <div>To : {message.to === "1" ? "1" : "2"}</div>
+                    <div className={style.chatMessageContent}>{message.content}</div>
+                    <div className={style.chatMessageTimestamp}>Date : {message.createdAt}
                     </div>
-                ))} */}
+                </div>
+            ))} */}
                     {messages.map((msg, idx) => (
                         <div key={idx} className={style.bubblechat}>
                             <div className={style.text}>from : {msg.from}</div>
@@ -129,3 +126,38 @@ export default function chatcs(props: any) {
         </div>
     )
 }
+export async function getStaticPaths() {
+    try {
+        const res = await axios.get(`http://localhost:9998/getorders`)
+        const allOrders = await res.data;
+        console.log(allOrders)
+        const paths = allOrders.map((order: any) => ({
+            params: {
+                id: String(order.ID),
+            },
+        }));
+        return {
+            paths,
+            fallback: true,
+        };
+    } catch (error) {
+        alert(error)
+        return {
+            notFound: true,
+        };
+    }
+
+}
+
+export async function getStaticProps(context: any) {
+    const { id } = context.params;
+    const res = await axios.get(`http://localhost:9998/getorderbyorderid?orderid=${id}`)
+    const orderDetail = await res.data;
+    return {
+        props: {
+            id,
+            orderDetail
+        }
+    }
+}
+

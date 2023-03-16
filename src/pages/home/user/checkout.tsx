@@ -19,6 +19,7 @@ export default function CheckOut(props: any) {
     const routers = useRouter()
     const [currAddress, setCurrAddress] = useState([])
     const [totalPrice, setTotalPrice] = useState([])
+
     useEffect(() => {
         const cookies = Cookies.get('token')
         axios.post('http://localhost:9998/validate', { cookies }).then(res => {
@@ -41,11 +42,22 @@ export default function CheckOut(props: any) {
                         console.log(err);
 
                     })
+                    const myData = {
+                        CartID: e.ID.toString()
+                    }
+                    axios.post("http://localhost:9998/calculatetotalprice", myData).then(res => {
+                        console.log(res);
+                        setTotalPrice(res.data)
+
+                    }).catch(err => {
+                        console.log(err);
+
+                    })
                 }
                 // route.GET("/getproduct/:id", controller.GetOneProduct)
 
             })
-            setTotalPrice(uniqueProducts.map((product) => product.price).reduce((sum, price) => sum + price, 0))
+            // setTotalPrice(uniqueProducts.map((product) => product.price).reduce((sum, price) => sum + price, 0))
         }).catch(err => {
             console.log(err)
             routers.push('/login')
@@ -158,37 +170,32 @@ export default function CheckOut(props: any) {
                         </button>
                         <button onClick={(event: any) => {
                             if (currUser.balance >= (Total + Total * 0.05)) {
-                                uniqueProducts.map((pr) => {
-                                    console.log(pr);
-                                    const data = {
-                                        UserID: currUser.ID.toString(),
-                                        Address: mainAddr.addressfield,
-                                        Receiver: mainAddr.receivername,
-                                        PaymentMethod: currPaymentMethod,
-                                        Delivery: currDelivery,
-                                        ProductID: pr.ID.toString(),
-                                        // GrandTotal: Total + Total * 0.05,
-                                        ProductTotal: Total.toString(),
-                                        // AdminFee: Total * 0.5
-                                    }
-                                    axios.post("http://localhost:9998/checkout", data).then(res => {
-                                        // check = true;
-                                        console.log(res);
+                                // var body struct {
+                                //     UserID        string `json:"userid"`
+                                //     Address       string `json:"address"`
+                                //     Receiver      string `json:"receiver"`
+                                //     PaymentMethod string `json:"paymentmethod"`
+                                //     Delivery      string `json:"delivery"`
+                                //     ProductTotal  string `json:"producttotal"`
+                                // }
+                                const data = {
+                                    UserID: currUser.ID.toString(),
+                                    Address: mainAddr.addressfield,
+                                    Receiver: mainAddr.receivername,
+                                    PaymentMethod: currPaymentMethod,
+                                    Delivery: currDelivery,
+                                    ProductTotal: Total.toString()
+                                }
+                                axios.post("http://localhost:9998/createneworder", data).then(res => {
+                                    console.log(res);
+                                    alert("You have checkedout successfully!")
+                                    routers.reload()
+                                }).catch(err => {
+                                    console.log(err);
 
-                                        if (res.data === true) {
-                                            int++
-                                        }
-                                        if (int === uniqueProducts.length) {
-                                            routers.push("/home/user/order")
-                                        }
-
-
-                                    }).catch(err => {
-                                        check = false;
-                                        console.log(err);
-
-                                    })
                                 })
+                                console.log(data);
+
                             } else {
                                 alert("Your Balance is insuficient!")
                             }
@@ -205,9 +212,9 @@ export default function CheckOut(props: any) {
                     </div>
                     <div className={style.rightcontainer}>
                         <h1>Order Summary</h1>
-                        <label >Item(s): {Total}</label>
-                        <label >Admin Fee : {Total * 0.05}</label>
-                        <label >Est. Total : {Total + Total * 0.05}</label>
+                        <label >Item(s): {totalPrice}</label>
+                        <label >Admin Fee : {totalPrice * 0.05}</label>
+                        <label >Est. Total : {totalPrice + totalPrice * 0.05}</label>
                         {/* <button>Secure Checkout</button> */}
                     </div>
 

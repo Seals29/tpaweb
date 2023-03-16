@@ -30,6 +30,7 @@ const Navbar = () => {
   const { theme, toggleTheme } = useContext(ThemeContext)
   const [currCountry, setCurrCountry] = useState('')
   const [statusSubscribe, setStatusSubscribe] = useState('')
+  const [totalCartPrice, setTotalCartPrice] = useState([])
   // console.log(theme)
   useEffect(() => {
     if (typeof window !== "undefined" && window.localStorage) {
@@ -49,6 +50,19 @@ const Navbar = () => {
       const data = {
         userid: res.data.user.ID.toString()
       }
+      if (res.data.user.role === "customer" || res.data.user.role === "Seller") {
+
+      }
+      if (res.data.user.role === "customer") {
+        axios.post("http://localhost:9998/calculatetotalpricebyuser", data).then(res => {
+          console.log(res);
+          setTotalCartPrice(res.data)
+        }).catch(err => {
+          console.log(err);
+
+        })
+      }
+
       axios.post("http://localhost:9998/getsubscribestatus", data).then(res => {
         console.log(res)
 
@@ -63,6 +77,10 @@ const Navbar = () => {
       })
     }).catch(err => {
       console.log(err)
+      const currUser = {
+        role: "guest"
+      }
+      setCurrUser(currUser)
     })
     console.log(currUser)
     navigator.geolocation.getCurrentPosition(async position => {
@@ -71,6 +89,7 @@ const Navbar = () => {
       const country = response.data.results[0].components.country;
       setCurrCountry(country)
     })
+
   }, [])
   const handleSearch = (event: any) => {
     setSearch(event.target.value);
@@ -82,17 +101,12 @@ const Navbar = () => {
 
         backgroundColor: theme.navbar,
         color: theme.text,
+        width: '100%',
         display: 'flex', flexDirection: 'column'
       }}>
 
         <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '1rem',
-          top: '0',
-          position: 'sticky',
-          zIndex: '1'
+          width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', top: '0', position: 'sticky', zIndex: '1'
         }}>
           <div onClick={() => {
             if (sidebar == false) {
@@ -104,7 +118,7 @@ const Navbar = () => {
               setSidebar(false);
             }
           }}>
-            <div style={{ width: '20px', height: '10px', display: 'inline-block', position: 'relative', cursor: 'pointer' }}>
+            <div style={{ width: '15px', height: '10px', display: 'inline-block', position: 'relative', cursor: 'pointer' }}>
               <div className={style.garis1} style={{ backgroundColor: theme.text }}></div>
               <div className={style.garis2} style={{ backgroundColor: theme.text }}></div>
               <div className={style.garis3} style={{ backgroundColor: theme.text }}></div>
@@ -116,12 +130,12 @@ const Navbar = () => {
             src="https://c1.neweggimages.com/WebResource/Themes/2005/Nest/logo_424x210.png"
             alt="Newegg" className={style.logo} ></img>
           </a>
-          <a href=""><div style={{ display: 'flex' }}>
+          <a href=""><div style={{ display: 'flex' }} className={style.delivery}>
             <FontAwesomeIcon icon={faLocationDot} style={{
               marginTop: '12px', marginRight: '10px'
               , color: theme.text
-            }} />
-            <div style={{ color: 'grey' }}>
+            }} className={style.delivery} />
+            <div style={{ color: 'grey' }} className={style.delivery}>
               {Lang.isEng ? "Deliver To" : "Kirim ke"}
               <div style={{ color: theme.text }}>{currCountry ? currCountry : "Select Address"}</div>
             </div>
@@ -166,7 +180,7 @@ const Navbar = () => {
           </div>
           {/* <button onClick={handleThemeToggle}>Toggle Theme</button> */}
           <label className={style.switch}  >
-            <input type="checkbox" onChange={toggleTheme} defaultChecked={dark}  />
+            <input type="checkbox" onChange={toggleTheme} defaultChecked={dark} />
             <span className={style.slider}  ></span>
           </label>
           <a href="/home/accountsetting"><div style={{ display: 'flex' }}>
@@ -174,21 +188,23 @@ const Navbar = () => {
             <div >
               {Lang.isEng ? "Welcome" : "Selamat Datang"}
               <div style={{ color: theme.text }}>
-                {currUser ? currUser.firstname : Lang.isEng ? "SignIn/Register" : "Masuk/Daftar"}
+                {currUser.role === "guest" ? Lang.isEng ? "SignIn/Register" : "Masuk/Daftar" : ""}
+
+                {currUser.role ? currUser.firstname : Lang.isEng ? "SignIn/Register" : "Masuk/Daftar"}
               </div>
 
             </div>
             {' '}
 
           </div></a>
-          <div onClick={(e:any)=>{
-              router.push("/home/balance")
-          }}>
+          <div onClick={(e: any) => {
+            router.push("/home/balance")
+          }} className={style.statusbalance}>
             {' '}
             Balance<br />
-            ${currUser.balance}
+            {'$' + currUser.balance}
           </div>
-          <div>Status : {statusSubscribe}
+          <div className={style.statussub}>Status : {statusSubscribe}
             <br />
             <button style={{
               display: statusSubscribe === "Subscribed" ? "none" : ""
@@ -196,12 +212,23 @@ const Navbar = () => {
           </div>
 
 
-          <div style={{ color: 'grey' }}>
+          <div style={{ color: 'grey' }} className={style.statusorder} onClick={(event: any) => {
+            if (currUser.role === "Seller") {
+              router.push("/home/shop/order")
+            }
+            if (currUser.role === "customer") {
+              router.push("/home/user/order")
+            }
+
+          }}>
             Returns
             <div style={{ color: theme.text }}>& Orders</div>
           </div>
           <div>
-            <FontAwesomeIcon icon={faCartShopping} style={{ color: theme.text }} />
+            <FontAwesomeIcon icon={faCartShopping} style={{ color: theme.text }} onClick={(e: event) => {
+              router.push("/home/user/viewcart")
+            }} />
+            {currUser.role === "admin" ? "" : '$' + totalCartPrice}
           </div>
         </div>
         <div className={style.navbar2} style={{ position: 'relative' }}>
@@ -239,22 +266,22 @@ const Navbar = () => {
           </div>
 
           <div style={{ color: theme.text }}>
-            {Lang.isEng ? "NewEgg Business" : "Bisnis NewEg"}
+            {Lang.isEng ? "Build PC" : "Bikin PC"}
           </div>
           <div className={style.verticalline} style={{ color: theme.text }}></div>
           <div className={style.navbar2button}>
             <FontAwesomeIcon icon={faComments} />
             {Lang.isEng ? "Feedback" : "Masukan"}
           </div>
-          <div className={style.navbar2button} onClick={(e:any)=>{
-            if(currUser.role==="cs"||currUser.role==="admin"){
+          <div className={style.navbar2button} onClick={(e: any) => {
+            if (currUser.role === "cs" || currUser.role === "admin") {
               router.push("/home/user/chatcs");
-            }else if(currUser.role==="customer"){
+            } else if (currUser.role === "customer") {
               router.push("/home/user/chattocs")
             }
-            
 
-          }} style={{cursor:'pointer'}}>
+
+          }} style={{ cursor: 'pointer' }}>
             <FontAwesomeIcon icon={faCircleQuestion} />
             {Lang.isEng ? "Help Center" : "Pusat Bantuan"}
           </div>

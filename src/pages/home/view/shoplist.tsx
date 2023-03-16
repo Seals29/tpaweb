@@ -10,12 +10,15 @@ import Link from "next/link";
 import Pagination from "@/pages/components/pagination";
 import { ThemeContext } from "@/theme/theme";
 import Card from "@/pages/components/card";
+import shop from "@/pages/shop";
+import HomeFooter from "@/pages/HomePage/Footer";
 export default function shoplist() {
 
 
     const routers = useRouter();
     const [currUser, setCurrUser] = useState([]);
     const [users, setUsers] = useState([])
+    const [filtered, setFiltered] = useState([])
     const [shops, setShops] = useState([])
     useEffect(() => {
         const cookies = Cookies.get('token')
@@ -30,18 +33,20 @@ export default function shoplist() {
         axios.get('http://localhost:9998/getshop').then(res => {
             console.log(res);
             setShops(res.data);
+            setFiltered(res.data)
         }).catch(err => {
             console.log(err);
         })
     }, [])
+    // const filtered = allShopOrders.filter((ord) => (ord.status === "Open"))
 
     const [currPage, setCurrPage] = useState(1);
     const totalShops = shops.length;
-    const Pages = Math.ceil(totalShops / 5)
+    const Pages = Math.ceil(filtered.length / 5)
     const { theme } = useContext(ThemeContext)
     const startIdx = (currPage - 1) * 5
     const endIdx = startIdx + 5
-    const userOnPage = shops.slice(startIdx, endIdx)
+    const userOnPage = filtered.slice(startIdx, endIdx)
     console.log(userOnPage)
     const changePageHandler = (pageNumber: any) => {
         setCurrPage(pageNumber)
@@ -51,8 +56,20 @@ export default function shoplist() {
         return (
             <div>
                 <Navbar />
-                <div style={{ minHeight: '100vh', maxHeight: '100vh' }}>
+                <div style={{ minHeight: '100vh', maxHeight: '100vh' }} className={style.shopcontainers}>
                     <h1>Shop List</h1>
+                    <h2 onClick={(event: any) => {
+                        const filteredShopList = shops.filter((shop) => (shop.isban === true))
+                        setFiltered(filteredShopList)
+                        console.log("asdasdas");
+
+                    }}>Filter By Banned Shop</h2>
+                    <h2 onClick={(event: any) => {
+                        const filteredShopList = shops.filter((shop) => (shop.isban === false))
+                        setFiltered(filteredShopList)
+                        console.log("asdasdas");
+
+                    }}>Filter By Unbanned Shop</h2>
                     <ul className={style.usercontainer}>
 
                         {userOnPage.map((idx: any) => (
@@ -97,6 +114,7 @@ export default function shoplist() {
                     </ul>
                     <Pagination currentPage={currPage} totalPages={Pages} onPageChange={changePageHandler}></Pagination>
                 </div>
+                <HomeFooter />
             </div>
         )
     } else {

@@ -18,7 +18,7 @@ import { ThemeContext } from "@/theme/theme";
 import Card from "@/pages/components/card";
 export default function main(props: any) {
     // const {}
-    const { products, shop, category, reviewShop } = props;
+    const { products, shop, category, reviewShop,CurrShopCategory } = props;
     const [currProducts, setCurrProducts] = useState([])
     console.log(reviewShop);
 
@@ -185,7 +185,7 @@ export default function main(props: any) {
                         textAlign: 'center', alignItems: 'center',
                         justifyContent: 'center', backgroundColor: theme.background2
                     }}>
-                        {uniqueCategories.map((e: any) => (
+                        {CurrShopCategory.map((e: any) => (
                             <div className={style.categorycard} style={{ backgroundColor: theme.background }}>
                                 <div className={style.categorycardinfo} >
                                     <h1 style={{ color: theme.text, fontWeight: 'bold', fontSize: '35px' }}>{e}</h1>
@@ -363,14 +363,18 @@ export async function getStaticProps(context: any) {
     const products = await res.data;
     const res3 = await axios.get(`http://localhost:9998/getreviewbyshopid?shopid=${id}`)
     const reviewShop = await res3.data;
-    // const res3 = await axios.get(`http://localhost:9998//getcategorybyshop?id=${id}`)
+    const res4 = await axios.get(`http://localhost:9998/getproductcategory/${id}`)
+    
+    const CurrShopCategory = await res4.data;
+    
     const shop = await res2.data
     // const category = await res3.data
     return {
         props: {
             products,
             shop,
-            reviewShop
+            reviewShop,
+            CurrShopCategory
             // category
         }
     }

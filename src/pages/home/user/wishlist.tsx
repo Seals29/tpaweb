@@ -163,25 +163,24 @@ export default function wishlist(props: any) {
         setIsActiveUpdateTab(true)
     }
     const [currPage, setCurrPage] = useState(1);
-    const [paginateNumber, setPaginateNumber] = useState(3)
-    const [startIdx, setStartIdx] = useState(0)
-    const [endIdx, setEndIdx] = useState(0)
+    const [paginateNumber, setPaginateNumber] = useState(15)
     const [pages,setPages] = useState(0)
-    const [wishlistOnPage, setWishlistOnPage] = useState([])
-    // console.log(wishlists)
-    useEffect(()=>{
-        setPages(Math.ceil(publicWishlists-1)*paginateNumber)
-        setStartIdx((currPage-1)*paginateNumber )
-        setEndIdx(startIdx + paginateNumber)
-        setWishlistOnPage(publicWishlists.slice(startIdx,endIdx))
-    },[currPage])
-    
     
     const totalPublic = publicWishlists.length;
     // const Pages = Math.ceil(publicWishlists / paginateNumber)
     const changePageHandler = (pageNumber: any) => {
         setCurrPage(pageNumber)
     }
+    const Pages = Math.ceil(totalPublic / 4)
+    // const [startIdx, setStartIdx] = useState((currPage-1)*5)
+    const startIdx = (currPage-1)*4
+    // startIdx(currPage - 1) * 5
+    const endIdx = startIdx + 4
+    const wishlistOnPage = publicWishlists.slice(startIdx, endIdx)
+    // useEffect(()=>{
+    //     // setStartIdx((currPage-1)*5)
+
+    // },[paginateNumber])
     return (
         <div>
             <header>
@@ -204,7 +203,7 @@ export default function wishlist(props: any) {
                     <div className={style.wishbtn}><button onClick={handleManage}>{' '}Manage WishList</button>
                         <select name="" id="" style={{marginLeft:'150px',display:activeTab === "Public WishList" ? "" : "none"}}
                         onChange={(e)=>{
-                            setPaginateNumber(e.target.value)
+                            // setPaginateNumber(e.target.value)
                         }}
                         >
                             <option value="3">3</option>

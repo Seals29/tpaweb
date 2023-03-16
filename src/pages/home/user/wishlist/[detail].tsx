@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import WishList from "@/pages/components/wishlist";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClose, faStar } from "@fortawesome/free-solid-svg-icons";
+import { faClose, faMinus, faPlus, faStar } from "@fortawesome/free-solid-svg-icons";
 export default function wishlistdetail(props: any) {
     const { wishlistdetail, detail, products, allcomments
     } = props
@@ -19,6 +19,7 @@ export default function wishlistdetail(props: any) {
     const [wishName, setWishName] = useState('')
     const { theme } = useContext(ThemeContext)
     const [currWishList, setCurrWishList] = useState([])
+    const [notes, setNotes] = useState([])
     // console.log(detail)
     const routers = useRouter()
     console.log(props)
@@ -29,7 +30,9 @@ export default function wishlistdetail(props: any) {
     useEffect(() => {
         setCurrNewAllComments(allcomments)
         const cookies = Cookies.get('token')
-        setCurrNote(currWishList.note)
+        console.log(currWishList);
+
+
         axios.post('http://localhost:9998/validate', { cookies }).then(res => {
             console.log(res.data.user)
             setCurrUser(res.data.user)
@@ -47,6 +50,7 @@ export default function wishlistdetail(props: any) {
             axios.post(`http://localhost:9998/getDWbyID`, data).then(res => {
                 console.log(res.data)
                 setCurrWishList(res.data)
+                setCurrNote(res.data.note)
             }).catch(err => {
                 console.log(err)
             })
@@ -59,6 +63,7 @@ export default function wishlistdetail(props: any) {
             axios.post(`http://localhost:9998/getDWbyID`, data).then(res => {
                 console.log(res.data)
                 setCurrWishList(res.data)
+                setCurrNote(res.data.note)
             }).catch(err => {
                 console.log(err)
             })
@@ -75,6 +80,22 @@ export default function wishlistdetail(props: any) {
     console.log(currWishList)
     const [newComment, setNewComment] = useState('')
     const [currQuantity, setCurrQuantity] = useState([])
+    const [newNotes, setNewNotes] = useState([])
+    const handleNotes = (e: any) => {
+        e.preventDefault()
+        console.log(yourNotes);
+        setNotes(yourNotes)
+        console.log(currWishList.ID);
+        setCurrNote(yourNotes)
+
+        axios.get(`http://localhost:9998/updatenotes?note=${yourNotes}&wishid=${currWishList.ID}`).then(res => {
+            console.log(res);
+
+        }).catch(err => {
+            console.log(err);
+
+        })
+    }
     const handleComment = (e: any) => {
         e.preventDefault()
         console.log(isAnon);
@@ -124,8 +145,7 @@ export default function wishlistdetail(props: any) {
             console.log(err)
         })
     }
-    const handleNotes = (e: any) => {
-    }
+
     const handleStatus = (e: any) => {
     }
     console.log(allcomments);
@@ -156,9 +176,51 @@ export default function wishlistdetail(props: any) {
         })
     }
     const handleDelete = (ID: any, event: any) => {
-        console.log(ID)
+        console.log(ID.toString())
         console.log("id product to in wishlist to be deleted " + ID)
         event.preventDefault();
+        console.log(currWishList);
+        const cookies = Cookies.get('token')
+        const data = {
+            productid: ID.toString(),
+            wishlistid: currWishList.ID.toString(),
+            userid: currUser.ID.toString(),
+            jwttoken: cookies
+        }
+        axios.post("http://localhost:9998/deleteproductfromwishlistid", data).then(res => {
+            console.log(res);
+
+        }).catch(err => {
+            console.log(err);
+
+        })
+        console.log(data);
+
+
+
+    }
+    const [updateQuantity, setUpdateQuantity] = useState([])
+    const handleUpdateQuantity = (Qty: any, ID: any, event: any) => {
+        const cookies = Cookies.get('token')
+        const data = {
+            JwtToken: cookies,
+            WishListID: currWishList.ID.toString(),
+            ProductID: ID,
+            Quantity: Qty - 1
+        }
+        console.log(data);
+
+    }
+    const handleAddQuantity = (Qty: any, ID: any, event: any) => {
+        const cookies = Cookies.get('token')
+        const data = {
+            JwtToken: cookies,
+            WishListID: currWishList.ID.toString(),
+            ProductID: ID,
+            Quantity: Qty + 1
+        }
+        console.log(data);
+
     }
     const AddAlltoCart = (event: any) => {
         const wishlistItems: any[] = [];
@@ -170,13 +232,16 @@ export default function wishlistdetail(props: any) {
         });
 
         console.log(wishlistItems);
+        const cookies = Cookies.get('token')
         wishlistItems.map((e) => {
             if (e.length > 0) {
                 const data = {
-                    UserID: currUser.ID.toString(),
+                    JwtToken: cookies,
                     WishListID: currWishList.ID.toString(),
-                    ProductID: e[0].toString()
+                    ProductID: e[0].toString(),
+                    Quantity: e.quantity
                 }
+
                 console.log(data);
 
 
@@ -240,7 +305,7 @@ export default function wishlistdetail(props: any) {
                         }} />
                         <button onClick={handleComment}>Comment</button>
                     </div>
-                    <label >Note : {currNote?currNote:currWishList.note}</label>
+                    <label >Note : {currNote ? currNote : currWishList.note}</label>
                     <div className={style.wishdetailleftsub1} style={{
                         display: currWishList.status === "Private" ? "" : "none"
                     }}>
@@ -249,20 +314,21 @@ export default function wishlistdetail(props: any) {
                             backgroundColor: theme.backgroundmenu,
                             color: theme.text,
 
-                        }} type="text" value={newComment} onChange={(e: any) => {
+                        }} type="text" value={yourNotes} onChange={(e: any) => {
                             setYourNotes(e.target.value)
                         }} />
-                        <button onClick={handleComment}>Add Notes</button>
+                        <button onClick={handleNotes}>Add Notes</button>
                     </div>
 
                 </div>
                 <div className={style.flexbottom}>
-                    {products.map((e) => {
+                    {products.map((e: any) => {
                         const wishlistItems = wishlistdetail.filter((item: any) => item.productid === e.ID).map((item: any) => {
                             return (
                                 <div className={style.wishcontent}>
                                     <img src={e.image} alt="" />
                                     <div className={style.wishdetailcontent}>
+                                        a
                                         <FontAwesomeIcon
                                             icon={faClose}
                                             style={{
@@ -271,7 +337,7 @@ export default function wishlistdetail(props: any) {
                                                 justifyContent: 'flex-end'
                                             }}
                                             onClick={(event) => {
-                                                handleDelete(e.ID, event)
+                                                handleDelete(e.ID.toString(), event)
                                             }}
                                         />
                                         <label><FontAwesomeIcon icon={faStar} /> ()</label>
@@ -279,11 +345,19 @@ export default function wishlistdetail(props: any) {
                                         <label style={{ color: 'green' }}>${e.price}</label>
                                         <label style={{ color: theme.text }}>{e.category}</label>
                                         <label style={{ color: 'grey' }}>Qty :
-                                            <input type="number" value={item.quantity} onChange={(event) => {
-                                                setCurrQuantity(event.target.value)
-                                            }} /> <button onClick={(event) => {
+                                            <input type="number" onChange={(event: any) => {
+                                                console.log(e);
+
+                                                handleUpdateQuantity(e.stock, e.ID, event)
+                                            }} defaultValue={e.stock} /> <button onClick={(event) => {
                                                 handleQuantity(e.ID, event)
                                             }}>Save</button>
+                                            <button onClick={(event: any) => {
+                                                handleUpdateQuantity(e.stock, e.ID, event)
+                                            }}><FontAwesomeIcon icon={faMinus} /></button>
+                                            <button onClick={(event: any) => {
+                                                handleAddQuantity(e.stock, e.ID, event)
+                                            }}><FontAwesomeIcon icon={faPlus} /></button>
                                         </label>
                                         <button onClick={(event) => {
                                             handleAddToCart(e.ID, item.quantity, event)

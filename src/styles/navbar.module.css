@@ -205,7 +205,7 @@
 
 .navbar2 {
   display: flex;
-  width: auto;
+  width: 100%;
   justify-content: space-between;
   margin: 15px;
 }
@@ -287,7 +287,7 @@
   align-items: center;
   background-color: lightblue;
   height: 45px;
-  width: 100px;
+  width: 90px;
   border: none;
   border-radius: 90px;
   position: absolute;
@@ -445,4 +445,50 @@
   position: absolute;
   left: 0;
   top: 100%;
+}
+
+
+
+
+
+@media (max-width: 640px) {
+  .switch {
+    display: none;
+  }
+  .search{
+    display: none;
+  }
+  .switch input{
+    display:none
+  }
+  .form{
+    display: none;
+  }
+  .navbar2{
+    display: none;;
+  }
+  .language{
+    display: none;
+  }
+  .notif{
+    display: none;
+  }
+  .slider{
+    display: none;
+  }
+  .bar{
+    display: none;
+  }
+  .statussub{
+    display: none;
+  }
+  .statusbalance{
+    display: none;
+  }
+  .statusorder{
+    display: none;
+  }
+  .delivery{
+    display: none;
+  }
 }

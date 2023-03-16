@@ -16,12 +16,14 @@ import Card from "./components/card";
 const home = (props: any) => {
     const [currCountry, setCurrCountry] = useState('')
     const routers = useRouter();
-    const { allProducts } = props;
+    const { allProducts, allbanners } = props;
     const [currUser, setCurrUser] = useState([]);
     const [isDark, setIsDark] = useState(false)
     const { theme } = useContext(ThemeContext)
     const [currIdx, setCurrIdx] = useState(0)
     console.log(allProducts)
+    console.log(allbanners);
+
     const banner = [
 
         {
@@ -33,12 +35,12 @@ const home = (props: any) => {
             url: "https://promotions.newegg.com/nepro/23-0211/1920x660.jpg"
         }
     ]
-    const [currBanner, setCurrBanner] = useState(banner[0].url)
+    const [currBanner, setCurrBanner] = useState(allbanners[0].promotionimage)
     const next = () => {
-        setCurrIdx((currIdx + 1) % banner.length)
+        setCurrIdx((currIdx + 1) % allbanners.length)
     }
     const prev = () => {
-        setCurrIdx((currIdx + 1) % banner.length)
+        setCurrIdx((currIdx - 1) % allbanners.length)
     }
     const [products, setProducts] = useState([])
     const [chunk, setChunk] = useState(products.slice(0, 10))
@@ -51,11 +53,11 @@ const home = (props: any) => {
             setCurrUser(res.data.user)
         }).catch(err => {
             console.log(err)
-            routers.push('/login')
+            // routers.push('/login')
         })
 
         console.log(currUser)
-        setCurrBanner(banner[currIdx].url)
+        setCurrBanner(allbanners[currIdx].promotionimage)
         const interval = setInterval(next, 20000)
 
 
@@ -66,17 +68,17 @@ const home = (props: any) => {
     const [currPage, setCurrPage] = useState(1)
     const [isLoading, setIsLoading] = useState(false)
     console.log(currCountry)
-    const loadMore = async () =>{
+    const loadMore = async () => {
         setIsLoading(true)
         const res = await axios.get(`http://localhost:9998/loadProducts?page=${currPage}&pagesize=10`)
         const data = await res.data
-        setCurrProducts([...currProducts,...data])
-        setCurrPage(currPage+1)
+        setCurrProducts([...currProducts, ...data])
+        setCurrPage(currPage + 1)
         setIsLoading(false)
     }
-    useEffect(()=>{
+    useEffect(() => {
         loadMore()
-    },[])
+    }, [])
     const handleScroll = async () => {
         const { scrollTop, scrollHeight, clientHeight } = document.documentElement
         if (scrollTop + clientHeight === scrollHeight) {
@@ -121,7 +123,7 @@ const home = (props: any) => {
                 <div style={{
                     backgroundColor: 'red', color: 'white', padding: '10px', textAlign: 'center', display: `${currUser.isban ? "" : "none"}`
                 }}>Your account is banned!</div>
-                <div style={{ minHeight: '50vh', maxHeight: '50vh', backgroundColor: theme.background }} className={style.containerbox1}>
+                <div style={{ minHeight: '20vh', maxHeight: '20vh', backgroundColor: theme.background }} className={style.containerbox1}>
                     <div className={style.containerbox} style={{ justifyContent: 'center' }}>
                         <div className={style.box} style={{ backgroundColor: theme.backgroundmenu, justifyContent: 'center', display: 'flex' }}>
                             <a href="/home/shop/newproduct"
@@ -150,6 +152,34 @@ const home = (props: any) => {
                                 color: theme.text,
                                 display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'
                             }}>Change your Password</a></div>
+                        <div className={style.box} style={{ backgroundColor: theme.backgroundmenu, justifyContent: 'center', display: 'flex', fontSize: '20px' }}>
+                            <a href="/home/shop/order" style={{
+                                color: theme.text,
+                                display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'
+                            }}>Orders</a></div>
+                        <div className={style.box} style={{ backgroundColor: theme.backgroundmenu, justifyContent: 'center', display: 'flex', fontSize: '20px' }}>
+                            <a href="/home/shop/chatcustomer" style={{
+                                color: theme.text,
+                                display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'
+                            }}>Chat Customer</a></div>
+                    </div>
+                </div>
+                <div style={{ minHeight: '30vh', maxHeight: '30vh', backgroundColor: theme.background }} className={style.containerbox1}>
+                    <div className={style.containerbox} style={{ justifyContent: 'center' }}>
+                        <div className={style.box} style={{ backgroundColor: theme.backgroundmenu, justifyContent: 'center', display: 'flex' }}>
+                            <a href="/home/shop/information"
+                                style={{
+                                    color: theme.text,
+                                    display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', fontSize: '20px'
+                                }} >View Shop Information!</a></div>
+                        <div className={style.box} style={{ backgroundColor: theme.backgroundmenu, justifyContent: 'center', display: 'flex' }}>
+                            <a href="/home/shop/viewreviews"
+                                style={{
+                                    color: theme.text,
+                                    display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', fontSize: '20px'
+                                }} >View All Reviews!</a></div>
+
+                        <br />
                     </div>
                 </div>
                 <footer style={{ position: 'sticky' }}>
@@ -173,12 +203,20 @@ const home = (props: any) => {
                 <div style={{ backgroundColor: 'transparent' }}>
 
                     <div className={style.slidercontainer}>
-                        {banner.map((img, idx) => (
-                            <Image key={idx} src={img.url} alt="description"
-                                className={currIdx === idx ? style.actives : style.inactives}
-                                layout="fill"
-                            ></Image>
-                        ))}
+                        {allbanners.map((img: any, idx: any) => {
+                            console.log(img);
+                            return (
+
+                                <Image key={idx} src={`${img.promotionimage}`} alt="description"
+                                    className={currIdx === idx ? style.actives : style.inactives}
+                                    layout="fill"
+                                ></Image>
+
+
+
+                            )
+
+                        })}
                         <button onClick={prev} className={style.prev}>
                             &lt;
                         </button>
@@ -193,13 +231,13 @@ const home = (props: any) => {
                     flexDirection: 'row', overflow: 'auto', flexWrap: 'wrap', justifyContent: 'center'
                 }}> */}
                 <div style={{ backgroundColor: theme.background, margin: '0' }} >
-                    <div className={style.cardcontainers} style={{backgroundColor:theme.background}}>
+                    <div className={style.cardcontainers} style={{ backgroundColor: theme.background }}>
                         {currProducts.map((idx: any) => (
                             <div className={style.usercontainer} onClick={(e) => {
                                 e.preventDefault()
                                 console.log(idx.ID)
                                 routers.push(`home/user/product/${idx.ID}`)
-                            }} style={{backgroundColor:theme.background, cursor:'pointer'}}>
+                            }} style={{ backgroundColor: theme.background, cursor: 'pointer' }}>
                                 <Card name={idx.name} image={idx.image} description={idx.description} rating={idx.rating} category={idx.category} detail={idx.detail} stock={idx.stock} price={idx.price} />
                             </div>
                         ))}
@@ -224,9 +262,12 @@ const home = (props: any) => {
 export async function getStaticProps() {
     const response = await axios.get("http://localhost:9998/getallproduct")
     const allProducts = await response.data;
+    const response2 = await axios.get("http://localhost:9998/getbanner")
+    const allbanners = await response2.data;
     return {
         props: {
             allProducts,
+            allbanners
         },
     };
 }

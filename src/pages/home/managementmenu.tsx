@@ -48,6 +48,7 @@ export default function managementmenu() {
                         </div>
                         <div className={style.box} style={{ backgroundColor: theme.backgroundmenu, textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}><a href="/home/view/userlist" style={{ color: theme.text, fontSize: '20px' }}>User List</a></div>{/*paginated */}
                         <div className={style.box} style={{ backgroundColor: theme.backgroundmenu, textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}><a href="/home/sendnews" style={{ color: theme.text, fontSize: '20px' }}>Send Newsletter</a></div>
+                        <div className={style.box} style={{ backgroundColor: theme.backgroundmenu, textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}><a href="/home/managebanner" style={{ color: theme.text, fontSize: '20px' }}>Management Promotion Banner</a></div>
                         <div className={style.box} style={{ backgroundColor: theme.backgroundmenu, textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}><a href="/home/newshop" style={{ color: theme.text, fontSize: '20px' }}>Insert New Shop</a></div>
                         <div className={style.box} style={{ backgroundColor: theme.backgroundmenu, textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                             <a href="/home/view/shoplist" style={{

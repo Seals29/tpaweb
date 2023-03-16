@@ -1,13 +1,13 @@
 import HomeFooter from "@/pages/HomePage/Footer";
 import Navbar from "@/pages/HomePage/Navbar";
+import style from "@/styles/chat.module.css"
 import { ThemeContext } from "@/theme/theme";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useRef, useState } from "react";
-import style from "@/styles/chat.module.css"
-export default function chatcs(props: any) {
-    const { users, loadedmsg } = props;
+export default function ChatCustomer(props: any) {
+    const { users } = props;
     const { theme } = useContext(ThemeContext)
     const routers = useRouter();
     const [timestamp, setTimestamp] = useState('')
@@ -17,13 +17,44 @@ export default function chatcs(props: any) {
     const [newMsg, setNewMsg] = useState('')
     const messageRef = useRef(null);
     const [content, setContent] = useState('')
+    const [orderedUser, setOrderedUser] = useState([])
+    const [orderedListUser, setOrderedListUsers] = useState([])
     useEffect(() => {
-        setMessages(loadedmsg)
+        // setMessages(loadedmsg)
         const cookies = Cookies.get('token')
+        const allData = {
+            JwtToken: cookies,
+        }
+        axios.post("http://localhost:9998/getallordersbyshopid", allData).then(res => {
+            console.log(res);
+            setOrderedUser(res.data)
+            res.data.map((e: any) => {
+                const theseData = {
+                    OrderID: e.ID.toString()
+                }
+
+                axios.post("http://localhost:9998/getuserdetailbyorderid", theseData).then(res => {
+                    console.log(res);
+                    setOrderedListUsers((prevstate) => [...prevstate, res.data[0]])
+
+                    // setMessages((prevstate) => [...prevstate, jsonOb])
+                }).catch(err => {
+                    console.log(err);
+
+                })
+            })
+
+        }).catch(err => {
+            console.log(err);
+
+        })
         axios.post('http://localhost:9998/validate', { cookies }).then(res => {
             console.log(res.data.user)
             setCurrUser(res.data.user)
             const newSocket = new WebSocket("ws://localhost:9998/message", String(res.data.user.ID));
+            // headers: {
+            //     "Sec-Websocket-Protocol": "your-protocol-id"
+            //   }
             newSocket.onopen = () => {
                 console.log("Connected to WebSocket server and the protocol : ", newSocket.protocol);
             };
@@ -53,17 +84,6 @@ export default function chatcs(props: any) {
         console.log(currUser)
 
     }, [])
-    useEffect(() => {
-        //load
-
-
-    }, []);
-    const scrollToBottom = () => {
-        if (messageRef.current) {
-            messageRef.current.scrollTop = messageRef.current.scrollHeight;
-        }
-    };
-
     const handleSend = (e: any) => {
         if (socket === null) {
             return null;
@@ -73,15 +93,20 @@ export default function chatcs(props: any) {
             socket.send(JSON.stringify(obj));
         }
     }
-    const [currentlyOpen, setCurrentlyOpen] = useState(users[0].ID)
+
     console.log(users)
+    console.log(orderedListUser);
+    const uniqueListUser = orderedListUser.filter((item, idx, self) => idx === self.findIndex((i) => i.ID === item.ID))
+    // const uniqueAllCarts = allCarts.filter((item, idx, self) => idx === self.findIndex((i) => i.ID === item.ID))
+    console.log(uniqueListUser);
+    const [currentlyOpen, setCurrentlyOpen] = useState(0)
     return (
         <div>
             <Navbar />
             <div className={style.chatcscontainer}>
                 <div className={style.chatuserlist}
                     style={{ color: theme.text, backgroundColor: theme.background }}>
-                    {users.map(e => (
+                    {uniqueListUser.map(e => (
                         <div className={style.chatusercomponent}
                             style={{ backgroundColor: theme.background, color: theme.text }}
                             onClick={(es) => {
@@ -89,7 +114,7 @@ export default function chatcs(props: any) {
                                 setCurrentlyOpen(e.ID)
                             }}
                         >
-                            {e.firstname} {currentlyOpen === e.ID ? "open" : ""}
+                            {e.FirstName} {currentlyOpen === e.ID ? "open" : ""}
                         </div>
                     ))}
 
@@ -121,7 +146,7 @@ export default function chatcs(props: any) {
                             style={{ backgroundColor: theme.background, color: theme.text }}
                             onChange={(e: any) => {
                                 setContent(e.target.value)
-                            }} onClick={scrollToBottom}
+                            }}
                         />
                         <button style={{ color: theme.text }} onClick={handleSend}>Send</button>
                     </div>
@@ -132,16 +157,14 @@ export default function chatcs(props: any) {
         </div>
     )
 }
-
 export async function getStaticProps() {
     const response = await axios.get("http://localhost:9998/getuser")
-    const response2 = await axios.get("http://localhost:9998/getallmessage")
+    // const response2 = await axios.get("http://localhost:9998/getshoporders")
     const users = await response.data;
-    const loadedmsg = await response2.data;
+
     return {
         props: {
-            users,
-            loadedmsg
+            users
         },
     };
 }

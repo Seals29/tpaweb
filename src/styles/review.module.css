@@ -1,0 +1,15 @@
+.reviewcontainer{
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    
+}
+.reviewcontainer h1{
+    text-align: center;
+    padding: 12px;
+}
+.reviewcard{
+    border: 1px solid white;
+    padding: 15px;
+    border-radius: 15px;
+}
