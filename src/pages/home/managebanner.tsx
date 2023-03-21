@@ -12,19 +12,6 @@ export default function managebanner(props: any) {
   const { allbanners } = props;
   console.log(allbanners);
   const { theme } = useContext(ThemeContext);
-  // console.log(promotion);
-  // useEffect(() => {
-  //     axios.get("http://localhost:9998/getallpromotionbanner").then(res => {
-  //         console.log(res);
-
-  //     }).catch(err => {
-  //         console.log(err);
-
-  //     })
-  //     // const data =  res.data;
-  //     // console.log(res);
-
-  // }, [])
   const [blur, setBlur] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const [imageUpload, setImageUpload] = useState([]);
@@ -76,8 +63,6 @@ export default function managebanner(props: any) {
         </div>
       ))}
 
-      {/* Management Banner */}
-
       <footer>
         <HomeFooter />
       </footer>
@@ -117,7 +102,6 @@ export default function managebanner(props: any) {
               storage,
               `promotion/${imageUpload.name + "OldEgg"}`
             );
-            //upload to the storage
             uploadBytes(imageRef, imageUpload)
               .then((res) => {
                 console.log(res);
@@ -126,7 +110,6 @@ export default function managebanner(props: any) {
                 console.log(err);
                 return;
               });
-            // console.log(data);
             const imageListReff = ref(storage, `promotion/`);
             listAll(imageListReff)
               .then((res) => {
@@ -158,7 +141,6 @@ export default function managebanner(props: any) {
     </div>
   );
 }
-// http://localhost:9998/getbanner
 export async function getStaticProps() {
   const response = await axios.get("http://localhost:9998/getbanner");
   const allbanners = await response.data;
