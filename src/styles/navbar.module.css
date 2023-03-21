@@ -58,6 +58,22 @@
   border-radius: 15px;
   outline: 0px;
 }
+.search2 {
+  border: none;
+  background-color: white;
+  /* padding: 15px; */
+  color: black;
+  border-radius: 15px;
+  outline: 0px;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  right:53%;
+  cursor: pointer;
+  /* margin-right: 150px; */
+}
 
 .darksearch {
   border: none;

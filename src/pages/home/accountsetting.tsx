@@ -31,7 +31,7 @@ export default function accountsetting() {
         })
         // alert("asdas")
     }, [])
-    console.log(email + name)
+    console.log(currUser)
     const handleSaveChange=(e:any)=>{
         e.preventDefault()
         console.log(email===currUser.email)
@@ -107,11 +107,36 @@ export default function accountsetting() {
                                     setLastName(e.target.value)
                                 }}
                                 />
+                                <div style={{
+                                    display:'flex', justifyContent:'space-between'
+                                }}>
                                 <input type="text" defaultValue={currUser.email} value={email} 
                                 style={{ backgroundColor: theme.background, color: theme.text, 
                                 borderRadius: '5px' }} onChange={(e)=>{
                                     setEmail(e.target.value)
                                 }} />
+                                <div style={{
+                                    cursor:'pointer',
+                                    padding:'5px'
+                                }} onClick={(event:any)=>{
+                                    event.preventDefault()
+                                    const cookies = Cookies.get('token')
+                                    if(currUser.isverif===false){
+                                        axios.get(`http://localhost:9998/sendverifuseremail?token=${cookies}`).then(res=>{
+                                            console.log(res);
+                                            if(res.data.message){
+                                                alert(res.data.message)
+                                                routers.push("/home/verifemail")
+                                            }
+                                        }).catch(err=>{
+                                            console.log(err);
+                                        })
+                                    }
+
+                                }}>
+                                    <h3>{currUser.isverif===true?"Verified":"Verif Now!"}</h3>
+                                </div>
+                                </div>
                                 <div style={{ display: 'flex' }}>
                                     <label >{currUser.phonenumber ? currUser.phonenumber : "To enhance your account security, add your mobile number"}</label>
                                     <button style={{ color: "grey", marginLeft: '50px',

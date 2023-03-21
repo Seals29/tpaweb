@@ -17,10 +17,12 @@ import { destroyCookie } from "nookies";
 import { useRouter } from "next/router";
 import { LangContext } from "@/theme/language";
 import Link from "next/link";
+import Search from "../home/user/search";
 
 const Navbar = () => {
   // const [theme, setTheme] = useState('light');
-  const [search, setSearch] = useState('');
+
+  const [search, setSearch] = useState("");
   const { Lang, toggleLang } = useContext(LangContext)
   const [currUser, setCurrUser] = useState([]);
   const [isDark, setIsDark] = useState(false)
@@ -30,9 +32,12 @@ const Navbar = () => {
   const { theme, toggleTheme } = useContext(ThemeContext)
   const [currCountry, setCurrCountry] = useState('')
   const [statusSubscribe, setStatusSubscribe] = useState('')
+  const [searchedProduct, setSearchedProduct]  = useState([])
   const [totalCartPrice, setTotalCartPrice] = useState([])
+  // const [search,setSearch] = useState([])
   // console.log(theme)
   useEffect(() => {
+    setSearch("")
     if (typeof window !== "undefined" && window.localStorage) {
       // localStorage is available
       setDark(false)
@@ -91,10 +96,14 @@ const Navbar = () => {
     })
 
   }, [])
+
   const handleSearch = (event: any) => {
     setSearch(event.target.value);
   };
   const [sidebar, setSidebar] = useState(false);
+  console.log(search);
+
+
   return (
     <>
       <nav style={{
@@ -102,7 +111,7 @@ const Navbar = () => {
         backgroundColor: theme.navbar,
         color: theme.text,
         width: '100%',
-        display: 'flex', flexDirection: 'column'
+        display: 'flex', flexDirection: 'column',
       }}>
 
         <div style={{
@@ -144,13 +153,48 @@ const Navbar = () => {
 
 
           <div className={style.bar}>
+            
             <input type="text"
-
+              value={search}
               className={style.text} style={{
                 // backgroundColor:theme.inputsearch,
                 backgroundImage: 'linear-gradient(135deg,#280F5C 0,#100F5C 58%,#0F345C 100%);'
                 // ,backgroundColor:theme.background
+              }} onChange={(event: any) => {
+                router.push(`/home?val=${event.target.value}`)
+                setSearch(event.target.value)
+                console.log(search);
+                axios.get(`http://localhost:9998/searchproduct?val=${router.query.val}`).then(res => {
+                  console.log(res);
+                  setSearchedProduct(res.data)
+                }).catch(err => {
+                  console.log(err);
+
+                })
               }} />
+              <button className={style.search2}
+              style={{color:theme.text, backgroundColor:theme.background2}}
+              onClick={(event:any)=>{
+                event.preventDefault()
+
+                const cookies = Cookies.get('token')
+                console.log("saving...");
+                
+                if(search.length>1){
+                  axios.get(`http://localhost:9998/savequery?token=${cookies}&query=${search}`).then(res=>{
+                
+                  console.log(res);
+                  if(res.data.message){
+                    alert(res.data.message);
+                  }
+                  }).catch(err=>{
+                    console.log(err);
+                  })
+                }
+               
+              }}  
+            
+              >Save Search</button>
             <button className={style.search} style={{ backgroundColor: theme.searchicon }} >
               <FontAwesomeIcon icon={faMagnifyingGlass}
                 className={style.icon}
@@ -158,7 +202,14 @@ const Navbar = () => {
             </button>
           </div>
           <div className={style.notif} style={{ borderColor: theme.text }}>
-            <a href=""><FontAwesomeIcon icon={faBell} className={style.icon} style={{ color: theme.text }} /></a>
+            <a href=""><FontAwesomeIcon icon={faBell} className={style.icon} style={{ color: theme.text }}onClick={(event:any)=>{
+              event.preventDefault()
+              if(currUser.role==="Seller"){
+                router.push("/home/shop/notification")
+              }
+              if(currUser.role==="customer")
+              router.push("/home/user/notification")
+            }} /></a>
 
           </div>
           <div className={style.language} style={{ borderColor: theme.text }} onClick={(e) => {
@@ -269,9 +320,12 @@ const Navbar = () => {
             {Lang.isEng ? "Build PC" : "Bikin PC"}
           </div>
           <div className={style.verticalline} style={{ color: theme.text }}></div>
-          <div className={style.navbar2button}>
+          <div className={style.navbar2button} onClick={(e: any) => {
+            e.preventDefault()
+            router.push("/home/user/review")
+          }} style={{ cursor: 'pointer' }} >
             <FontAwesomeIcon icon={faComments} />
-            {Lang.isEng ? "Feedback" : "Masukan"}
+            {Lang.isEng ? "Your Review" : "Review"}
           </div>
           <div className={style.navbar2button} onClick={(e: any) => {
             if (currUser.role === "cs" || currUser.role === "admin") {
@@ -319,6 +373,7 @@ const Navbar = () => {
 
         </div>
       </div>
+      <Search searchedProducts={searchedProduct} searching={search} />
     </>
   );
 

@@ -117,7 +117,7 @@ export default function viewreviews() {
                             <div>Star {e.starreview}</div>
                             <div>By : {e.userid}</div>
                             <div>Date {dateh + ':' + datemin}</div>
-                            <div>is Helpful? :{e.ishelpfull.toString()}</div>
+                            {/* <div>is Helpful? :{e.ishelpfull.toString()}</div> */}
                         </div>
 
                     </div>

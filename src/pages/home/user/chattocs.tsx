@@ -6,6 +6,8 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useRef, useState } from "react";
 import style from "@/styles/chat.module.css"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPaperclip, faPenNib } from "@fortawesome/free-solid-svg-icons";
 export default function chatcs(props: any) {
     const { users } = props;
     const { theme } = useContext(ThemeContext)
@@ -87,23 +89,6 @@ export default function chatcs(props: any) {
             <Navbar />
             <div className={style.chatcscontainer} style={{ backgroundColor: theme.background }}>
                 <div className={style.chatcsmsgs}>
-
-                    {/* {messages.map((message, index) => (
-                    <div
-                        key={index}
-                        className={
-                            message.from === "1"
-                                ? style.chatmsgreceive
-                                : style.chatmsgsent
-                        }
-                    >
-                        <div>From : {message.from === "2" ? "2" : "1"}</div>
-                        <div>To : {message.to === "1" ? "1" : "2"}</div>
-                        <div className={style.chatMessageContent}>{message.content}</div>
-                        <div className={style.chatMessageTimestamp}>Date : {message.createdAt}
-                        </div>
-                    </div>
-                ))} */}
                     {messages.map((msg, idx) => (
                         <div key={idx} className={style.bubblechat}>
                             <div className={style.text}>from : {msg.from}</div>
@@ -119,6 +104,10 @@ export default function chatcs(props: any) {
                                 setContent(e.target.value)
                             }}
                         />
+                        <div>
+                            <input type="file" />
+                            <FontAwesomeIcon icon={faPaperclip}/>
+                        </div>
                         <button style={{ color: theme.text }} onClick={handleSend}>Send</button>
                     </div>
                 </div>

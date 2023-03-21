@@ -16,6 +16,8 @@ import Card from "./components/card";
 const home = (props: any) => {
     const [currCountry, setCurrCountry] = useState('')
     const routers = useRouter();
+    console.log(routers.query.val);
+    
     const { allProducts, allbanners } = props;
     const [currUser, setCurrUser] = useState([]);
     const [isDark, setIsDark] = useState(false)
@@ -202,7 +204,10 @@ const home = (props: any) => {
                 }}>Your account is banned!</div>
                 <div style={{ backgroundColor: 'transparent' }}>
 
-                    <div className={style.slidercontainer}>
+                    <div className={style.slidercontainer} style={{
+                        display:routers.query.val?.length===0?"":"none"
+
+                    }}>
                         {allbanners.map((img: any, idx: any) => {
                             console.log(img);
                             return (
@@ -230,7 +235,10 @@ const home = (props: any) => {
                     display: "flex", gap: '15px', background: theme.background,
                     flexDirection: 'row', overflow: 'auto', flexWrap: 'wrap', justifyContent: 'center'
                 }}> */}
-                <div style={{ backgroundColor: theme.background, margin: '0' }} >
+                <div style={{ backgroundColor: theme.background, margin: '0' }} style={{
+                        display:routers.query.val?.length===0?"":"none"
+
+                    }} >
                     <div className={style.cardcontainers} style={{ backgroundColor: theme.background }}>
                         {currProducts.map((idx: any) => (
                             <div className={style.usercontainer} onClick={(e) => {

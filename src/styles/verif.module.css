@@ -1,0 +1,24 @@
+.verifcontainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100px;
+    max-height: 400px;
+    gap: 35px;
+}
+.verifcontainer hr{
+    width: 100%;
+}
+
+.verifcontainer input{
+    padding: 20px;
+    border: 1px;
+}
+.verifcontainer button{
+    padding: 20px;
+    border-radius: 15px;
+    min-width: 400px;
+    font-size: 35px;
+    font-weight: bold;
+}

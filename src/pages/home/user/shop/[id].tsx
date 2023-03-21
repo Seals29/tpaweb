@@ -18,7 +18,7 @@ import { ThemeContext } from "@/theme/theme";
 import Card from "@/pages/components/card";
 export default function main(props: any) {
     // const {}
-    const { products, shop, category, reviewShop,CurrShopCategory } = props;
+    const { products, shop, category, reviewShop, CurrShopCategory } = props;
     const [currProducts, setCurrProducts] = useState([])
     console.log(reviewShop);
 
@@ -35,7 +35,7 @@ export default function main(props: any) {
     const [allCategory, setAllCategory] = useState([])
     const [allShopCategory, setAllShopCategory] = useState([])
     const [uniqueCategory, setUniqueCategory] = useState([])
-
+    const [recommendedData, setRecommendedData] = useState([])
 
     useEffect(() => {
         const cookies = Cookies.get('token')
@@ -57,8 +57,9 @@ export default function main(props: any) {
             console.log(err)
         })
         setCurrProducts(products)
+        setRecommendedData([...products].sort((a, b) => a.rating - b.rating))
     }, [])
-
+    const [search, setSearch] = useState([])
     const uniqueCategories = [...new Set(allShopCategory)];
     console.log(uniqueCategories)
     const [categories, setCategories] = useState([])
@@ -73,6 +74,7 @@ export default function main(props: any) {
     const handleTabClick = (tab: string) => {
         setActiveTab(tab);
     };
+
     const handleReview = (e: any) => {
         const userid = currUser.ID.toString()
         const shopid = shop.ID.toString()
@@ -93,6 +95,19 @@ export default function main(props: any) {
         console.log(data);
 
     }
+    useEffect(() => {
+
+        // setFilteredReview(shopReviews.filter((rev: any) =>
+        //     rev.reviewcomment.includes(search) ||
+        //     String(rev.starreview) === (search) ||
+        //     rev.reviewcomment.includes(search) ||
+        //     rev.reviewcomment.includes(search) ||
+        //     rev.reviewcomment.includes(search)
+        // ))
+        setCurrProducts(products.filter((pr: any) =>
+            pr.name.includes(search)
+        ))
+    }, [search])
     return (
         <>
             <header style={{ color: '' }}>
@@ -189,6 +204,10 @@ export default function main(props: any) {
                             <div className={style.categorycard} style={{ backgroundColor: theme.background }}>
                                 <div className={style.categorycardinfo} >
                                     <h1 style={{ color: theme.text, fontWeight: 'bold', fontSize: '35px' }}>{e}</h1>
+
+
+
+
                                 </div>
                             </div>
                         ))}
@@ -202,12 +221,13 @@ export default function main(props: any) {
                 backgroundColor: theme.background,
                 display: activeTab === "home" ? '' : 'none'
             }}>Recommended Products</h1><br />
+
             <div className={style.cardcontainers} style={{
                 color: theme.text,
                 backgroundColor: theme.background,
                 display: activeTab === "home" ? '' : 'none'
             }}>
-                {recomData.map((idx: any) => (
+                {recommendedData.map((idx: any) => (
                     <div className={style.usercontainer} onClick={(e) => {
                         e.preventDefault()
                         console.log(idx.ID)
@@ -231,6 +251,10 @@ export default function main(props: any) {
                         <h2 onClick={(e) => {
                             setCurrProducts(descSortedData)
                         }}>Sort By Desc</h2>
+                        <h2>Search <input type="text" value={search} onChange={(event: any) => {
+                            event.preventDefault()
+                            setSearch(event.target.value)
+                        }} /></h2>
                     </div>
                     <div className={style.cardcontainers} style={{ backgroundColor: theme.background }}>
                         {currProducts.map((idx: any) => (
@@ -311,7 +335,7 @@ export default function main(props: any) {
                 <div>
                     <h1>All Reviews!</h1>
                 </div>
-                {reviewShop.map((event:any)=>(
+                {reviewShop.map((event: any) => (
                     <div>
                         {event.reviewcomment}
 
@@ -364,9 +388,9 @@ export async function getStaticProps(context: any) {
     const res3 = await axios.get(`http://localhost:9998/getreviewbyshopid?shopid=${id}`)
     const reviewShop = await res3.data;
     const res4 = await axios.get(`http://localhost:9998/getproductcategory/${id}`)
-    
+
     const CurrShopCategory = await res4.data;
-    
+
     const shop = await res2.data
     // const category = await res3.data
     return {
