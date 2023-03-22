@@ -84,6 +84,11 @@ export default function chatcs(props: any) {
             messageRef.current.scrollTop = messageRef.current.scrollHeight;
         }
     }, [messages])
+    const handleImage=()=>{
+
+    }
+
+
     return (
         <div>
             <Navbar />
