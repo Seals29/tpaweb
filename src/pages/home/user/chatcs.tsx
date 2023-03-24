@@ -69,6 +69,16 @@ export default function chatcs(props: any) {
   useEffect(() => {
     //load
   }, []);
+  function isImageUrl(url:string){
+    if( typeof url !== `string`)return false;
+    const urlNoProtocol = url.split(`://`)[1]
+    if(!urlNoProtocol) return false;
+    if(url.toLowerCase().includes("png")||url.toLowerCase().includes("jpg")){
+      return true;
+    }else{
+      return false;
+    }
+  }
   const handleDownload = (event: any, downloadUrl: string) => {
     fetch(downloadUrl, {
       mode: "no-cors",
@@ -183,12 +193,18 @@ export default function chatcs(props: any) {
                         display: isUrl(msg.content) ? "" : "none",
                       }}
                     >
+                      <img src={msg.content} alt="" style={{
+                        display:isImageUrl(msg.content)?"":"none",
+                        maxHeight:'600px',
+                        maxWidth:'600px'
+                      }} />
                       <a
                         href="#"
                         ref={linkRef}
                         onClick={(event: any) => {
                           handleDownload(event, msg.content);
                         }}
+                        style={{display:isImageUrl(msg.content)?"none":""}}
                       >
                         Download Here
                       </a>

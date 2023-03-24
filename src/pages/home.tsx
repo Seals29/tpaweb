@@ -108,6 +108,18 @@ const home = (props: any) => {
     // 4789dc9ad1d743caae109fc5818ebe2f
     return () => clearInterval(interval);
   }, [currIdx]);
+  function isImageUrl(url:string){
+    if( typeof url !== `string`)return false;
+    const urlNoProtocol = url.split(`://`)[1]
+    if(!urlNoProtocol) return false;
+    if(url.toLowerCase().includes("png")||url.toLowerCase().includes("jpg")){
+      return true;
+    }else{
+      return false;
+    }
+  }
+  console.log(isImageUrl("http://localhost:9998sadag"));
+  
   const [currProducts, setCurrProducts] = useState([]);
   const [currPage, setCurrPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
